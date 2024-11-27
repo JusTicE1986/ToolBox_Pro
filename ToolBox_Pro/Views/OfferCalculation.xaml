@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.OfferCalculation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:converters="clr-namespace:ToolBox_Pro.Converters"
+             Height="Auto" Width="Auto">
+    <UserControl.DataContext>
+        <!-- Hier wird das OfferCalculationViewModel gesetzt -->
+        <viewmodels:OfferCalculationViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <converters:ZeroToCollapsedConverter x:Key="ZeroToCollapsedConverter"/>
+    </UserControl.Resources>
+
+
+    <Grid Margin="20">
+        <!-- Zeilen für Layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Für Label, TextBox und Buttons -->
+            <RowDefinition Height="Auto"/>
+            <!-- Für DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Für Gesamtsumme -->
+        </Grid.RowDefinitions>
+
+        <!-- StackPanel für Label, TextBox und Buttons -->
+        <StackPanel Grid.Row="0" Margin="0 0 0 10" VerticalAlignment="Top">
+            <!-- Label und TextBox vertikal anordnen -->
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0 0 0 10">
+                <Label x:Name="lblFileDestination" Content="Speicherort der Angebote" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+                <TextBox Text="{Binding OfferDestination, UpdateSourceTrigger=PropertyChanged}"
+                         Width="200" Height="30" TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Buttons horizontal anordnen -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <Button Content="Mails speichern" Height="40" Width="120" Command="{Binding SaveFilesCommand}" Margin="5"/>
+                <Button Content="Angebote auswerten" Height="40" Width="120" Command="{Binding AnalyzeOffersCommand}" Margin="5"/>
+                <Button Content="Gesamtangebot" Height="40" Width="120" Command="{Binding GenerateOfferCommand}" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- DataGrid für die Liste der Dateien -->
+        <DataGrid ItemsSource="{Binding Offers}" AutoGenerateColumns="False" Grid.Row="1" Margin="0 10 0 10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Angebotsdatei" Binding="{Binding FileName}" Width="*"/>
+                <DataGridTextColumn Header="Summe" Binding="{Binding Price, StringFormat={}{0:N2} €}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Gesamtsumme TextBlock -->
+        <TextBlock
+           HorizontalAlignment="Right" Grid.Row="2" FontSize="16" FontWeight="Bold">
+
+            <TextBlock.Inlines>
+                <Run Text="Gesamtsumme: " />
+                <Run Text="{Binding TotalPrice, StringFormat={}{0:N2} €}" />
+            </TextBlock.Inlines>
+        </TextBlock>
+
+    </Grid>
+</UserControl>
