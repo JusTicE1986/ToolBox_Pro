@@ -1,11 +1,9 @@
-﻿using PdfSharp.Pdf;
-using PdfSharp.Drawing;
-using System;
+﻿using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System.Collections.Generic;
 using System.IO;
-using PdfSharp.Pdf.IO;
 using ToolBox_Pro.Models;
-using ToolBox_Pro.ViewModels;
 
 namespace ToolBox_Pro.Services
 {
@@ -42,8 +40,10 @@ namespace ToolBox_Pro.Services
             // Tabelle mit den Angeboten
             foreach (var offer in offers)
             {
+                string priceText = offer.Price.ToString("N2") + " €";
+                double priceWidth = gfx.MeasureString(priceText, font).Width;
                 gfx.DrawString(offer.FileName, font, XBrushes.Black, new XPoint(xPos, yPos));
-                gfx.DrawString(offer.Price.ToString("N2") + " €", font, XBrushes.Black, new XPoint(xPos + 400, yPos));
+                gfx.DrawString(priceText, font, XBrushes.Black, new XPoint(xPos + 500 - priceWidth, yPos));
                 yPos += 20;
 
                 // Wenn der Text zu lang wird, gehe zur nächsten Seite
@@ -84,5 +84,6 @@ namespace ToolBox_Pro.Services
                 }
             }
         }
+
     }
 }

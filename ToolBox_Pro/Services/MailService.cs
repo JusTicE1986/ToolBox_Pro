@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Office.Interop.Outlook;
 
 namespace ToolBox_Pro.Services
@@ -13,18 +14,26 @@ namespace ToolBox_Pro.Services
             Items items = inbox.Items.Restrict($"[SenderEmailAddress] = '{senderEmail}'");
 
             // Der Zielordner, in den die E-Mails verschoben werden
-            MAPIFolder targetFolder = GetSubFolder(inbox, "KERN Angebote");
+            MAPIFolder targetFolder = GetSubFolder(inbox, "KERN COTI Angebote");
             if (targetFolder == null)
             {
                 System.Windows.MessageBox.Show("Der Ordner 'KERN Angebote' wurde nicht gefunden.");
                 return savedFiles;
             }
-
+            List<MailItem> mailItems = new List<MailItem>();
             foreach (object item in items)
             {
                 if (item is MailItem mailItem)
                 {
-                    // Anhänge speichern
+                    mailItems.Add(mailItem);
+                }
+            }
+
+            // Jetzt auf der Kopie arbeiten
+            foreach (MailItem mailItem in mailItems)
+            {
+                try
+                {
                     foreach (Attachment attachment in mailItem.Attachments)
                     {
                         if (attachment.FileName.EndsWith(".pdf") && attachment.FileName.StartsWith("attr"))
@@ -35,16 +44,13 @@ namespace ToolBox_Pro.Services
                         }
                     }
 
-                    // E-Mail in den Zielordner verschieben
-                    try
-                    {
-                        mailItem.Move(targetFolder); // E-Mail verschieben
-                    }
-                    catch (System.Exception ex)
-                    {
-                        // Fehlerbehandlung für das Verschieben der E-Mail
-                        System.Windows.MessageBox.Show($"Fehler beim Verschieben der E-Mail: {ex.Message}");
-                    }
+                    // Mail in Zielordner verschieben
+                    //MAPIFolder targetFolder = inbox.Folders["KERN Angebote"];
+                    mailItem.Move(targetFolder);
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine($"Fehler bei Mailverarbeitung: {ex.Message}");
                 }
             }
             return savedFiles;

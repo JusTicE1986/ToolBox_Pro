@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using ToolBox_Pro.Models;
 using UglyToad.PdfPig;
-using UglyToad.PdfPig.Content;
 
 namespace ToolBox_Pro.Services
 {

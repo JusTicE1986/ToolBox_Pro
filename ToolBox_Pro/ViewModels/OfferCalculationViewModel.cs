@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using ToolBox_Pro.Commands;
@@ -123,7 +121,7 @@ namespace ToolBox_Pro.ViewModels
             // E-Mails mit Anhängen extrahieren und speichern
             try
             {
-                string senderEmail = "andreas.neumann86@googlemail.com";  // Absender-E-Mail
+                string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
                 var savedFiles = _mailService.ExtractPDFsFromMails(senderEmail, OfferDestination);
                 MessageBox.Show($"Es wurden {savedFiles.Count} PDF-Dateien gespeichert.");
             }
@@ -163,6 +161,7 @@ namespace ToolBox_Pro.ViewModels
             // PDF speichern
             var pdfPath = System.IO.Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now.ToString("yyyy-MM-dd")}.pdf");
             pdfDocument.Save(pdfPath);
+
 
             MessageBox.Show($"Gesamtangebot wurde erstellt und gespeichert unter {pdfPath}");
         }

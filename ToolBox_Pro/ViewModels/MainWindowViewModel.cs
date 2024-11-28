@@ -1,13 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using ToolBox_Pro.Commands;
-using ToolBox_Pro.ViewModels;
 using ToolBox_Pro.Views;
 
 namespace ToolBox_Pro.ViewModels
 {
-    public class MainWindowViewModel : ObservableObject
+    public class MainWindowViewModel : BaseViewModel
     {
         private object _currentView;
 
