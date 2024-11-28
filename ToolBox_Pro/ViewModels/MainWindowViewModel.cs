@@ -29,10 +29,12 @@ namespace ToolBox_Pro.ViewModels
         }
 
     public ICommand ShowOfferCalculationCommand { get; }
+        public ICommand ShowPDFProcessingCommand { get; }
 
         public MainWindowViewModel()
         {
             ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
+            ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
 
         }
 
@@ -40,6 +42,11 @@ namespace ToolBox_Pro.ViewModels
         {
             IsLogoVisible = false;
             CurrentView = new OfferCalculation();
+        }
+
+        private void ShowPDFProcessing()
+        {
+            CurrentView = new PDFProcessingView();
         }
     }
 }

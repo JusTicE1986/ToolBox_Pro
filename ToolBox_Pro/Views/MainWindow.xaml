@@ -28,7 +28,8 @@ HorizontalAlignment="Left"
 VerticalAlignment="Center" Height="50" Margin="10"/>
             <Button Content="KERN Angebote" 
                     Command="{Binding ShowOfferCalculationCommand}" Height="50" />
-            <Button Content="Seitenzahlen und Gewicht berechnen" Height="50" />
+            <Button Content="Seitenzahlen und Gewicht berechnen" Height="50" 
+                    Command="{Binding ShowPDFProcessingCommand}"/>
             <Button Content="Language.xml erstellen" Height="50" />
             <Button Content="Konformitätserklärungen" Height="50" />
         </StackPanel>
