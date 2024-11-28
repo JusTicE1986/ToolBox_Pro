@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PdfSharp.Pdf.IO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -47,6 +48,28 @@ namespace ToolBox_Pro.Services
             }
             return pdfList;
         }
+
+        public string ExtractTextFromPDF(string filePath, int pageNumber = 1)
+        {
+            try
+            {
+                using (var pdf = PdfDocument.Open(filePath))
+                {
+                    if (pageNumber > pdf.NumberOfPages || pageNumber <= 0)
+                    {
+                        pageNumber = 1; // Standardmäßig erste Seite auslesen
+                    }
+
+                    var page = pdf.GetPage(pageNumber);
+                    return page.Text;
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Fehler beim Extrahieren des Textes aus {filePath}: {ex.Message}";
+            }
+        }
+
 
         private string ExtractTextFromPDF(string filePath)
         {

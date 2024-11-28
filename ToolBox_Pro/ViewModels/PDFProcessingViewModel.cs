@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ToolBox_Pro.Commands;
+using ToolBox_Pro.Models;
 using ToolBoxPro.Services;
 
 namespace ToolBox_Pro.ViewModels
@@ -18,7 +20,8 @@ namespace ToolBox_Pro.ViewModels
         private bool _isProcessing;
 
         // Diese Sammlung enthält die verarbeiteten PDF-Daten, die im UserControl angezeigt werden
-        public ObservableCollection<string> ProcessedFiles { get; set; }
+        public ObservableCollection<PDFDataModel> ProcessedFiles { get; set; } = new ObservableCollection<PDFDataModel>();
+
 
         public string PDFDirectory
         {
@@ -35,6 +38,7 @@ namespace ToolBox_Pro.ViewModels
 
         // Das Kommando, das das PDF-Verarbeitungsprozess ausführt
         public ICommand ProcessPDFsCommand { get; }
+        public ICommand SaveToExcelCommand { get; }
 
         // Zeigt eine Statusnachricht (z.B. "Verarbeitung läuft...")
         public string StatusMessage
@@ -67,17 +71,26 @@ namespace ToolBox_Pro.ViewModels
         // Konstruktor
         public PDFProcessingViewModel()
         {
-            ProcessedFiles = new ObservableCollection<string>();
             _pdfService = new PDFProcessingService();
             ProcessPDFsCommand = new RelayCommands(async () => await ProcessPDFsAsync());
+            SaveToExcelCommand = new RelayCommands(() => SaveToExcel());
         }
 
         // Methode, um die PDFs asynchron zu verarbeiten und den Fortschritt zu überwachen
         private async Task ProcessPDFsAsync()
         {
-            if (string.IsNullOrEmpty(PDFDirectory) || !Directory.Exists(PDFDirectory))
+            try
             {
-                MessageBox.Show("Bitte geben Sie ein gültiges Verzeichnis ein.");
+                PDFDirectory = Path.GetFullPath(PDFDirectory.Trim());
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Ungültiger Pfad: {ex.Message}");
+                return;
+            }
+            if (!Directory.Exists(PDFDirectory))
+            {
+                System.Windows.MessageBox.Show("Das angegebene Verzeichnis existiert nicht.");
                 return;
             }
 
@@ -102,16 +115,28 @@ namespace ToolBox_Pro.ViewModels
                 ProcessedFiles.Clear();
                 foreach (var data in processedData)
                 {
-                    string fileInfo = $"Materialnummer: {data["Materialnummer"]}, " +
-                                      $"Format: {data["Format"]}, " +
-                                      $"Seitenzahl: {data["Seitenzahl"]}, " +
-                                      $"Gewicht: {data["Gewicht in kg"]} kg";
-                    ProcessedFiles.Add(fileInfo);
+                    //string fileInfo = $"Materialnummer: {data["Materialnummer"]}, " +
+                    //                  $"Format: {data["Format"]}, " +
+                    //                  $"Seitenzahl: {data["Seitenzahl"]}, " +
+                    //                  $"Gewicht: {data["Gewicht in kg"]} kg";
+                    ProcessedFiles.Add(new PDFDataModel
+                    {
+                        Materialnummer = data["Materialnummer"],
+                        Format = data["Format"],
+                        Seitenzahl = Convert.ToInt32(data["Seitenzahl"]),
+                        Gewicht = Convert.ToDouble(data["Gewicht in kg"]),
+                        AusgabeDatum = data["Ausgabedatum"],
+                        Typ = data["Fahrzeugtyp"],
+                        Model = data["Fahrzeugmodell"],
+                        Language = data["Language"]
+                    });
+
                 }
 
-                // Automatische Erstellung der Excel-Liste
-                _pdfService.ExportDataToExcel(processedData, PDFDirectory);
-                StatusMessage = "Verarbeitung abgeschlossen und Excel-Datei erstellt.";
+                //// Automatische Erstellung der Excel-Liste
+                //_pdfService.ExportDataToExcel(processedData, PDFDirectory);
+                //StatusMessage = "Verarbeitung abgeschlossen und Excel-Datei erstellt.";
+
             }
             catch (Exception ex)
             {
@@ -121,6 +146,46 @@ namespace ToolBox_Pro.ViewModels
             {
                 IsProcessing = false;
             }
+
+        }
+        private void SaveToExcel()
+        {
+            System.Windows.MessageBox.Show("Funktion wird gerufen");
+            //    try
+            //    {
+            //        if (ProcessedFiles.Count == 0)
+            //        {
+            //            StatusMessage = "Keine Daten zum Exportieren.";
+            //            return;
+            //        }
+
+            //        // Daten für den Export vorbereiten (aus ProcessedFiles)
+            //        var processedData = new List<Dictionary<string, string>>();
+            //        foreach (var file in ProcessedFiles)
+            //        {
+            //            processedData.Add(new Dictionary<string, string>
+            //        {
+            //            { "Materialnummer", file.Materialnummer },
+            //            { "Format", file.Format },
+            //            { "Seitenzahl", file.Seitenzahl.ToString() },
+            //            { "Gewicht in kg", file.Gewicht.ToString() },
+            //            { "Ausgabedatum", file.AusgabeDatum },
+            //            { "Fahrzeugtyp", file.Typ },
+            //            { "Fahrzeugmodell", file.Model },
+            //            { "Language", file.Language }
+            //        });
+            //        }
+
+            //        // Excel-Datei exportieren
+            //        _pdfService.ExportDataToExcel(processedData, PDFDirectory);
+            //        StatusMessage = "Excel-Datei erfolgreich erstellt.";
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        StatusMessage = $"Fehler beim Exportieren: {ex.Message}";
+            //    }
+            //
+
         }
     }
 }

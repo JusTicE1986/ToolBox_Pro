@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Excel;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using ToolBox_Pro.Services;
+using static System.Windows.Forms.DataFormats;
 
 namespace ToolBoxPro.Services
 {
     public class PDFProcessingService
     {
+        private readonly PDFService _pdfService;
+        private readonly DimensionService _dimensionService;
+
+        public PDFProcessingService()
+        {
+            _pdfService = new PDFService();
+            _dimensionService = new DimensionService();
+        }
+
         public List<Dictionary<string, string>> ProcessPdfs(string directoryPath, IProgress<int> progress)
         {
             var processedData = new List<Dictionary<string, string>>();
@@ -38,16 +50,24 @@ namespace ToolBoxPro.Services
             {
                 // Extrahieren der Seitenzahl
                 int pageCount = GetPageCount(filePath);
-
+                string text = _pdfService.ExtractTextFromPDF(filePath);
                 // Extrahieren der Materialnummer, Gewicht und Format aus dem PDF (Beispiel)
-                string materialNumber = "Nicht gefunden";  // Hier müsste eine Methode kommen, um diese Information aus dem PDF zu extrahieren
-                string format = "DIN A4";  // Beispiel, ggf. muss auch das Format aus dem PDF ermittelt werden
-                string weight = "0.05";  // Beispielwert, auch hier muss ggf. eine Logik zum Extrahieren hinzugefügt werden
+                string materialNumber = ExtractMaterialNumber(text);  // Hier müsste eine Methode kommen, um diese Information aus dem PDF zu extrahieren
+                string format = _dimensionService.CheckFirstPageDimensions(filePath); // Beispiel, ggf. muss auch das Format aus dem PDF ermittelt werden
+                double weight = _dimensionService.CalculateWeight(pageCount, format);  // Beispielwert, auch hier muss ggf. eine Logik zum Extrahieren hinzugefügt werden
+                string editionDate = ExtractEditionDate(text);  // Beispielwert, auch hier muss ggf. eine Logik zum Extrahieren hinzugefügt werden
+                string vehicleType = ExtractTypeFromText(text);  // Beispielwert, auch hier muss ggf. eine Logik zum Extrahieren hinzugefügt werden
+                string vehicleModel = ExtractModelFromFileName(Path.GetFileName(filePath).Trim());
+                string language = ExtractLanguageFromText(text);
 
                 fileData.Add("Materialnummer", materialNumber);
                 fileData.Add("Format", format);
                 fileData.Add("Seitenzahl", pageCount.ToString());
-                fileData.Add("Gewicht in kg", weight);
+                fileData.Add("Gewicht in kg", weight.ToString());
+                fileData.Add("Ausgabedatum", editionDate);
+                fileData.Add("Fahrzeugtyp", vehicleType);
+                fileData.Add("Fahrzeugmodell", vehicleModel);
+                fileData.Add("Language", language);
             }
             catch (Exception ex)
             {
@@ -56,15 +76,45 @@ namespace ToolBoxPro.Services
 
             return fileData;
         }
+        #region extractions
+        private string ExtractMaterialNumber(string text)
+        {
+            var match = Regex.Match(text, @"(?<!\d)\d{10}(?!\d)");
+            return match.Success ? match.Value : "Nicht gefunden";
+        }
+
+        private string ExtractEditionDate(string text)
+        {
+            var match = Regex.Match(text, @"\d{2}\/\d{4}");
+            return match.Success ? match.Value : "Nicht gefunden";
+        }
+        private string ExtractModelFromFileName(string text)
+        {
+            var match = Regex.Match(text, @"(?<=^OM\s)(\S+)");
+            return match.Success ? match.Value : "Nicht gefunden";
+        }
+        private string ExtractTypeFromText(string text)
+        {
+            var match = Regex.Match(text, @"(A\d{2}-\d{2}|T\d{2}-\d{2}|RL\d{2}-\d{2}|RL\d{2}T-\d{2})");
+            return match.Success ? match.Value : "Nicht gefunden";
+        }
+        private string ExtractLanguageFromText(string text)
+        {
+            var match = Regex.Match(text, @"\[\w{2}\]");
+            return match.Success ? match.Value : "Nicht gefunden";
+        }
+        #endregion
 
         private int GetPageCount(string filePath)
         {
-            using (PdfDocument document = PdfReader.Open(filePath, PdfDocumentOpenMode.ReadOnly))
+            using (PdfDocument document = PdfReader.Open(filePath, PdfDocumentOpenMode.Import))
             {
                 return document.PageCount;
             }
         }
 
+
+        #region Excel Export
         public void ExportDataToExcel(List<Dictionary<string, string>> processedData, string outputDirectory)
         {
             var excelApp = new Application();
@@ -77,6 +127,11 @@ namespace ToolBoxPro.Services
             workSheet.Cells[1, 2] = "Format";
             workSheet.Cells[1, 3] = "Seitenzahl";
             workSheet.Cells[1, 4] = "Gewicht in kg";
+            workSheet.Cells[1, 5] = "Ausgabedatum";
+            workSheet.Cells[1, 6] = "Fahrzeugtyp";
+            workSheet.Cells[1, 7] = "Fahrzeugmodell";
+            workSheet.Cells[1, 8] = "Language";
+
 
             // Daten in die Excel-Datei einfügen
             for (int i = 0; i < processedData.Count; i++)
@@ -86,13 +141,18 @@ namespace ToolBoxPro.Services
                 workSheet.Cells[i + 2, 2] = data["Format"];
                 workSheet.Cells[i + 2, 3] = data["Seitenzahl"];
                 workSheet.Cells[i + 2, 4] = data["Gewicht in kg"];
+                workSheet.Cells[i + 2, 5] = data["Ausgabedatum"];
+                workSheet.Cells[i + 2, 6] = data["Fahrzeugtyp"];
+                workSheet.Cells[i + 2, 7] = data["Fahrzeugmodell"];
+                workSheet.Cells[i + 2, 8] = data["Language"];
             }
 
             // Excel-Datei speichern
-            string filePath = Path.Combine(outputDirectory, "ProcessedPDFs.xlsx");
+            string filePath = Path.Combine(outputDirectory, $"Betriebsanleitungen {DateTime.Now.ToString("dd-MM-yyyy")}.xlsx");
             workBook.SaveAs(filePath);
             workBook.Close(false);
             excelApp.Quit();
         }
+        #endregion
     }
 }
