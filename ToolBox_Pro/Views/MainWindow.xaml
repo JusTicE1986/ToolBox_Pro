@@ -22,15 +22,16 @@
 
         <!-- Navigationsleiste -->
 
-        <StackPanel Grid.Column="0" Background="#2D2D2D" VerticalAlignment="Center">
-            <Image Source="../Images/WN.jpg"
+        <StackPanel Grid.Column="0" Background="#e2001a" VerticalAlignment="Top" Margin="10">
+            <Image Source="../Images/Weidemann Logo.png"
 HorizontalAlignment="Left"
-VerticalAlignment="Center" Height="50" Margin="10,10,0,10"/>
-            <Button Content="Offer Calculation" 
+VerticalAlignment="Center" Height="50" Margin="10"/>
+            <Button Content="KERN Angebote" 
                     Command="{Binding ShowOfferCalculationCommand}" Height="50" />
-            <Button Content="Page Weight Calculation" Height="50" />
-            <Button Content="XML Handler" Height="50" />
-            <Button Content="Conformity Declaration Tool" Height="50" />
+            <Button Content="Seitenzahlen und Gewicht berechnen" Height="50" 
+                    Command="{Binding ShowPDFProcessingCommand}"/>
+            <Button Content="Language.xml erstellen" Height="50" />
+            <Button Content="Konformitätserklärungen" Height="50" />
         </StackPanel>
 
         <!-- Rechter Bereich -->

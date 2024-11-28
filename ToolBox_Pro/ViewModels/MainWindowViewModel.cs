@@ -1,13 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using ToolBox_Pro.Commands;
-using ToolBox_Pro.ViewModels;
 using ToolBox_Pro.Views;
 
 namespace ToolBox_Pro.ViewModels
 {
-    public class MainWindowViewModel : ObservableObject
+    public class MainWindowViewModel : BaseViewModel
     {
         private object _currentView;
 
@@ -32,10 +29,12 @@ namespace ToolBox_Pro.ViewModels
         }
 
     public ICommand ShowOfferCalculationCommand { get; }
+        public ICommand ShowPDFProcessingCommand { get; }
 
         public MainWindowViewModel()
         {
             ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
+            ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
 
         }
 
@@ -43,6 +42,11 @@ namespace ToolBox_Pro.ViewModels
         {
             IsLogoVisible = false;
             CurrentView = new OfferCalculation();
+        }
+
+        private void ShowPDFProcessing()
+        {
+            CurrentView = new PDFProcessingView();
         }
     }
 }
