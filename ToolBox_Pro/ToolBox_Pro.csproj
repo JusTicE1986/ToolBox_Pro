@@ -11,6 +11,17 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>9</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>00020813-0000-0000-c000-000000000046</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Numerics" />
@@ -30,28 +41,14 @@
     <Resource Include="Images\Weidemann Logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+    <PackageReference Include="ClosedXML" />
     <PackageReference Include="Microsoft.CSharp" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Options" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" />
-    <PackageReference Include="Microsoft.Office.Interop.Excel" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" />
     <PackageReference Include="PdfiumViewer" />
     <PackageReference Include="PdfiumViewer.Native.x86.v8-xfa" />
     <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa" />
     <PackageReference Include="PdfPig" />
     <PackageReference Include="PDFsharp" />
-    <PackageReference Include="SharpZipLib" />
-    <PackageReference Include="SixLabors.Fonts" />
-    <PackageReference Include="SixLabors.ImageSharp" />
-    <PackageReference Include="System.ComponentModel.Annotations" />
-    <PackageReference Include="System.ComponentModel.Annotations" />
-    <PackageReference Include="System.Data.DataSetExtensions" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" />
     <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using ToolBox_Pro.Commands;
 using ToolBox_Pro.Models;
-using ToolBoxPro.Services;
+using ToolBox_Pro.Services;
 
 namespace ToolBox_Pro.ViewModels
 {
@@ -150,41 +150,41 @@ namespace ToolBox_Pro.ViewModels
         }
         private void SaveToExcel()
         {
-            System.Windows.MessageBox.Show("Funktion wird gerufen");
-            //    try
-            //    {
-            //        if (ProcessedFiles.Count == 0)
-            //        {
-            //            StatusMessage = "Keine Daten zum Exportieren.";
-            //            return;
-            //        }
+            //System.Windows.MessageBox.Show("Funktion wird gerufen");
+            try
+            {
+                if (ProcessedFiles.Count == 0)
+                {
+                    StatusMessage = "Keine Daten zum Exportieren.";
+                    return;
+                }
 
-            //        // Daten für den Export vorbereiten (aus ProcessedFiles)
-            //        var processedData = new List<Dictionary<string, string>>();
-            //        foreach (var file in ProcessedFiles)
-            //        {
-            //            processedData.Add(new Dictionary<string, string>
-            //        {
-            //            { "Materialnummer", file.Materialnummer },
-            //            { "Format", file.Format },
-            //            { "Seitenzahl", file.Seitenzahl.ToString() },
-            //            { "Gewicht in kg", file.Gewicht.ToString() },
-            //            { "Ausgabedatum", file.AusgabeDatum },
-            //            { "Fahrzeugtyp", file.Typ },
-            //            { "Fahrzeugmodell", file.Model },
-            //            { "Language", file.Language }
-            //        });
-            //        }
+                // Daten für den Export vorbereiten (aus ProcessedFiles)
+                var processedData = new List<Dictionary<string, string>>();
+                foreach (var file in ProcessedFiles)
+                {
+                    processedData.Add(new Dictionary<string, string>
+                    {
+                        { "Materialnummer", file.Materialnummer },
+                        { "Format", file.Format },
+                        { "Seitenzahl", file.Seitenzahl.ToString() },
+                        { "Gewicht in kg", file.Gewicht.ToString() },
+                        { "Ausgabedatum", file.AusgabeDatum },
+                        { "Fahrzeugtyp", file.Typ },
+                        { "Fahrzeugmodell", file.Model },
+                        { "Language", file.Language }
+                    });
+                }
 
-            //        // Excel-Datei exportieren
-            //        _pdfService.ExportDataToExcel(processedData, PDFDirectory);
-            //        StatusMessage = "Excel-Datei erfolgreich erstellt.";
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        StatusMessage = $"Fehler beim Exportieren: {ex.Message}";
-            //    }
-            //
+                // Excel-Datei exportieren
+                _pdfService.ExportDataToExcel(processedData, PDFDirectory);
+                StatusMessage = "Excel-Datei erfolgreich erstellt.";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Fehler beim Exportieren: {ex.Message}";
+            }
+
 
         }
     }
