@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.LanguageXML"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToolBox_Pro.Views"
+             xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:LanguageXMLViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Titel oder Beschreibung -->
+        <TextBlock Text="Language XML Datenverarbeitung" 
+                   FontSize="16" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,10" />
+
+        <!-- Button zum Starten der Verarbeitung -->
+        <Button Content="Verarbeiten"
+                Grid.Row="1"
+                HorizontalAlignment="Left"
+                Padding="10,5"
+                Command="{Binding ProcessDataCommand}" />
+
+        <!-- Fortschrittsanzeige -->
+        <StackPanel Grid.Row="2" Margin="0,20,0,0">
+            <TextBlock Text="Fortschritt:" 
+                       FontWeight="Bold" 
+                       Margin="0,0,0,5" />
+        </StackPanel>
+    </Grid>
+</UserControl>

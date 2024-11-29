@@ -28,13 +28,15 @@ namespace ToolBox_Pro.ViewModels
             }
         }
 
-    public ICommand ShowOfferCalculationCommand { get; }
+        public ICommand ShowOfferCalculationCommand { get; }
         public ICommand ShowPDFProcessingCommand { get; }
+        public ICommand ShowLanguageXMLCommand { get; }
 
         public MainWindowViewModel()
         {
             ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
             ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
+            ShowLanguageXMLCommand = new RelayCommands(ShowLanguageXML);
 
         }
 
@@ -47,6 +49,11 @@ namespace ToolBox_Pro.ViewModels
         private void ShowPDFProcessing()
         {
             CurrentView = new PDFProcessingView();
+        }
+
+        private void ShowLanguageXML()
+        {
+            CurrentView = new LanguageXML();
         }
     }
 }
