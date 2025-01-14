@@ -31,8 +31,14 @@ VerticalAlignment="Center" Height="50" Margin="10"/>
             <Button Content="Seitenzahlen und Gewicht berechnen" Height="50" 
                     Command="{Binding ShowPDFProcessingCommand}"/>
             <Button Content="Language.xml erstellen" Height="50" 
-                    Command="{Binding ShowLanguageXMLCommand}"/>
-            <Button Content="Konformitätserklärungen" Height="50" />
+                    Command="{Binding ShowLanguageXMLCommand}"
+                    Visibility="{Binding AdminVisibility}"/>
+            <Button Content="Ordner leeren" Height="50"
+                    Command="{Binding ShowCleanupViewCommand}"
+                    Visibility="{Binding AdminVisibility}"/>
+            <Button Content="Wiki Upload" Height="50"
+        Command="{Binding ShowWikiUploadCommand}"
+                    Visibility="{Binding AdminVisibility}"/>
         </StackPanel>
 
         <!-- Rechter Bereich -->

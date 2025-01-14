@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
 using ToolBox_Pro.Commands;
 using ToolBox_Pro.Views;
 
@@ -28,16 +30,39 @@ namespace ToolBox_Pro.ViewModels
             }
         }
 
+        private bool _isAdmin;
+        public bool IsAdmin
+        {
+            get => _isAdmin;
+            set
+            {
+                _isAdmin = value;
+                OnPropertyChanged(nameof(_isAdmin));
+                OnPropertyChanged(nameof(AdminVisibility));
+            }
+        }
+        public Visibility AdminVisibility => IsAdmin ? Visibility.Visible : Visibility.Collapsed;
+
         public ICommand ShowOfferCalculationCommand { get; }
         public ICommand ShowPDFProcessingCommand { get; }
         public ICommand ShowLanguageXMLCommand { get; }
+        public ICommand ShowCleanupViewCommand { get; }
+        public ICommand ShowWikiUploadCommand { get; }
 
         public MainWindowViewModel()
         {
+            IsAdmin = CheckIfUserIsAdmin();
             ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
             ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
             ShowLanguageXMLCommand = new RelayCommands(ShowLanguageXML);
+            ShowCleanupViewCommand = new RelayCommands(ShowCleanupView);
+            ShowWikiUploadCommand = new RelayCommands(ShowWikiUploadView);
+        }
 
+        private bool CheckIfUserIsAdmin()
+        {
+            string currentUser = Environment.UserName;
+            return currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE1986", StringComparison.OrdinalIgnoreCase);
         }
 
         private void ShowOfferCalculation()
@@ -54,6 +79,16 @@ namespace ToolBox_Pro.ViewModels
         private void ShowLanguageXML()
         {
             CurrentView = new LanguageXML();
+        }
+
+        private void ShowCleanupView()
+        {
+            CurrentView = new CleanupView();
+        }
+
+        private void ShowWikiUploadView()
+        {
+            CurrentView = new WikiUploadView();
         }
     }
 }
