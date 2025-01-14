@@ -16,6 +16,7 @@ namespace ToolBox_Pro.Models
         public string Typ {  get; set; }
         public string Model {  get; set; }
         public string Language {  get; set; }
+        public string Version {  get; set; }
     }
 
 }

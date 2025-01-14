@@ -58,6 +58,7 @@ namespace ToolBox_Pro.Services
                 string vehicleType = ExtractTypeFromText(text);  // Beispielwert, auch hier muss ggf. eine Logik zum Extrahieren hinzugefügt werden
                 string vehicleModel = ExtractModelFromFileName(Path.GetFileName(filePath).Trim());
                 string language = ExtractLanguageFromText(text);
+                string version = ExtractVersionFromFileName(Path.GetFileName(filePath).Trim());
 
                 fileData.Add("Materialnummer", materialNumber);
                 fileData.Add("Format", format);
@@ -67,6 +68,7 @@ namespace ToolBox_Pro.Services
                 fileData.Add("Fahrzeugtyp", vehicleType);
                 fileData.Add("Fahrzeugmodell", vehicleModel);
                 fileData.Add("Language", language);
+                fileData.Add("Version", version);
             }
             catch (Exception ex)
             {
@@ -92,6 +94,15 @@ namespace ToolBox_Pro.Services
             var match = Regex.Match(text, @"(?<=^OM\s)(\S+)");
             return match.Success ? match.Value : "Nicht gefunden";
         }
+        private static string ExtractVersionFromFileName(string text)
+        {
+            //var version = text.Substring(text.IndexOf(" V")+2, 3);
+            var startVersion = text.IndexOf(" V");
+            var endVersion = text.LastIndexOf(" ");
+            var lengthVersion = endVersion - startVersion - 2;
+            var version = text.Substring(startVersion + 2, lengthVersion);
+            return version;
+        }
         private static string ExtractTypeFromText(string text)
         {
             var match = Regex.Match(text, @"(A\d{2}-\d{2}|T\d{2}-\d{2}|RL\d{2}-\d{2}|RL\d{2}T-\d{2})");
@@ -102,14 +113,14 @@ namespace ToolBox_Pro.Services
             var match = Regex.Match(text, @"\[\w{2}\]");
             return match.Success ? match.Value : "Nicht gefunden";
         }
-        #endregion
+        
 
         private static int GetPageCount(string filePath)
         {
             using PdfDocument document = PdfReader.Open(filePath, PdfDocumentOpenMode.Import);
             return document.PageCount;
         }
-
+        #endregion
 
         #region Excel Export
         public void ExportDataToExcel(List<Dictionary<string, string>> processedData, string outputDirectory)
@@ -154,7 +165,7 @@ namespace ToolBox_Pro.Services
             //    excelApp.Quit();
             //}
             #endregion
-            
+
 
             // Erstelle eine neue Excel-Datei
             using (var workbook = new XLWorkbook())
@@ -164,12 +175,13 @@ namespace ToolBox_Pro.Services
                 // Kopfzeilen in die Excel-Datei einfügen
                 worksheet.Cell(1, 1).Value = "Materialnummer";
                 worksheet.Cell(1, 2).Value = "Format";
-                worksheet.Cell(1, 3).Value = "Seitenzahl";
-                worksheet.Cell(1, 4).Value = "Gewicht in kg";
-                worksheet.Cell(1, 5).Value = "Ausgabedatum";
-                worksheet.Cell(1, 6).Value = "Fahrzeugtyp";
-                worksheet.Cell(1, 7).Value = "Fahrzeugmodell";
-                worksheet.Cell(1, 8).Value = "Language";
+                worksheet.Cell(1, 3).Value = "Version";
+                worksheet.Cell(1, 4).Value = "Ausgabe";
+                worksheet.Cell(1, 5).Value = "Fahrzeugtyp";
+                worksheet.Cell(1, 6).Value = "Verkaufsbezeichnung";
+                worksheet.Cell(1, 7).Value = "Seitenzahl";
+                worksheet.Cell(1, 8).Value = "Sprache";
+                worksheet.Cell(1, 9).Value = "Gewicht in kg";
 
                 // Daten in die Excel-Datei einfügen
                 for (int i = 0; i < processedData.Count; i++)
@@ -177,20 +189,21 @@ namespace ToolBox_Pro.Services
                     var data = processedData[i];
                     worksheet.Cell(i + 2, 1).Value = data["Materialnummer"];
                     worksheet.Cell(i + 2, 2).Value = data["Format"];
-                    worksheet.Cell(i + 2, 3).Value = data["Seitenzahl"];
-                    worksheet.Cell(i + 2, 4).Value = data["Gewicht in kg"];
-                    worksheet.Cell(i + 2, 5).Value = data["Ausgabedatum"];
-                    worksheet.Cell(i + 2, 6).Value = data["Fahrzeugtyp"];
-                    worksheet.Cell(i + 2, 7).Value = data["Fahrzeugmodell"];
+                    worksheet.Cell(i + 2, 3).Value = data["Version"];
+                    worksheet.Cell(i + 2, 4).Value = data["Ausgabedatum"];
+                    worksheet.Cell(i + 2, 5).Value = data["Fahrzeugtyp"];
+                    worksheet.Cell(i + 2, 6).Value = data["Fahrzeugmodell"];
+                    worksheet.Cell(i + 2, 7).Value = data["Seitenzahl"];
                     worksheet.Cell(i + 2, 8).Value = data["Language"];
+                    worksheet.Cell(i + 2, 9).Value = data["Gewicht in kg"];
                 }
 
                 // Kopfzeilen formatieren (fett)
-                var headerRange = worksheet.Range(1, 1, 1, 8); // Zeile 1, Spalten 1 bis 8
+                var headerRange = worksheet.Range(1, 1, 1, 9); // Zeile 1, Spalten 1 bis 9
                 headerRange.Style.Font.Bold = true;
 
                 // Rahmenlinien um die gesamte Tabelle hinzufügen
-                var tableRange = worksheet.Range(1, 1, processedData.Count + 1, 8); // Von Kopfzeilen bis letzte Zeile
+                var tableRange = worksheet.Range(1, 1, processedData.Count + 1, 9); // Von Kopfzeilen bis letzte Zeile
                 tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 

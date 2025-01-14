@@ -128,7 +128,8 @@ namespace ToolBox_Pro.ViewModels
                         AusgabeDatum = data["Ausgabedatum"],
                         Typ = data["Fahrzeugtyp"],
                         Model = data["Fahrzeugmodell"],
-                        Language = data["Language"]
+                        Language = data["Language"],
+                        Version = data["Version"]
                     });
 
                 }
@@ -172,7 +173,9 @@ namespace ToolBox_Pro.ViewModels
                         { "Ausgabedatum", file.AusgabeDatum },
                         { "Fahrzeugtyp", file.Typ },
                         { "Fahrzeugmodell", file.Model },
-                        { "Language", file.Language }
+                        { "Language", file.Language },
+                        { "Version", file.Version }
+
                     });
                 }
 

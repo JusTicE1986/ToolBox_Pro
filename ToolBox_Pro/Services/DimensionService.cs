@@ -56,11 +56,11 @@ namespace ToolBox_Pro.Services
                             // Überprüfen, ob es DIN A4 oder DIN A5 ist
                             if (height > 297 && width > 210)
                             {
-                                return "A4";
+                                return "DIN A4";
                             }
                             else if ((height < 297 && height > 210) && (width < 210 && width > 148))
                             {
-                                return "A5";
+                                return "DIN A5";
                             }
                             else
                             {
@@ -92,11 +92,11 @@ namespace ToolBox_Pro.Services
             double totalWeight = 0;
 
             // Berechnung
-            if (pageCount > 4 && format == "A4")
+            if (pageCount > 4 && format == "DIN A4")
             {
                 totalWeight = ((2 * weightCover) + ((pages - 4) * weight)) / 1000; // Gewicht in kg
             }
-            else if (pageCount > 4 && format == "A5")
+            else if (pageCount > 4 && format == "DIN A5")
             {
                 totalWeight = ((2 * weightCover) + ((pages - 4) * weight)) / 2000; // Gewicht in kg
             }
