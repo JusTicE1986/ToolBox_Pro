@@ -13,7 +13,6 @@ namespace ToolBox_Pro.ViewModels
     public class MainWindowViewModel : BaseViewModel
     {
         private object _currentView;
-
         public object CurrentView
         {
             get => _currentView;
@@ -23,6 +22,7 @@ namespace ToolBox_Pro.ViewModels
                 OnPropertyChanged(nameof(CurrentView));
             }
         }
+        
         private bool _isLogoVisible = true;
         public bool IsLogoVisible
         {
@@ -60,9 +60,12 @@ namespace ToolBox_Pro.ViewModels
             }
         }
 
-        public Visibility AdminVisibility => CurrentUserRole == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PriceListVisibility => CurrentUserRole == UserRole.PriceLists ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility NormalUserVisibility => CurrentUserRole == UserRole.NormalUser ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility AdminVisibility => 
+            CurrentUserRole == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility PriceListVisibility => 
+            (CurrentUserRole == UserRole.PriceLists || CurrentUserRole == UserRole.Admin) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility NormalUserVisibility => 
+            CurrentUserRole == UserRole.NormalUser ? Visibility.Visible : Visibility.Collapsed;
 
 
         public ICommand ShowOfferCalculationCommand { get; }
@@ -74,7 +77,7 @@ namespace ToolBox_Pro.ViewModels
 
         public MainWindowViewModel()
         {
-            IsAdmin = CheckIfUserIsAdmin();
+            CurrentUserRole = GetCurrentUserRole();
             ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
             ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
             ShowLanguageXMLCommand = new RelayCommands(ShowLanguageXML);
@@ -99,11 +102,11 @@ namespace ToolBox_Pro.ViewModels
 
         private UserRole GetCurrentUserRole()
         {
-            string currentUser = Environment.UserName;
+            string currentUser = Environment.UserName.ToLower();
 
-            if (currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE"))
+            if (currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE86"))
                 return UserRole.Admin;
-            if (_priceListUser.Contains(currentUser, StringComparison.OrdinalIgnoreCase))
+            if (_priceListUser.Any(u => u.Equals(currentUser, StringComparison.OrdinalIgnoreCase)))
                 return UserRole.PriceLists;
             return UserRole.NormalUser;
         }
