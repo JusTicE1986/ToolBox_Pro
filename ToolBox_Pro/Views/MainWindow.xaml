@@ -39,6 +39,10 @@ VerticalAlignment="Center" Height="50" Margin="10"/>
             <Button Content="Wiki Upload" Height="50"
         Command="{Binding ShowWikiUploadCommand}"
                     Visibility="{Binding AdminVisibility}"/>
+            <Button Content="Preisliste Export" Height="50"
+                    Command="{Binding ShowPreislisteExportCommand}"
+                    Visibility="{Binding PriceListVisibility}"/>
+
         </StackPanel>
 
         <!-- Rechter Bereich -->

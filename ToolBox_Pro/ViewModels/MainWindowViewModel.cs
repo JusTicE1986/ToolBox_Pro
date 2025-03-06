@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using ToolBox_Pro.Commands;
+using ToolBox_Pro.Models;
 using ToolBox_Pro.Views;
 
 namespace ToolBox_Pro.ViewModels
@@ -41,13 +45,32 @@ namespace ToolBox_Pro.ViewModels
                 OnPropertyChanged(nameof(AdminVisibility));
             }
         }
-        public Visibility AdminVisibility => IsAdmin ? Visibility.Visible : Visibility.Collapsed;
+
+        private UserRole _currentUserRole;
+        public UserRole CurrentUserRole
+        {
+            get => _currentUserRole;
+            set
+            {
+                _currentUserRole = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(AdminVisibility));
+                OnPropertyChanged(nameof(PriceListVisibility));
+                OnPropertyChanged(nameof(NormalUserVisibility));
+            }
+        }
+
+        public Visibility AdminVisibility => CurrentUserRole == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility PriceListVisibility => CurrentUserRole == UserRole.PriceLists ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility NormalUserVisibility => CurrentUserRole == UserRole.NormalUser ? Visibility.Visible : Visibility.Collapsed;
+
 
         public ICommand ShowOfferCalculationCommand { get; }
         public ICommand ShowPDFProcessingCommand { get; }
         public ICommand ShowLanguageXMLCommand { get; }
         public ICommand ShowCleanupViewCommand { get; }
         public ICommand ShowWikiUploadCommand { get; }
+        public ICommand ShowPreislisteExportCommand { get; }  
 
         public MainWindowViewModel()
         {
@@ -57,12 +80,32 @@ namespace ToolBox_Pro.ViewModels
             ShowLanguageXMLCommand = new RelayCommands(ShowLanguageXML);
             ShowCleanupViewCommand = new RelayCommands(ShowCleanupView);
             ShowWikiUploadCommand = new RelayCommands(ShowWikiUploadView);
+            ShowPreislisteExportCommand = new RelayCommands(ShowPreislisteExport);
         }
 
         private bool CheckIfUserIsAdmin()
         {
             string currentUser = Environment.UserName;
             return currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE1986", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private readonly List<string> _priceListUser = new()
+        {
+            "LNZDRAWM",
+            "LNZFISCC",
+            "LNZNEUMA",
+            "JusTicE86"
+        };
+
+        private UserRole GetCurrentUserRole()
+        {
+            string currentUser = Environment.UserName;
+
+            if (currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE"))
+                return UserRole.Admin;
+            if (_priceListUser.Contains(currentUser, StringComparison.OrdinalIgnoreCase))
+                return UserRole.PriceLists;
+            return UserRole.NormalUser;
         }
 
         private void ShowOfferCalculation()
@@ -78,7 +121,7 @@ namespace ToolBox_Pro.ViewModels
 
         private void ShowLanguageXML()
         {
-            CurrentView = new LanguageXML();
+            CurrentView = new Views.LanguageXML();
         }
 
         private void ShowCleanupView()
@@ -90,5 +133,14 @@ namespace ToolBox_Pro.ViewModels
         {
             CurrentView = new WikiUploadView();
         }
+
+        private void ShowPreislisteExport() 
+        {
+            CurrentView = new PreislsiteExportView()
+            {
+                DataContext = new PreislisteExportViewModel()
+            };
+        }
+
     }
 }
