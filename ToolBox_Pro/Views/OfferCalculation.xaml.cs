@@ -12,5 +12,7 @@ namespace ToolBox_Pro.Views
             // Falls du das DataContext hier manuell setzen möchtest:
             //DataContext = new OfferCalculationViewModel();
         }
+
+        
     }
 }

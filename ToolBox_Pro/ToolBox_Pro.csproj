@@ -9,6 +9,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
@@ -50,5 +51,10 @@
     <PackageReference Include="PdfPig" />
     <PackageReference Include="PDFsharp" />
     <PackageReference Include="System.ValueTuple" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="OutlookMailService.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -78,59 +78,75 @@ namespace ToolBox_Pro.ViewModels
             AnalyzeOffersCommand = new RelayCommands(AnalyzeOffers);
             GenerateOfferCommand = new RelayCommands(GenerateOffer);
         }
+        //#region SaveFiles
+        //private void SaveFiles()
+        //{
+        //    if (string.IsNullOrEmpty(OfferDestination))
+        //    {
+        //        MessageBox.Show("Bitte wählen Sie ein Zielverzeichnis aus.");
+        //        return;
+        //    }
+
+        //    // Prüfen, ob der Zielordner existiert, wenn nicht, erstelle ihn
+        //    if (!System.IO.Directory.Exists(OfferDestination))
+        //    {
+        //        try
+        //        {
+        //            System.IO.Directory.CreateDirectory(OfferDestination);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show($"Fehler beim Erstellen des Verzeichnisses: {ex.Message}");
+        //            return;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Zielordner leeren: Nur E-Mail-Anhänge löschen, die bereits existieren
+        //        try
+        //        {
+        //            var files = System.IO.Directory.GetFiles(OfferDestination, "*.pdf"); // Nur PDF-Dateien löschen
+        //            foreach (var file in files)
+        //            {
+        //                System.IO.File.Delete(file);  // Löschen der Anhänge
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show($"Fehler beim Leeren des Verzeichnisses: {ex.Message}");
+        //            return;
+        //        }
+        //    }
+
+        //    // E-Mails mit Anhängen extrahieren und speichern
+        //    try
+        //    {
+        //        string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
+        //        var savedFiles = _mailService.ExtractPDFsFromMails(senderEmail, OfferDestination);
+        //        MessageBox.Show($"Es wurden {savedFiles.Count} PDF-Dateien gespeichert.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Fehler beim Extrahieren der Anhänge: {ex.Message}");
+        //    }
+        //}
+        //#endregion
 
         private void SaveFiles()
         {
-            if (string.IsNullOrEmpty(OfferDestination))
+            string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
+            string exportPath = @"C:\TEMP\Neuer Ordner";
+
+            if (string.IsNullOrWhiteSpace(senderEmail) || string.IsNullOrWhiteSpace(exportPath))
             {
-                MessageBox.Show("Bitte wählen Sie ein Zielverzeichnis aus.");
+                MessageBox.Show("Bitte geben Sie Absender-E-Mail und Export-Pfad an.");
                 return;
             }
 
-            // Prüfen, ob der Zielordner existiert, wenn nicht, erstelle ihn
-            if (!System.IO.Directory.Exists(OfferDestination))
-            {
-                try
-                {
-                    System.IO.Directory.CreateDirectory(OfferDestination);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Fehler beim Erstellen des Verzeichnisses: {ex.Message}");
-                    return;
-                }
-            }
-            else
-            {
-                // Zielordner leeren: Nur E-Mail-Anhänge löschen, die bereits existieren
-                try
-                {
-                    var files = System.IO.Directory.GetFiles(OfferDestination, "*.pdf"); // Nur PDF-Dateien löschen
-                    foreach (var file in files)
-                    {
-                        System.IO.File.Delete(file);  // Löschen der Anhänge
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Fehler beim Leeren des Verzeichnisses: {ex.Message}");
-                    return;
-                }
-            }
+            var serviceCaller = new OutlookServiceCaller();
+            serviceCaller.ExportAttachments(senderEmail, exportPath);
 
-            // E-Mails mit Anhängen extrahieren und speichern
-            try
-            {
-                string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
-                var savedFiles = _mailService.ExtractPDFsFromMails(senderEmail, OfferDestination);
-                MessageBox.Show($"Es wurden {savedFiles.Count} PDF-Dateien gespeichert.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Fehler beim Extrahieren der Anhänge: {ex.Message}");
-            }
         }
-
         private void AnalyzeOffers()
         {
             if (string.IsNullOrEmpty(OfferDestination))

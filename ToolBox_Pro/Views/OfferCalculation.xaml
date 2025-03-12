@@ -35,7 +35,7 @@
 
             <!-- Buttons horizontal anordnen -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <Button Content="Mails speichern" Height="40" Width="120" Command="{Binding SaveFilesCommand}" Margin="5"/>
+                <Button Content="Mails speichern" Height="40" Width="120" Command="{Binding SaveFilesCommand}" Margin="5" />
                 <Button Content="Angebote auswerten" Height="40" Width="120" Command="{Binding AnalyzeOffersCommand}" Margin="5"/>
                 <Button Content="Gesamtangebot" Height="40" Width="120" Command="{Binding GenerateOfferCommand}" Margin="5"/>
             </StackPanel>

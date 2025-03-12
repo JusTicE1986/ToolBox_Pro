@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Office.Interop.Outlook;
+using System.IO;
+using System.Windows;
+using Outlook = Microsoft.Office.Interop.Outlook;
+
 
 namespace ToolBox_Pro.Services
 {
@@ -9,55 +12,71 @@ namespace ToolBox_Pro.Services
         public List<string> ExtractPDFsFromMails(string senderEmail, string destinationFolder)
         {
             List<string> savedFiles = new List<string>();
-            Application outlookApp = new Application();
-            MAPIFolder inbox = outlookApp.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
-            Items items = inbox.Items.Restrict($"[SenderEmailAddress] = '{senderEmail}'");
+            Outlook.Application outlookApp = new Outlook.Application();
+            Outlook.MAPIFolder inbox = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
+            Outlook.Items items = inbox.Items.Restrict("[SenderEmailAddress] = transeng@e-kern.com");
 
             // Der Zielordner, in den die E-Mails verschoben werden
-            MAPIFolder targetFolder = GetSubFolder(inbox, "KERN COTI Angebote");
+            Outlook.MAPIFolder targetFolder = GetSubFolder(inbox, "KERN COTI Angebote");
             if (targetFolder == null)
             {
-                System.Windows.MessageBox.Show("Der Ordner 'KERN Angebote' wurde nicht gefunden.");
-                return savedFiles;
+                targetFolder = inbox.Folders.Add("KERN COTI Angebote", Type.Missing) as Outlook.MAPIFolder;
             }
-            List<MailItem> mailItems = new List<MailItem>();
+
+            // Überprüfung, ob das Zielverzeichnis existiert
+            if (!Directory.Exists(destinationFolder))
+            {
+                Directory.CreateDirectory(destinationFolder);
+                System.Windows.MessageBox.Show($"Der Ordner {destinationFolder} wurde erstellt.");
+            }
+            else
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(destinationFolder);
+                foreach (var file in directoryInfo.GetFiles())
+                {
+                    file.Delete(); // Löscht alle vorhandenen Dateien
+                }
+            }
+
+            // Verarbeitung der E-Mails
             foreach (object item in items)
             {
-                if (item is MailItem mailItem)
+                if (item is Outlook.MailItem mailItem)
                 {
-                    mailItems.Add(mailItem);
-                }
-            }
-
-            // Jetzt auf der Kopie arbeiten
-            foreach (MailItem mailItem in mailItems)
-            {
-                try
-                {
-                    foreach (Attachment attachment in mailItem.Attachments)
+                    try
                     {
-                        if (attachment.FileName.EndsWith(".pdf") && attachment.FileName.StartsWith("attr"))
+                        foreach (Outlook.Attachment attachment in mailItem.Attachments)
                         {
-                            string savePath = $"{destinationFolder}\\{attachment.FileName}";
-                            attachment.SaveAsFile(savePath);
-                            savedFiles.Add(savePath);
+                            if (attachment.FileName.EndsWith(".pdf") && attachment.FileName.StartsWith("attr"))
+                            {
+                                string savePath = Path.Combine(destinationFolder, attachment.FileName);
+                                attachment.SaveAsFile(savePath);
+                                savedFiles.Add(savePath);
+                            }
+                        }
+
+                        // Mail in Zielordner verschieben
+                        if (targetFolder != null)
+                        {
+                            mailItem.Move(targetFolder);
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show("Der Zielordner konnte nicht erstellt werden.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-
-                    // Mail in Zielordner verschieben
-                    //MAPIFolder targetFolder = inbox.Folders["KERN Angebote"];
-                    mailItem.Move(targetFolder);
-                }
-                catch (System.Exception ex)
-                {
-                    Console.WriteLine($"Fehler bei Mailverarbeitung: {ex.Message}");
+                    catch (System.Exception ex)
+                    {
+                        Console.WriteLine($"Fehler bei Mailverarbeitung: {ex.Message}");
+                    }
                 }
             }
             return savedFiles;
         }
-        private MAPIFolder GetSubFolder(MAPIFolder parentFolder, string folderName)
+
+        private Outlook.MAPIFolder GetSubFolder(Outlook.MAPIFolder parentFolder, string folderName)
         {
-            foreach (MAPIFolder folder in parentFolder.Folders)
+            foreach (Outlook.MAPIFolder folder in parentFolder.Folders)
             {
                 if (folder.Name == folderName)
                 {
@@ -68,3 +87,4 @@ namespace ToolBox_Pro.Services
         }
     }
 }
+

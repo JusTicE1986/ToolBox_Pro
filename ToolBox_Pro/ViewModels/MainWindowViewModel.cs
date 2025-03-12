@@ -97,6 +97,7 @@ namespace ToolBox_Pro.ViewModels
             "LNZDRAWM",
             "LNZFISCC",
             "LNZNEUMA",
+            "LNZLAABJ",
             "JusTicE86"
         };
 
