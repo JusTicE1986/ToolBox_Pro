@@ -5,28 +5,152 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToolBox_Pro"
         xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
-        mc:Ignorable="d"
-        Title="ToolBox Pro" Height="1024" Width="1280">
+        mc:Ignorable="d" 
+        Title="ToolBox Pro" Height="1024" Width="1280"
+        Background="#202020"
+        FontFamily="Aptos">
 
     <!-- DataContext Binding für MainWindow -->
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/MainWindowStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--<Storyboard x:Key="FlyoutOpenAnimation">
+                <DoubleAnimation Storyboard.TargetName="FlyoutGrid"
+                     Storyboard.TargetProperty="Width"
+                     From="80" To="320"
+                     Duration="0:0:0.3"
+                     AccelerationRatio="0.3"
+                     DecelerationRatio="0.7"/>
+            </Storyboard>
+            <Storyboard x:Key="FlyoutCloseAnimation">
+                <DoubleAnimation Storyboard.TargetName="FlyoutGrid"
+                     Storyboard.TargetProperty="Width"
+                     From="320" To="80"
+                     Duration="0:0:0.3"
+                     AccelerationRatio="0.3"
+                     DecelerationRatio="0.7"/>
+            </Storyboard>-->
+        </ResourceDictionary>
+
+
+    </Window.Resources>
 
     <Grid>
         <!-- Navigationsbereich (links) -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- Navigationsleiste -->
+        <!--Expander x:Name="MyExpander"
+                  Grid.Column="0"
+                  Background="#8B0000"
+                  Foreground="White"
+                  ExpandDirection="Right"
+                  IsExpanded="False"
+                  Header="☰ Menü"
+                  Width="Auto"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Stretch"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed"
+                  Visibility="Visible">
 
-        <StackPanel Grid.Column="0" Background="#e2001a" VerticalAlignment="Top" Margin="10">
-            <Image Source="../Images/Weidemann Logo.png"
-HorizontalAlignment="Left"
-VerticalAlignment="Center" Height="50" Margin="10"/>
-            <Button Content="KERN Angebote" 
+            -->
+        <!--<StackPanel Grid.Column="0" Background="#8B0000" VerticalAlignment="Top" Margin="10">
+                <Image  Source="../Images/Weidemann Logo.png"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" Height="50" Margin="10"/>-->
+        <!--
+            <Grid x:Name="FlyoutGrid" Width="60">
+                <ListBox x:Name="NavigationList"
+                         ItemsSource="{Binding NavigationItems}"
+                         SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
+                         Background="Transparent"
+                         BorderThickness="0">
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Padding" Value="20"/>
+                            <Setter Property="Height" Value="40"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Background" Value="#8B0000"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="Black" BlurRadius="5" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                                            <ContentPresenter VerticalAlignment="Center" 
+                                              HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#B22222"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E2001A"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                            
+                            -->
+        <!--<StackPanel Orientation="Horizontal" Margin="5">-->
+        <!--
+                                <TextBlock Text="{Binding Icon}"
+                                           FontSize="20"
+                                           FontFamily="Segoe UI Emoji"
+                                           Width="30"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="0"/>
+                                <TextBlock Text="{Binding Title}"
+                                           HorizontalAlignment="Center"
+                                           Visibility="{Binding IsExpanded, ElementName=MyExpander, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Grid.Column="1"/>
+                                
+                            -->
+        <!--</StackPanel>-->
+        <!--
+                            </Grid>
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            -->
+        <!--<Button Content="KERN Angebote" 
                     Command="{Binding ShowOfferCalculationCommand}" Height="50" />
             <Button Content="Seitenzahlen und Gewicht berechnen" Height="50" 
                     Command="{Binding ShowPDFProcessingCommand}"/>
@@ -41,15 +165,63 @@ VerticalAlignment="Center" Height="50" Margin="10"/>
                     Visibility="{Binding AdminVisibility}"/>
             <Button Content="Preisliste Export" Height="50"
                     Command="{Binding ShowPreislisteExportCommand}"
-                    Visibility="{Binding PriceListVisibility}"/>
+                    Visibility="{Binding PriceListVisibility}"/>-->
 
-        </StackPanel>
+        <!--</StackPanel>-->
+        <!--
+        </Expander>-->
+        <Border x:Name="FlyoutBorder"
+        Background="#8B0000"
+        Width="60"
+        MouseEnter="FlyoutBorder_MouseEnter"
+        MouseLeave="FlyoutBorder_MouseLeave">
+
+            <Grid>
+                <ListBox x:Name="NavigationList"
+                 ItemsSource="{Binding NavigationItems}"
+                 SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
+                 Background="Transparent"
+                 BorderThickness="0">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <!-- Icon-Bereich -->
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Text-Bereich -->
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Icon}"
+                                   FontSize="20"
+                                   FontFamily="Segoe UI Emoji"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="0"/>
+
+                                <TextBlock Text="{Binding Title}"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding DataContext.IsFlyoutExpanded, 
+                        RelativeSource={RelativeSource AncestorType=Window}, 
+                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   Grid.Column="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
 
         <!-- Rechter Bereich -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" 
+              Background="#F5F5F5"
+              >
 
             <!-- Zeige das Logo, bevor ein Modul geladen wird -->
-            <ContentControl Content="{Binding CurrentView}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ContentControl Content="{Binding CurrentView}" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"/>
 
         </Grid>
     </Grid>

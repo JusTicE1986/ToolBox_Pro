@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToolBox_Pro.ViewModels;
 
 namespace ToolBox_Pro.Views
 {
@@ -23,6 +24,7 @@ namespace ToolBox_Pro.Views
         public PreislsiteExportView()
         {
             InitializeComponent();
+            DataContext = new PreislisteExportViewModel();
         }
     }
 }
