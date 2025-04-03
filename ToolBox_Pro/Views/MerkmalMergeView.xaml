@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.MerkmalMergeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToolBox_Pro.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel Margin="20" Orientation="Vertical" >
+        <Button Content="Merkmal-Datei laden" Width="200"
+                Command="{Binding LadeMerkmalDateiCommand}"/>
+        <Button Content="Gruppentabelle laden" Width="200"
+                Command="{Binding LadeGruppenDateiCommand}"/>
+        <Button Content="🔄 Reset" 
+                Command="{Binding ResetCommand}" Width="200"/>
+        <DataGrid ItemsSource="{Binding Eintraege}" AutoGenerateColumns="False"
+                  Margin="0,20,0,0" Height="400">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Gruppe" Binding="{Binding Gruppe}" />
+                <DataGridTextColumn Header="Merkmalname" Binding="{Binding Merkmalname}" />
+                <DataGridTextColumn Header="VC Aktion" Binding="{Binding VcAktion}" />
+                <DataGridTextColumn Header="Merkmalswert" Binding="{Binding Merkmalswert}" />
+                <DataGridTextColumn Header="Merkmalbez." Binding="{Binding Merkmalbezeichnung}" />
+                <DataGridTextColumn Header="Bezeich.Merkmalswert" Binding="{Binding BezeichMerkmalwert}" />
+                <DataGridTextColumn Header="Merkmalname_Merkmalswert" Binding="{Binding Merkmalname_Merkmalswert}" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </StackPanel>
+</UserControl>

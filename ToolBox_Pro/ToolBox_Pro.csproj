@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" />
     <PackageReference Include="PdfiumViewer" />
