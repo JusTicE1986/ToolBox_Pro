@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
@@ -31,23 +31,67 @@ namespace ToolBox_Pro.ViewModels
         private ICollectionView gefilterteEintraege;
         [ObservableProperty]
         private ObservableCollection<MerkmalModelEintrag> merkmalModelle = new();
-        [ObservableProperty] MerkmalModelEintrag ausgewaehltesMerkmalModell = new();
+        [ObservableProperty]
+        MerkmalModelEintrag ausgewaehltesMerkmalModell = new();
+        [ObservableProperty]
+        private string statusmeldung;
+        [ObservableProperty] 
+        private bool istListeGeladen;
+        [ObservableProperty] 
+        private bool istXmlGeladen;
+        [ObservableProperty] 
+        private bool istVerglichen;
+        [ObservableProperty]
+        private bool istDataGridSichtbar;
 
         //private ICollectionView gefilterteEintraege;
         //public ICollectionView GefilterteEintraege => gefilterteEintraege;
 
         [RelayCommand]
-        private void ExcelLaden()
+        private async Task ExcelLadenAsync()
         {
-            var daten = _importService.LadeUndFiltereEintraege();
-            Eintraege = new ObservableCollection<MerkmalsEintrag>(daten);
+            IstBeschaeftigt = true;
 
-            Typen = new ObservableCollection<string>(
-                Eintraege.Select(e => e.Type).Distinct().OrderBy(t => t));
+            // Dialog nur im UI-Thread
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "Excel Dateien (*.xlsx)|*.xlsx",
+                Title = "Excel-Datei mit Merkmalen auswählen"
+            };
 
-            gefilterteEintraege = CollectionViewSource.GetDefaultView(Eintraege);
-            gefilterteEintraege.Filter = FilterEintraege;
-            GefilterteEintraege?.Refresh();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                await Task.Delay(100); // Spinner zeigen
+
+                // Dateipfad übergeben – Zugriff im Hintergrundthread erlaubt
+                var daten = await Task.Run(() => _importService.LadeUndFiltereEintraege(openFileDialog.FileName));
+
+                Eintraege = new ObservableCollection<MerkmalsEintrag>(daten);
+
+                var typPattern = new Regex("^[ATW]");
+                Typen = new ObservableCollection<string>(
+                    Eintraege
+                    .Select(e => e.Type)
+                    .Where(t => !string.IsNullOrWhiteSpace(t) && typPattern.IsMatch(t))
+                    .Distinct()
+                    .OrderBy(t => t));
+
+                GefilterteEintraege = CollectionViewSource.GetDefaultView(Eintraege);
+                GefilterteEintraege.Filter = FilterEintraege;
+                GefilterteEintraege?.Refresh();
+
+                IstListeGeladen = daten.Any();
+                IstVerglichen = false;
+                IstXmlGeladen = false;
+
+                Statusmeldung = $"✔ {Eintraege.Count} Einträge aus Excel geladen.";
+            }
+            else
+            {
+                Statusmeldung = "❌ Ladevorgang abgebrochen.";
+            }
+
+            IstBeschaeftigt = false;
         }
         [RelayCommand]
         private void LadeXmlMerkmale()
@@ -60,22 +104,42 @@ namespace ToolBox_Pro.ViewModels
             {
                 var liste = _importService.LadeUntersteXmlMerkmale(openFileDialog.FileName);
                 XmlMerkmale = new ObservableCollection<XmlMerkmal>(liste);
+
+                IstXmlGeladen = liste.Any();
+                IstVerglichen = false;
+
+                Statusmeldung = $"✔ {liste.Count} Merkmale aus XML geladen.";
             }
         }
         [RelayCommand]
-        private void AbgleichIdsMitXml()
+        private async Task AbgleichIdsMitXmlAsync()
         {
-            if (XmlMerkmale == null || XmlMerkmale.Count == 0 || Eintraege == null) return;
-
-            foreach (var eintrag in Eintraege)
+            
+            if (XmlMerkmale == null || XmlMerkmale.Count == 0 || Eintraege == null)
             {
-                var match = XmlMerkmale.FirstOrDefault(x => x.Bezeichnung.StartsWith(eintrag.MerkmalNameUndWert));
-                if (match != null)
-                {
-                    eintrag.Id = match.Id;
-                }
+                Statusmeldung = "⚠ Bitte zuerst XML- und Excel-Liste laden.";
+                return;
             }
+            IstBeschaeftigt = true;
+            await Task.Delay(100);
+            int zugewiesen = 0;
+            await Task.Run(() =>
+            {
+                foreach (var eintrag in Eintraege)
+                {
+                    var match = XmlMerkmale.FirstOrDefault(x => x.Bezeichnung.StartsWith(eintrag.MerkmalNameUndWert));
+                    if (match != null)
+                    {
+                        eintrag.Id = match.Id;
+                        zugewiesen++;
+                    }
+                }
+            });
+            Statusmeldung = $"✔ {zugewiesen} IDs zugewiesen.";
             OnPropertyChanged(nameof(Eintraege));
+            GefilterteEintraege?.Refresh();
+            IstVerglichen = true;
+            IstBeschaeftigt = false;
         }
         [RelayCommand]
         private void ExportiereXml()
@@ -102,6 +166,30 @@ namespace ToolBox_Pro.ViewModels
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 exportService.ExportiereXmlFilterDatei(idListe, sfd.FileName);
+            }
+        }
+        [RelayCommand]
+        private void FilterXmlAktualisieren()
+        {
+            MessageBox.Show("Mit der Ausführung dieses Befehls wird der ursprüngliche Filter aktualisiert und überschrieben.", "Achtung!", MessageBoxButtons.OKCancel);
+            var dialog = new OpenFileDialog
+            {
+                Filter = "XML Dateien (*.xml)|*.xml",
+                Title = "Filter-XML auswählen"
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var ids = GefilterteEintraege
+                    .Cast<MerkmalsEintrag>()
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Id))
+                    .Select(x => x.Id)
+                    .Distinct()
+                    .ToList();
+
+
+                var service = new ExportXmlService();
+                service.AktualisiereFilterXmlDatei(dialog.FileName, ids);
             }
         }
 

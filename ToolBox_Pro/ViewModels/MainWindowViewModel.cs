@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
-using ToolBox_Pro.Commands;
 using ToolBox_Pro.Models;
 using ToolBox_Pro.Views;
 
 namespace ToolBox_Pro.ViewModels
 {
-    public class MainWindowViewModel : BaseViewModel
+    public partial class MainWindowViewModel : ObservableObject
     {
         //    #region Backup ToolBox_Pro
         //    private object _currentView;
@@ -152,16 +149,7 @@ namespace ToolBox_Pro.ViewModels
         //#endregion
 
         #region Neues ViewModel mit NavigationItems
-        private object _currentView;
-        public object CurrentView
-        {
-            get => _currentView;
-            set
-            {
-                _currentView = value;
-                OnPropertyChanged(nameof(CurrentView));
-            }
-        }
+        
 
         private bool _isFlyoutExpanded;
         public bool IsFlyoutExpanded
@@ -184,6 +172,16 @@ namespace ToolBox_Pro.ViewModels
                     SwitchView(value);
                 }
             }
+        }
+
+        [ObservableProperty]
+        private object currentView;
+
+        public bool IstStartAktiv => CurrentView == null;
+
+        partial void OnCurrentViewChanged(object value)
+        {
+            OnPropertyChanged(nameof(IstStartAktiv));
         }
 
         public ObservableCollection<NavigationItem> NavigationItems { get; } = new ObservableCollection<NavigationItem>
@@ -238,7 +236,7 @@ namespace ToolBox_Pro.ViewModels
         {
             string currentUser = Environment.UserName.ToLower();
 
-            if (currentUser.Equals("lnzneuma", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("justice86"))
+            if (currentUser.Equals("lnzneuma", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("andre"))
                 return UserRole.Admin;
 
             if (new[] { "lnzdrawm", "lnzfiscc", "lnzneuma", "lnzlaabj", "justice86" }

@@ -26,5 +26,10 @@ namespace ToolBox_Pro.Views
             InitializeComponent();
             DataContext = new MerkmalsImportViewModel();
         }
+        public void ScrollZumGridAnfang()
+        {
+            MerkmalsDataGrid?.ScrollIntoView(MerkmalsDataGrid.Items[0]);
+            MerkmalsDataGrid.Focus();
+        }
     }
 }

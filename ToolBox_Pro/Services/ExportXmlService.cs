@@ -60,5 +60,42 @@ namespace ToolBox_Pro.Services
             var doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"), root);
             doc.Save(speicherpfad);
         }
+
+        public void AktualisiereFilterXmlDatei(string dateipfad, List<string> neueIds)
+        {
+            var doc = XDocument.Load(dateipfad);
+            var root = doc.Root;
+            if (root == null) return;
+
+            // Alte Knoten entfernen
+            var alterKnoten = root.Elements("criterion")
+                .FirstOrDefault(x =>
+                (string)x.Attribute("name") == "ontlc.VariantConfigurationTaxonomyLink"
+                && (string)x.Attribute("id") == "5119443843"
+                && (string)x.Attribute("type") == "XmlDocument");
+
+            alterKnoten?.Remove();
+
+            // Neue Knoten einfügen
+            var neuerCriterion = new XElement("criterion",
+                new XAttribute("type", "XmlDocument"),
+                new XAttribute("id", "5119443843"),
+                new XAttribute("name", "ontlc.VariantConfigurationTaxonomyLink"));
+
+            var ontologySelection = new XElement("ontologySelection",
+                new XAttribute("scope", "UPPERTREE"),
+                new XAttribute("logicalOperation", "OR"));
+
+            foreach (var id in neueIds)
+            {
+                ontologySelection.Add(new XElement("node", new XAttribute("id", id)));
+            }
+
+            neuerCriterion.Add(ontologySelection);
+            root.Add(neuerCriterion);
+
+            //Datei überschreiben!
+            doc.Save(dateipfad);
+        }
     }
 }

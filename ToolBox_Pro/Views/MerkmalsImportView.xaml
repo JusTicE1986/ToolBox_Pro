@@ -9,15 +9,324 @@
     <UserControl.DataContext>
         <vm:MerkmalsImportViewModel/>
     </UserControl.DataContext>
-    
-    <DockPanel>
-        <ComboBox Width="150" Height="25" ItemsSource="{Binding Typen}" SelectedItem="{Binding AusgewaehlterTyp, Mode=TwoWay}" Margin="0 0 20 0"/>
-        <ComboBox Width="150" Height="25" ItemsSource="{Binding MerkmalModelle}" SelectedItem="{Binding AusgewaehltesMerkmalModell, Mode=TwoWay}" DisplayMemberPath="ModellBez" Margin="0 0 20 0"/>
-        <Button Content="Merkmalsliste laden" Command="{Binding ExcelLadenCommand}" DockPanel.Dock="Top" Padding="10" Margin="10"/>
-        <Button Content="Merkmale-XML laden" Command="{Binding LadeXmlMerkmaleCommand}" DockPanel.Dock="Top" Padding="10" Margin="10"/>
-        <Button Content="Listen vergleichen" Command="{Binding AbgleichIdsMitXmlCommand}" DockPanel.Dock="Top" Padding="10" Margin="10"/>
-        <Button Content="Projektfilter speichern" Command="{Binding ExportiereXmlCommand}" DockPanel.Dock="Top" Padding="10" Margin="10"/>
-        <DataGrid ItemsSource="{Binding Eintraege}" AutoGenerateColumns="False" Margin="10" IsReadOnly="True">
+    <UserControl.Resources>
+        <Style x:Key="FlatButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#E6EEF8"/>
+            <!-- helles Blau-Grau -->
+            <Setter Property="Foreground" Value="#222"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCD3DC"/>
+            <!--<Setter Property="CornerRadius" Value="6" />-->
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="#888" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="6"
+                        SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D2E3F3"/>
+                    <!-- Hover: leicht dunkler -->
+                    <Setter Property="BorderBrush" Value="#AFC7DE"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SchrittUeberschriftStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0 20 0 10"/>
+            <Setter Property="Foreground" Value="#333"/>
+        </Style>
+        <Style x:Key="ToolboxComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1E2E40"/>
+            <Setter Property="BorderBrush" Value="#AFC7DE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="MinWidth" Value="150"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4" />
+                            <ToggleButton Grid.Column="2"
+                                  Focusable="False"
+                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  ClickMode="Press"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Stretch">
+                                <Path Data="M 0 0 L 4 4 L 8 0 Z"
+                              Width="8"
+                              Height="4"
+                              Stretch="Uniform"
+                              Fill="#333"
+                              Margin="0,0,10,0"
+                              VerticalAlignment="Center" />
+                            </ToggleButton>
+                            <ContentPresenter Margin="6,0,28,0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Content="{TemplateBinding SelectionBoxItem}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+    </UserControl.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Schritt 1–3 -->
+            <RowDefinition MinHeight="625" Height="*"/>
+            <!-- DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Statuszeile -->
+        </Grid.RowDefinitions>
+        <StackPanel Margin="20"
+                Orientation="Vertical"
+                HorizontalAlignment="Left"
+                    Grid.Row="0">
+            <!--Schritt 1 -->
+            <Border BorderBrush="#D8E2F0"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="#FAFBFC"
+                    Padding="16"
+                    Margin="0 12 0 0">
+                <StackPanel>
+                    <TextBlock Text="🔹 Schritt 1: Daten laden" 
+                       Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Merkmalsliste laden" 
+                        Style="{StaticResource FlatButtonStyle}"
+                        Command="{Binding ExcelLadenCommand}" 
+                        Padding="10" 
+                        Margin="10"/>
+                        <Button Content="Merkmale-XML laden" 
+                        Style="{StaticResource FlatButtonStyle}"
+                        Command="{Binding LadeXmlMerkmaleCommand}" 
+                        Padding="10" 
+                        Margin="10"/>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Typ:" VerticalAlignment="Center"/>
+                            <ComboBox Width="200" Height="34"
+          ItemsSource="{Binding Typen}"
+          SelectedItem="{Binding AusgewaehlterTyp, Mode=TwoWay}"
+          IsEditable="True"
+          IsReadOnly="True"
+          Margin="0 0 20 0">
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox">
+                                        <!-- Visuelles Styling -->
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Foreground" Value="#1E2E40"/>
+                                        <Setter Property="BorderBrush" Value="#AFC7DE"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="Padding" Value="6,2"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="MinWidth" Value="150"/>
+                                        <Setter Property="Height" Value="34"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                                        <!-- Dynamischer Text (Platzhalter-Ersatz) -->
+                                        <Setter Property="Text" Value="" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AusgewaehlterTyp}" Value="{x:Null}">
+                                                <Setter Property="Text" Value="Typ auswählen..." />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+
+                            <TextBlock Text="Modell:" VerticalAlignment="Center"/>
+                            <ComboBox Width="200" Height="34"
+          ItemsSource="{Binding MerkmalModelle}"
+          SelectedItem="{Binding AusgewaehltesMerkmalModell, Mode=TwoWay}"
+          DisplayMemberPath="ModellBez"
+          IsEditable="True"
+          IsReadOnly="True"
+          Margin="0 0 20 0">
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Foreground" Value="#1E2E40"/>
+                                        <Setter Property="BorderBrush" Value="#AFC7DE"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="Padding" Value="6,2"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="MinWidth" Value="150"/>
+                                        <Setter Property="Height" Value="34"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                                        <Setter Property="Text" Value="" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AusgewaehltesMerkmalModell}" Value="{x:Null}">
+                                                <Setter Property="Text" Value="Modell auswählen..." />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding MerkmalModelle.Count}" Value="0">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Setter Property="Text" Value="Keine Modelle verfügbar" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+
+
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border BorderBrush="#D8E2F0"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="#FAFBFC"
+                    Padding="16"
+                    Margin="0 12 0 0">
+                <!--Schritt 2 -->
+                <StackPanel>
+                    <TextBlock Text="🔹 Schritt 2: Vergleich starten"
+                       Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <Button Content="Listen vergleichen" 
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding AbgleichIdsMitXmlCommand}"
+                    MaxWidth="410"
+                    Padding="10" 
+                    Margin="10"
+                    HorizontalAlignment="Left">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource AndConverter}">
+                                <Binding Path="IstListeGeladen"/>
+                                <Binding Path="IstXmlGeladen"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                </StackPanel>
+            </Border>
+            <!--Schritt 3 -->
+            <Border BorderBrush="#D8E2F0"
+        BorderThickness="1"
+        CornerRadius="6"
+        Background="#FAFBFC"
+        Padding="16"
+        Margin="0 12 0 0">
+                <StackPanel>
+                    <TextBlock Text="🔹 Schritt 3: Exportieren"
+                       Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Projektfilter speichern" 
+                        Style="{StaticResource FlatButtonStyle}"
+                        Command="{Binding ExportiereXmlCommand}" 
+                        Padding="10" 
+                        Margin="10"
+                        IsEnabled="{Binding IstVerglichen}"/>
+                        <Button Content="Projektfilter aktualisieren" 
+                        Style="{StaticResource FlatButtonStyle}"
+                        Command="{Binding FilterXmlAktualisierenCommand}" 
+                        Padding="10" 
+                        Margin="10"
+                        IsEnabled="{Binding IstVerglichen}"/>
+
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+        </StackPanel>
+        <DataGrid x:Name="MerkmalsDataGrid"
+                      Grid.Row="1" 
+                      ItemsSource="{Binding Eintraege}" 
+                      AutoGenerateColumns="False" 
+                      Margin="10" 
+                      IsReadOnly="True"
+                      Visibility="{Binding IstListeGeladen, Converter={StaticResource BoolToVisibilityConverter}}"
+                      MinHeight="650"
+                      HeadersVisibility="Column"
+                      RowHeight="30"
+                      FontSize="13"
+                      GridLinesVisibility="None"
+                      ColumnHeaderHeight="32"
+                      BorderBrush="#DDD"
+                      BorderThickness="1"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      AlternatingRowBackground="#F3F3F3"
+                      RowBackground="White"
+                      HorizontalGridLinesBrush="#DDD"
+                      VerticalGridLinesBrush="#DDD">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Background" Value="#EEE"/>
+                    <Setter Property="Foreground" Value="#222"/>
+                    <Setter Property="Padding" Value="5,2"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+
+                    <Style.Triggers>
+                        <!-- Hover-Effekt -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFE0E0E0"/>
+                            <!-- hellgrau -->
+                        </Trigger>
+
+                        <!-- Auswahl-Effekt -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FFD23F31"/>
+                            <!-- dein Akzentrot -->
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
                 <DataGridTextColumn Header="Model" Binding="{Binding Model}"/>
@@ -25,13 +334,25 @@
                 <DataGridTextColumn Header="Merkmal" Binding="{Binding MerkmalNameUndWert}"/>
                 <DataGridTextColumn Header="Bezeichnung" Binding="{Binding BezeichMerkmalwert}"/>
             </DataGrid.Columns>
-            
+
         </DataGrid>
-        <DataGrid ItemsSource="{Binding XmlMerkmale}" AutoGenerateColumns="False" Margin="10" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Bezeichnung" Binding="{Binding Bezeichnung}" />
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </DockPanel>
+        <!-- ✅ Statuszeile -->
+        <Border Grid.Row="2" Background="#EEE" Padding="10" BorderBrush="#CCC" BorderThickness="1">
+            <TextBlock Text="{Binding Statusmeldung}" FontSize="13" />
+        </Border>
+        <Grid Background="#80000000" Visibility="{Binding IstBeschaeftigt, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="150"
+                             Height="20"/>
+                <TextBlock Text="Bitte warten..." 
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           Margin="0 10 0 0"/>
+
+            </StackPanel>
+
+        </Grid>
+    </Grid>
 </UserControl>

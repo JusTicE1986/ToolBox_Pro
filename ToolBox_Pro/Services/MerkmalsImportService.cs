@@ -13,18 +13,11 @@ namespace ToolBox_Pro.Services
 {
     public class MerkmalsImportService
     {
-        public List<MerkmalsEintrag> LadeUndFiltereEintraege()
+        public List<MerkmalsEintrag> LadeUndFiltereEintraege(string dateipfad)
         {
             var result = new List<MerkmalsEintrag>();
-            OpenFileDialog openFileDialog = new()
-            {
-                Filter = "Excel Dateien (*.xlsx)|*.xlsx",
-                Title = "Excel-Datei mit Merkmalen auswählen"
-            };
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                using var workbook = new XLWorkbook(openFileDialog.FileName);
+            
+                using var workbook = new XLWorkbook(dateipfad);
                 var worksheet = workbook.Worksheets.First();
                 var rows = worksheet.RangeUsed().RowsUsed().Skip(1);
 
@@ -50,8 +43,6 @@ namespace ToolBox_Pro.Services
                         });
                     }
                 }
-            }
-            MessageBox.Show("Datei geladen", "Hinweis", MessageBoxButtons.OK);
             return result;
         }
 
