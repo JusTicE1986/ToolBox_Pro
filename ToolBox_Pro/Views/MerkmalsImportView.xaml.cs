@@ -17,14 +17,14 @@ using ToolBox_Pro.ViewModels;
 namespace ToolBox_Pro.Views
 {
     /// <summary>
-    /// Interaktionslogik für MerkmalMergeView.xaml
+    /// Interaktionslogik für MerkmalsImportView.xaml
     /// </summary>
-    public partial class MerkmalMergeView : UserControl
+    public partial class MerkmalsImportView : UserControl
     {
-        public MerkmalMergeView()
+        public MerkmalsImportView()
         {
             InitializeComponent();
-            DataContext = new MerkmalMergeViewModel();
+            DataContext = new MerkmalsImportViewModel();
         }
     }
 }

@@ -195,7 +195,7 @@ namespace ToolBox_Pro.ViewModels
     new NavigationItem("Sprachdatei XML", "🗣️", new Views.LanguageXML()),
     new NavigationItem("Wiki Upload", "🌐", new WikiUploadView(), UserRole.Admin),
     new NavigationItem("Preisliste Export", "💾", new PreislsiteExportView(), UserRole.PriceLists),
-    new NavigationItem("ST4 Merkmale", "🧩", new MerkmalXmlView(), UserRole.Admin)
+    new NavigationItem("Projektfilter erstellen", "🧩", new MerkmalsImportView(), UserRole.Admin)
 };
 
 

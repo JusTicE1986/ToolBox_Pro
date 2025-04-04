@@ -36,7 +36,7 @@
                      DecelerationRatio="0.7"/>
             </Storyboard>-->
         </ResourceDictionary>
-
+        
 
     </Window.Resources>
 
@@ -196,12 +196,14 @@
                                 <TextBlock Text="{Binding Icon}"
                                    FontSize="20"
                                    FontFamily="Segoe UI Emoji"
+                                           Foreground="White"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Grid.Column="0"/>
 
                                 <TextBlock Text="{Binding Title}"
                                    VerticalAlignment="Center"
+                                           Foreground="White"
                                    Visibility="{Binding DataContext.IsFlyoutExpanded, 
                         RelativeSource={RelativeSource AncestorType=Window}, 
                         Converter={StaticResource BooleanToVisibilityConverter}}"
