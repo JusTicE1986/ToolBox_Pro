@@ -4,112 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
+             xmlns:controls ="clr-namespace:ToolBox_Pro.Controls"
              xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
              mc:Ignorable="d">
     <UserControl.DataContext>
         <vm:MerkmalsImportViewModel/>
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <Style x:Key="FlatButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#E6EEF8"/>
-            <!-- helles Blau-Grau -->
-            <Setter Property="Foreground" Value="#222"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="14,6"/>
-            <Setter Property="MinWidth" Value="200"/>
-            <Setter Property="MinHeight" Value="30"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#CCD3DC"/>
-            <!--<Setter Property="CornerRadius" Value="6" />-->
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="#888" Opacity="0.1"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="6"
-                        SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      RecognizesAccessKey="True"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#D2E3F3"/>
-                    <!-- Hover: leicht dunkler -->
-                    <Setter Property="BorderBrush" Value="#AFC7DE"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.5"/>
-                    <Setter Property="Cursor" Value="Arrow"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="SchrittUeberschriftStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Margin" Value="0 20 0 10"/>
-            <Setter Property="Foreground" Value="#333"/>
-        </Style>
-        <Style x:Key="ToolboxComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#1E2E40"/>
-            <Setter Property="BorderBrush" Value="#AFC7DE"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="6,2"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="MinWidth" Value="150"/>
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4" />
-                            <ToggleButton Grid.Column="2"
-                                  Focusable="False"
-                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                  ClickMode="Press"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Stretch">
-                                <Path Data="M 0 0 L 4 4 L 8 0 Z"
-                              Width="8"
-                              Height="4"
-                              Stretch="Uniform"
-                              Fill="#333"
-                              Margin="0,0,10,0"
-                              VerticalAlignment="Center" />
-                            </ToggleButton>
-                            <ContentPresenter Margin="6,0,28,0"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Left"
-                                      Content="{TemplateBinding SelectionBoxItem}" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-
-    </UserControl.Resources>
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -276,57 +176,9 @@
         <DataGrid x:Name="MerkmalsDataGrid"
                       Grid.Row="1" 
                       ItemsSource="{Binding Eintraege}" 
-                      AutoGenerateColumns="False" 
-                      Margin="10" 
-                      IsReadOnly="True"
+                  Style="{StaticResource ToolboxDataGridStyle}"
                       Visibility="{Binding IstListeGeladen, Converter={StaticResource BoolToVisibilityConverter}}"
-                      MinHeight="650"
-                      HeadersVisibility="Column"
-                      RowHeight="30"
-                      FontSize="13"
-                      GridLinesVisibility="None"
-                      ColumnHeaderHeight="32"
-                      BorderBrush="#DDD"
-                      BorderThickness="1"
-                      SelectionMode="Single"
-                      SelectionUnit="FullRow"
-                      AlternatingRowBackground="#F3F3F3"
-                      RowBackground="White"
-                      HorizontalGridLinesBrush="#DDD"
-                      VerticalGridLinesBrush="#DDD">
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                    <Setter Property="Background" Value="#EEE"/>
-                    <Setter Property="Foreground" Value="#222"/>
-                    <Setter Property="Padding" Value="5,2"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="FontSize" Value="13"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-
-                    <Style.Triggers>
-                        <!-- Hover-Effekt -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#FFE0E0E0"/>
-                            <!-- hellgrau -->
-                        </Trigger>
-
-                        <!-- Auswahl-Effekt -->
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#FFD23F31"/>
-                            <!-- dein Akzentrot -->
-                            <Setter Property="Foreground" Value="White"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-
-            </DataGrid.RowStyle>
+                      MinHeight="650">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
                 <DataGridTextColumn Header="Model" Binding="{Binding Model}"/>
@@ -340,19 +192,7 @@
         <Border Grid.Row="2" Background="#EEE" Padding="10" BorderBrush="#CCC" BorderThickness="1">
             <TextBlock Text="{Binding Statusmeldung}" FontSize="13" />
         </Border>
-        <Grid Background="#80000000" Visibility="{Binding IstBeschaeftigt, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                <ProgressBar IsIndeterminate="True"
-                             Width="150"
-                             Height="20"/>
-                <TextBlock Text="Bitte warten..." 
-                           Foreground="White"
-                           HorizontalAlignment="Center"
-                           Margin="0 10 0 0"/>
+        <controls:LoadingSpinner Visibility="{Binding IstBeschaeftigt, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            </StackPanel>
-
-        </Grid>
     </Grid>
 </UserControl>

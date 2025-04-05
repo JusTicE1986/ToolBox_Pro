@@ -8,19 +8,22 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel >
-        <Button Content="Merkmale speichern"
+            <Button Content="Merkmale speichern" Style="{StaticResource FlatButtonStyle}"
+
                     Width="150"
                     Height="40"
                     Command="{Binding CsvSpeichernCommand}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
-        <Button Content="Bezeichnungen speichern"
+            <Button Content="Bezeichnungen speichern" Style="{StaticResource FlatButtonStyle}"
+
             Width="150"
             Height="40"
             Command="{Binding CsvMerkmaleSpeichernCommand}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
-        <Button Content="Preisliste speichern"
+            <Button Content="Preisliste speichern" Style="{StaticResource FlatButtonStyle}"
+
             Width="150"
             Height="40"
             Command="{Binding PreislistenExportierenCommand}"

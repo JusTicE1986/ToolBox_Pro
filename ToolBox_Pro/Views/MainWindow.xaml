@@ -104,12 +104,12 @@
                     <Image Source="/Images/WN.png"
                        Width="200" Height="200"
                        Margin="0 0 0 20"/>
-                    <TextBlock Text="Willkommen bei ToolBox Pro"
+                    <TextBlock Text="{Binding Begruessungstext}"
                            FontSize="22"
                            FontWeight="Bold"
                            Foreground="#444"
                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="Bitte wählen Sie eine Funktion links in der Navigation."
+                    <TextBlock Text="Bitte wähle eine Funktion links in der Navigation aus."
                            FontSize="14"
                            Foreground="#666"
                            Margin="0 10 0 0"

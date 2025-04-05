@@ -12,6 +12,12 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Styles\Fonts\Inter-Bold.ttf" />
+    <None Remove="Styles\Fonts\Inter-Regular.ttf" />
+    <None Remove="Styles\Fonts\Inter-SemiBold.ttf" />
+    <None Remove="Styles\Fonts\InterDisplay-Light.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>9</VersionMinor>
@@ -40,6 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Weidemann Logo.png" />
+    <Resource Include="Styles\Fonts\Inter-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\Fonts\Inter-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\Fonts\Inter-SemiBold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\Fonts\InterDisplay-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" />
@@ -57,8 +75,5 @@
     <None Update="OutlookMailService.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Styles\" />
   </ItemGroup>
 </Project>

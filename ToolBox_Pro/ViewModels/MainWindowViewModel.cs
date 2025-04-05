@@ -4,153 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using ToolBox_Pro.Models;
+using ToolBox_Pro.Services;
 using ToolBox_Pro.Views;
 
 namespace ToolBox_Pro.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        //    #region Backup ToolBox_Pro
-        //    private object _currentView;
-        //    public object CurrentView
-        //    {
-        //        get => _currentView;
-        //        set
-        //        {
-        //            _currentView = value;
-        //            OnPropertyChanged(nameof(CurrentView));
-        //        }
-        //    }
-
-        //    private bool _isLogoVisible = true;
-        //    public bool IsLogoVisible
-        //    {
-        //        get => _isLogoVisible;
-        //        set
-        //        {
-        //            _isLogoVisible = value;
-        //            OnPropertyChanged();
-        //        }
-        //    }
-
-        //    private bool _isAdmin;
-        //    public bool IsAdmin
-        //    {
-        //        get => _isAdmin;
-        //        set
-        //        {
-        //            _isAdmin = value;
-        //            OnPropertyChanged(nameof(_isAdmin));
-        //            OnPropertyChanged(nameof(AdminVisibility));
-        //        }
-        //    }
-
-        //    private UserRole _currentUserRole;
-        //    public UserRole CurrentUserRole
-        //    {
-        //        get => _currentUserRole;
-        //        set
-        //        {
-        //            _currentUserRole = value;
-        //            OnPropertyChanged();
-        //            OnPropertyChanged(nameof(AdminVisibility));
-        //            OnPropertyChanged(nameof(PriceListVisibility));
-        //            OnPropertyChanged(nameof(NormalUserVisibility));
-        //        }
-        //    }
-
-        //    public Visibility AdminVisibility => 
-        //        CurrentUserRole == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
-        //    public Visibility PriceListVisibility => 
-        //        (CurrentUserRole == UserRole.PriceLists || CurrentUserRole == UserRole.Admin) ? Visibility.Visible : Visibility.Collapsed;
-        //    public Visibility NormalUserVisibility => 
-        //        CurrentUserRole == UserRole.NormalUser ? Visibility.Visible : Visibility.Collapsed;
-
-
-        //public ICommand ShowOfferCalculationCommand { get; }
-        //public ICommand ShowPDFProcessingCommand { get; }
-        //public ICommand ShowLanguageXMLCommand { get; }
-        //public ICommand ShowCleanupViewCommand { get; }
-        //public ICommand ShowWikiUploadCommand { get; }
-        //public ICommand ShowPreislisteExportCommand { get; }
-
-        //public MainWindowViewModel()
-        //{
-        //    CurrentUserRole = GetCurrentUserRole();
-        //    ShowOfferCalculationCommand = new RelayCommands(ShowOfferCalculation);
-        //    ShowPDFProcessingCommand = new RelayCommands(ShowPDFProcessing);
-        //    ShowLanguageXMLCommand = new RelayCommands(ShowLanguageXML);
-        //    ShowCleanupViewCommand = new RelayCommands(ShowCleanupView);
-        //    ShowWikiUploadCommand = new RelayCommands(ShowWikiUploadView);
-        //    ShowPreislisteExportCommand = new RelayCommands(ShowPreislisteExport);
-        //}
-
-        //    private bool CheckIfUserIsAdmin()
-        //    {
-        //        string currentUser = Environment.UserName;
-        //        return currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE1986", StringComparison.OrdinalIgnoreCase);
-        //    }
-
-        //    private readonly List<string> _priceListUser = new()
-        //    {
-        //        "LNZDRAWM",
-        //        "LNZFISCC",
-        //        "LNZNEUMA",
-        //        "LNZLAABJ",
-        //        "JusTicE86"
-        //    };
-
-        //    private UserRole GetCurrentUserRole()
-        //    {
-        //        string currentUser = Environment.UserName.ToLower();
-
-        //        if (currentUser.Equals("LNZNEUMA", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("JusTicE86"))
-        //            return UserRole.Admin;
-        //        if (_priceListUser.Any(u => u.Equals(currentUser, StringComparison.OrdinalIgnoreCase)))
-        //            return UserRole.PriceLists;
-        //        return UserRole.NormalUser;
-        //    }
-
-        //private void ShowOfferCalculation()
-        //{
-        //    IsLogoVisible = false;
-        //    CurrentView = new OfferCalculation();
-        //}
-
-        //private void ShowPDFProcessing()
-        //{
-        //    CurrentView = new PDFProcessingView();
-        //}
-
-        //private void ShowLanguageXML()
-        //{
-        //    CurrentView = new Views.LanguageXML();
-        //}
-
-        //private void ShowCleanupView()
-        //{
-        //    CurrentView = new CleanupView();
-        //}
-
-        //private void ShowWikiUploadView()
-        //{
-        //    CurrentView = new WikiUploadView();
-        //}
-
-        //private void ShowPreislisteExport()
-        //{
-        //    CurrentView = new PreislsiteExportView()
-        //    {
-        //        DataContext = new PreislisteExportViewModel()
-        //    };
-        //}
-
-        //}
-        //#endregion
-
         #region Neues ViewModel mit NavigationItems
-        
-
         private bool _isFlyoutExpanded;
         public bool IsFlyoutExpanded
         {
@@ -174,6 +35,11 @@ namespace ToolBox_Pro.ViewModels
             }
         }
 
+        private readonly UserService _userService = new UserService();
+
+        public string Begruessungstext => $"Willkommen {CurrentUserDisplayNameOrUsername} bei der ToolBox Pro 👋";
+
+
         [ObservableProperty]
         private object currentView;
 
@@ -186,14 +52,15 @@ namespace ToolBox_Pro.ViewModels
 
         public ObservableCollection<NavigationItem> NavigationItems { get; } = new ObservableCollection<NavigationItem>
 {
-    //new NavigationItem("Startseite", "🏠", new HomeView()),
+
+    new NavigationItem("Projektfilter erstellen", "🧩", new MerkmalsImportView()),
     new NavigationItem("KERN Angebote", "📂", new OfferCalculation()),
     new NavigationItem("Seitenzahlen & Gewicht", "📏", new PDFProcessingView()),
-    new NavigationItem("Ordner bereinigen", "🧹", new CleanupView()),
-    new NavigationItem("Sprachdatei XML", "🗣️", new Views.LanguageXML()),
-    new NavigationItem("Wiki Upload", "🌐", new WikiUploadView(), UserRole.Admin),
     new NavigationItem("Preisliste Export", "💾", new PreislsiteExportView(), UserRole.PriceLists),
-    new NavigationItem("Projektfilter erstellen", "🧩", new MerkmalsImportView(), UserRole.Admin)
+    new NavigationItem("Ordner bereinigen", "🧹", new CleanupView(), UserRole.Admin),
+    new NavigationItem("Sprachdatei XML", "🗣️", new Views.LanguageXML(), UserRole.Admin),
+    new NavigationItem("Wiki Upload", "🌐", new WikiUploadView(), UserRole.Admin),
+    new NavigationItem("User Settings", "👥", new UserManagementView(), UserRole.Admin)
 };
 
 
@@ -210,6 +77,7 @@ namespace ToolBox_Pro.ViewModels
                 CurrentView = item.View;
             }
         }
+
 
         private UserRole _currentUserRole;
         public UserRole CurrentUserRole
@@ -234,16 +102,32 @@ namespace ToolBox_Pro.ViewModels
 
         private UserRole GetCurrentUserRole()
         {
-            string currentUser = Environment.UserName.ToLower();
+            _userService.LoadUsers();
+            var user = _userService.GetOrCreateUser(Environment.UserName);
 
-            if (currentUser.Equals("lnzneuma", StringComparison.OrdinalIgnoreCase) || currentUser.Equals("andre"))
-                return UserRole.Admin;
+            // Optional: Admin-Hinweis bei unbestätigten Usern
+            if (user.Role == UserRole.Admin)
+            {
+                var neueUser = _userService.GetUnconfirmedUsers();
+                if (neueUser.Any())
+                {
+                    MessageBox.Show($"Neue Benutzer erkannt:\n{string.Join("\n", neueUser.Select(u => u.Username))}");
+                }
+            }
 
-            if (new[] { "lnzdrawm", "lnzfiscc", "lnzneuma", "lnzlaabj", "justice86" }
-                .Any(u => u.Equals(currentUser, StringComparison.OrdinalIgnoreCase)))
-                return UserRole.PriceLists;
+            return user.Role;
+        }
 
-            return UserRole.NormalUser;
+        public string CurrentUserDisplayNameOrUsername
+        {
+            get
+            {
+                var user = _userService.GetOrCreateUser(Environment.UserName);
+                return string.IsNullOrWhiteSpace(user.DisplayName)
+                    ? user.Username
+                    : user.DisplayName;
+
+            }
         }
     }
 

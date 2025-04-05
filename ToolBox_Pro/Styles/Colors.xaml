@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--PRIMÄRFARBEN-->
+
+    <Color x:Key="PrimaryBlue">#E6EEF8</Color>
+    <Color x:Key="PrimaryBlueHover">#D2E3F3</Color>
+    <Color x:Key="PrimaryBorder">#CCD3DC</Color>
+    <Color x:Key="PrimaryBorderHover">#AFC7DE</Color>
+    <Color x:Key="PrimaryBlueText">#222</Color>
+    <Color x:Key="CardBorder">#D8E2F0</Color>
+    <Color x:Key="CardBackground">#FAFBFC</Color>
+    
+    <!-- GRAUTÖNE -->
+    <Color x:Key="TextDark">#1E2E40</Color>
+    <Color x:Key="TextMedium">#333</Color>
+
+    <!-- BRUSHES -->
+    <SolidColorBrush x:Key="BrushPrimaryBlue" Color="{StaticResource PrimaryBlue}"/>
+    <SolidColorBrush x:Key="BrushPrimaryBlueHover" Color="{StaticResource PrimaryBlueHover}"/>
+    <SolidColorBrush x:Key="BrushPrimaryBorder" Color="{StaticResource PrimaryBorder}"/>
+    <SolidColorBrush x:Key="BrushPrimaryBorderHover" Color="{StaticResource PrimaryBorderHover}"/>
+    <SolidColorBrush x:Key="BrushPrimaryBlueText" Color="{StaticResource PrimaryBlueText}"/>
+    <SolidColorBrush x:Key="BrushTextDark" Color="{StaticResource TextDark}"/>
+    <SolidColorBrush x:Key="BrushTextMedium" Color="{StaticResource TextMedium}"/>
+    <SolidColorBrush x:Key="BrushCardBorder" Color="{StaticResource CardBorder}"/>
+    <SolidColorBrush x:Key="BrushCardBackground" Color="{StaticResource CardBackground}"/>
+
+
+</ResourceDictionary>

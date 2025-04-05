@@ -1,7 +1,13 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ToolBox_Pro.Commands;
 using ToolBox_Pro.Models;
@@ -9,181 +15,109 @@ using ToolBox_Pro.Services;
 
 namespace ToolBox_Pro.ViewModels
 {
-    public class OfferCalculationViewModel : BaseViewModel
+    public partial class OfferCalculationViewModel : ObservableObject
     {
-        // Eigenschaften
-        // Private Felder
-        private string _offerDestination;
-        private ObservableCollection<OfferModel> _offers;
-        private decimal _totalPrice;
-
-        // Public Properties
-        public string OfferDestination
-        {
-            get => _offerDestination;
-            set
-            {
-                if (_offerDestination != value)
-                {
-                    _offerDestination = value;
-                    OnPropertyChanged(nameof(OfferDestination));  // PropertyChanged benachrichtigen
-                }
-            }
-        }
-
-        public ObservableCollection<OfferModel> Offers
-        {
-            get => _offers;
-            set
-            {
-                if (_offers != value)
-                {
-                    _offers = value;
-                    OnPropertyChanged(nameof(Offers));  // PropertyChanged benachrichtigen
-                }
-            }
-        }
-
-        public decimal TotalPrice
-        {
-            get => _totalPrice;
-            set
-            {
-                if (_totalPrice != value)
-                {
-                    _totalPrice = value;
-                    OnPropertyChanged(nameof(TotalPrice));  // PropertyChanged benachrichtigen
-                }
-            }
-        }
-
-
         private readonly PDFService _pdfService;
         private readonly MailService _mailService;
 
-
-        // Commands
-        public ICommand SaveFilesCommand { get; }
-        public ICommand AnalyzeOffersCommand { get; }
-        public ICommand GenerateOfferCommand { get; }
+        [ObservableProperty]
+        private string offerDestination;
+        [ObservableProperty]
+        private ObservableCollection<OfferModel> offers = new();
+        [ObservableProperty]
+        private decimal totalPrice;
+        [ObservableProperty]
+        private bool isBusy;
 
         public OfferCalculationViewModel()
         {
-            
             _pdfService = new PDFService();
             _mailService = new MailService();
-            OfferDestination = @"C:\TEMP\Neuer Ordner";
-            Offers = new ObservableCollection<OfferModel>();
-            SaveFilesCommand = new RelayCommands(SaveFiles);
-            AnalyzeOffersCommand = new RelayCommands(AnalyzeOffers);
-            GenerateOfferCommand = new RelayCommands(GenerateOffer);
+
+            OfferDestination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "KERN Angebote");
         }
-        //#region SaveFiles
-        //private void SaveFiles()
-        //{
-        //    if (string.IsNullOrEmpty(OfferDestination))
-        //    {
-        //        MessageBox.Show("Bitte wählen Sie ein Zielverzeichnis aus.");
-        //        return;
-        //    }
 
-        //    // Prüfen, ob der Zielordner existiert, wenn nicht, erstelle ihn
-        //    if (!System.IO.Directory.Exists(OfferDestination))
-        //    {
-        //        try
-        //        {
-        //            System.IO.Directory.CreateDirectory(OfferDestination);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show($"Fehler beim Erstellen des Verzeichnisses: {ex.Message}");
-        //            return;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // Zielordner leeren: Nur E-Mail-Anhänge löschen, die bereits existieren
-        //        try
-        //        {
-        //            var files = System.IO.Directory.GetFiles(OfferDestination, "*.pdf"); // Nur PDF-Dateien löschen
-        //            foreach (var file in files)
-        //            {
-        //                System.IO.File.Delete(file);  // Löschen der Anhänge
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show($"Fehler beim Leeren des Verzeichnisses: {ex.Message}");
-        //            return;
-        //        }
-        //    }
-
-        //    // E-Mails mit Anhängen extrahieren und speichern
-        //    try
-        //    {
-        //        string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
-        //        var savedFiles = _mailService.ExtractPDFsFromMails(senderEmail, OfferDestination);
-        //        MessageBox.Show($"Es wurden {savedFiles.Count} PDF-Dateien gespeichert.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Fehler beim Extrahieren der Anhänge: {ex.Message}");
-        //    }
-        //}
-        //#endregion
-
+        [RelayCommand]
         private void SaveFiles()
         {
-            string senderEmail = "transeng@e-kern.com";  // Absender-E-Mail
-            string exportPath = @"C:\TEMP\Neuer Ordner";
+            string senderMail = "transeng@e-kern.com";
 
-            if (string.IsNullOrWhiteSpace(senderEmail) || string.IsNullOrWhiteSpace(exportPath))
+            if (string.IsNullOrWhiteSpace(senderMail) || string.IsNullOrWhiteSpace(OfferDestination))
             {
-                MessageBox.Show("Bitte geben Sie Absender-E-Mail und Export-Pfad an.");
+                System.Windows.MessageBox.Show("Bitte Absender Email und Export-Pfad angeben.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             var serviceCaller = new OutlookServiceCaller();
-            serviceCaller.ExportAttachments(senderEmail, exportPath);
-
+            serviceCaller.ExportAttachments(senderMail, OfferDestination);
         }
-        private void AnalyzeOffers()
+        [RelayCommand]
+        private async Task AnalyzeOffersAsync()
         {
             if (string.IsNullOrEmpty(OfferDestination))
             {
-                MessageBox.Show("Bitte wählen Sie ein Verzeichnis aus.");
+                System.Windows.MessageBox.Show("Bitte ein Verzeichnis auswählen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            var offerList = _pdfService.ExtractPDFData(OfferDestination);
-            Offers.Clear();
-            foreach (var offer in offerList)
-            {
-                Offers.Add(offer);
-            }
-            CalculateTotalPrice();
+            IsBusy = true;
+            await Task.Run(() => {
+                var offerList = _pdfService.ExtractPDFData(OfferDestination);
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    Offers.Clear();
+                    foreach (var offer in offerList)
+                    {
+                        Offers.Add(offer);
+                    }
+                    CalculateTotalPrice();
+                });
+            });
+
+            IsBusy = false;
         }
+        [RelayCommand]
         private void GenerateOffer()
         {
             if (string.IsNullOrEmpty(OfferDestination))
             {
-                MessageBox.Show("Bitte wählen Sie ein Verzeichnis aus.");
+                System.Windows.MessageBox.Show("Bitte ein Verzeichnis auswählen", "Fehler", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
 
             var pdfMergeService = new PdfMergeService(OfferDestination);
             var pdfDocument = pdfMergeService.CreatePdfWithSummary(Offers.ToList(), TotalPrice.ToString("N2") + " €");
 
-            // PDF speichern
-            var pdfPath = System.IO.Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now.ToString("yyyy-MM-dd")}.pdf");
+            var pdfPath = Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now:yyyy-MM-dd}.pdf");
             pdfDocument.Save(pdfPath);
 
+            System.Windows.MessageBox.Show($"Gesamtangebot wurde erstellt und gespeichert unter {pdfPath}", "Datei gespeichert", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            MessageBox.Show($"Gesamtangebot wurde erstellt und gespeichert unter {pdfPath}");
         }
+
         private void CalculateTotalPrice()
         {
             TotalPrice = Offers.Sum(x => x.Price);
+        }
+
+        [RelayCommand]
+        private void PickFolder()
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                Description = "Speicherort für Angebote wählen",
+                SelectedPath = OfferDestination
+            };
+
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                OfferDestination = dialog.SelectedPath;
+            }
+            else
+            {
+                OfferDestination = OfferDestination;
+            }
         }
     }
 }

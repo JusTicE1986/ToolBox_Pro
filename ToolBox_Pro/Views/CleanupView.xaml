@@ -11,11 +11,14 @@
         <viewmodels:CleanupViewModel/>
     </UserControl.DataContext>
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button Content="ST4___pdf_Automated_Production leeren" 
+        <Button Content="ST4___pdf_Automated_Production leeren" Style="{StaticResource FlatButtonStyle}"
+ 
                 Command="{Binding CleanupST4PdfCommand}" Width="300" Height="40"/>
-        <Button Content="DIR__success leeren" 
+        <Button Content="DIR__success leeren"  Style="{StaticResource FlatButtonStyle}"
+
                 Command="{Binding CleanupDIRSuccessCommand}" Width="300" Height="40"/>
-        <Button Content="DIR__failed leeren" 
+        <Button Content="DIR__failed leeren" Style="{StaticResource FlatButtonStyle}"
+
                 Command="{Binding CleanupDIRFailedCommand}" Width="300" Height="40"/>
     </StackPanel>
 

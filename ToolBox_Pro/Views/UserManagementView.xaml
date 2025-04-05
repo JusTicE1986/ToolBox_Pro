@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.UserManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:local="clr-namespace:ToolBox_Pro.Views" 
+             xmlns:helpers="clr-namespace:ToolBox_Pro.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:UserManagementViewModel/>
+    </UserControl.DataContext>
+    <StackPanel Margin="20">
+        <DataGrid ItemsSource="{Binding Benutzerliste}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  Style="{StaticResource ToolboxDataGridStyle}"
+                  Height="300"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Username" Binding="{Binding Username}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}"/>
+                <DataGridCheckBoxColumn Header="Bestätigt" Binding="{Binding IsConfirmed}"/>
+                <DataGridComboBoxColumn Header="Rolle"
+                                        SelectedItemBinding="{Binding Role}"
+                                        ItemsSource="{x:Static helpers:UserRoleValues.All}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Border Style="{DynamicResource ToolboxContainerStyle}">
+            <StackPanel>
+            <TextBlock Text="{Binding BenutzerAnzahl, StringFormat='👥 {0} Benutzer insgesamt'}"
+           Style="{StaticResource TextBlockStyle}"/>
+            <Button Content="Speichern"
+                Command="{Binding SpeichernCommand}"
+                Margin="0 10 0 0"
+                Style="{StaticResource FlatButtonStyle}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -3,61 +3,85 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
              xmlns:converters="clr-namespace:ToolBox_Pro.Converters"
+             xmlns:local="clr-namespace:ToolBox_Pro.Controls"
              Height="Auto" Width="Auto">
     <UserControl.DataContext>
-        <!-- Hier wird das OfferCalculationViewModel gesetzt -->
         <viewmodels:OfferCalculationViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:ZeroToCollapsedConverter x:Key="ZeroToCollapsedConverter"/>
     </UserControl.Resources>
 
 
     <Grid Margin="20">
-        <!-- Zeilen für Layout -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Für Label, TextBox und Buttons -->
             <RowDefinition Height="Auto"/>
-            <!-- Für DataGrid -->
             <RowDefinition Height="Auto"/>
-            <!-- Für Gesamtsumme -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- StackPanel für Label, TextBox und Buttons -->
-        <StackPanel Grid.Row="0" Margin="0 0 0 10" VerticalAlignment="Top">
-            <!-- Label und TextBox vertikal anordnen -->
-            <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0 0 0 10">
-                <Label x:Name="lblFileDestination" Content="Speicherort der Angebote" HorizontalAlignment="Center" Margin="0 0 0 5"/>
-                <TextBox Text="{Binding OfferDestination, UpdateSourceTrigger=PropertyChanged}"
-                         Width="200" Height="30" TextAlignment="Center"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        
+        <Border Grid.Column="0" Style="{StaticResource ToolboxContainerStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource SchrittUeberschriftStyle}"
+                           Text="Speicherort der Angebote"/>
+                <TextBlock Style="{StaticResource  TextBlockStyle}"
+                           Text="Bitte auswählen:"/>
+                <StackPanel>
+                    <Button Style="{StaticResource FlatButtonStyle}"
+                            Content="Ordner wählen"
+                            Command="{Binding PickFolderCommand}"/>
+                </StackPanel>
             </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Margin="10 10 0 0" Style="{StaticResource ToolboxContainerStyle}">
 
-            <!-- Buttons horizontal anordnen -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <Button Content="Mails speichern" Height="40" Width="120" Command="{Binding SaveFilesCommand}" Margin="5" />
-                <Button Content="Angebote auswerten" Height="40" Width="120" Command="{Binding AnalyzeOffersCommand}" Margin="5"/>
-                <Button Content="Gesamtangebot" Height="40" Width="120" Command="{Binding GenerateOfferCommand}" Margin="5"/>
-            </StackPanel>
-        </StackPanel>
+            <StackPanel Orientation="Vertical">
+                    <TextBlock Style="{StaticResource SchrittUeberschriftStyle}"
+           Text="Angebote auswerten"/>
+                    <Button Content="Mails speichern" Command="{Binding SaveFilesCommand}"
+                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
+                    <Button Content="Angebote auswerten" Command="{Binding AnalyzeOffersCommand}"
+                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
+                        <Button Content="Gesamtangebot" Command="{Binding GenerateOfferCommand}"
+                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
+                    </StackPanel>
+        </Border>
+        </Grid>
+        <!-- Spinner während Analyse -->
+         <local:LoadingSpinner Grid.Row="3" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-        <!-- DataGrid für die Liste der Dateien -->
-        <DataGrid ItemsSource="{Binding Offers}" AutoGenerateColumns="False" Grid.Row="1" Margin="0 10 0 10">
+
+            <!-- Angebotsliste -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Offers}"
+                  AutoGenerateColumns="False"
+                  Visibility="{Binding Offers.Count, Converter={StaticResource ZeroToCollapsedConverter}}"
+                  Style="{StaticResource ToolboxDataGridStyle}"
+                  Margin="0 10 0 10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Angebotsdatei" Binding="{Binding FileName}" Width="*"/>
                 <DataGridTextColumn Header="Summe" Binding="{Binding Price, StringFormat={}{0:N2} €}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Gesamtsumme TextBlock -->
-        <TextBlock
-           HorizontalAlignment="Right" Grid.Row="2" FontSize="16" FontWeight="Bold">
-
+        <!-- Gesamtsumme -->
+        <TextBlock Grid.Row="3"
+                   FontSize="16" FontWeight="Bold"
+                   HorizontalAlignment="Right"
+                   Visibility="{Binding Offers.Count, Converter={StaticResource ZeroToCollapsedConverter}}">
             <TextBlock.Inlines>
-                <Run Text="Gesamtsumme: " />
+                <Run Text="Gesamtsumme: "/>
                 <Run Text="{Binding TotalPrice, StringFormat={}{0:N2} €}" />
             </TextBlock.Inlines>
         </TextBlock>
-
+        
     </Grid>
 </UserControl>

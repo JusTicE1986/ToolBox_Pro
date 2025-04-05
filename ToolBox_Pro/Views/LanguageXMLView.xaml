@@ -25,7 +25,8 @@
                    Margin="0,0,0,10" />
 
         <!-- Button zum Starten der Verarbeitung -->
-        <Button Content="Verarbeiten"
+        <Button Content="Verarbeiten" Style="{StaticResource FlatButtonStyle}"
+
                 Grid.Row="1"
                 HorizontalAlignment="Left"
                 Padding="10,5"

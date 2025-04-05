@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -68,7 +69,10 @@ namespace ToolBox_Pro.ViewModels
 
                 Eintraege = new ObservableCollection<MerkmalsEintrag>(daten);
 
-                var typPattern = new Regex("^[ATW]");
+
+                var patternText = File.ReadAllText("Config/typPattern.txt"); // z. B. "^[ATWED]"
+                var typPattern = new Regex(patternText);
+                //var typPattern = new Regex("^[ATW]");
                 Typen = new ObservableCollection<string>(
                     Eintraege
                     .Select(e => e.Type)
