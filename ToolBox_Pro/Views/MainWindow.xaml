@@ -10,8 +10,8 @@
         mc:Ignorable="d" 
         Title="ToolBox Pro" Height="1250" Width="1280"
         Background="#202020"
-        FontFamily="Aptos"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        >
 
     <!-- DataContext Binding für MainWindow -->
     <Window.DataContext>

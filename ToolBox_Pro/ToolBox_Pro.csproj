@@ -10,8 +10,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <ApplicationIcon>ToolBoxIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\favicon.ico" />
     <None Remove="Styles\Fonts\Inter-Bold.ttf" />
     <None Remove="Styles\Fonts\Inter-Regular.ttf" />
     <None Remove="Styles\Fonts\Inter-SemiBold.ttf" />
@@ -27,6 +29,12 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ToolBoxIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -12,7 +12,7 @@ namespace ToolBox_Pro.Services;
 public class UserService
 {
     private const string FilePath = "Config/users.securejson";
-    private const string EncryptionKey = "MEnkkThuKpXdh3.fv@R7FnHjNtuzPmCQ"; // 32 Zeichen für AES-256
+    private const string EncryptionKey = "MEnkkThuKpXdh3.fv@R7FnHjNtuzPmCQ";
 
     private List<AppUser> _userList = new();
 
@@ -33,14 +33,14 @@ public class UserService
         }
 
         var encryptedData = File.ReadAllBytes(FilePath);
-        var json = Decrypt(encryptedData, GetEncryptionKey());
+        var json = Decrypt(encryptedData, EncryptionKey);
         _userList = JsonSerializer.Deserialize<List<AppUser>>(json) ?? new List<AppUser>();
     }
 
     public void SaveUsers()
     {
         var json = JsonSerializer.Serialize(_userList, new JsonSerializerOptions { WriteIndented = true });
-        var encrypted = Encrypt(json, GetEncryptionKey());
+        var encrypted = Encrypt(json, EncryptionKey);
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
         File.WriteAllBytes(FilePath, encrypted);
     }
