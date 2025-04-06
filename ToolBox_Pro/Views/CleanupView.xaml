@@ -10,16 +10,69 @@
     <UserControl.DataContext>
         <viewmodels:CleanupViewModel/>
     </UserControl.DataContext>
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button Content="ST4___pdf_Automated_Production leeren" Style="{StaticResource FlatButtonStyle}"
- 
-                Command="{Binding CleanupST4PdfCommand}" Width="300" Height="40"/>
-        <Button Content="DIR__success leeren"  Style="{StaticResource FlatButtonStyle}"
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
 
-                Command="{Binding CleanupDIRSuccessCommand}" Width="300" Height="40"/>
-        <Button Content="DIR__failed leeren" Style="{StaticResource FlatButtonStyle}"
+            <!-- Überschrift -->
+            <Border Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="Verzeichnisse bereinigen"
+                       Style="{StaticResource ViewUeberschriftStyle}"/>
+                    <TextBlock Text="Löschen der Ordner nur wenn gerade keine Produktionen in ST4 über Workflow laufen (Manual oder Spare Parts Lists)."
+                           Style="{StaticResource TextBlockStyle}"/>
+                </StackPanel>
+            </Border>
 
-                Command="{Binding CleanupDIRFailedCommand}" Width="300" Height="40"/>
-    </StackPanel>
+            <!-- Card 1 -->
+            <Border Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="ST4_pdf_Automated_Production"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Leert das Verzeichnis für automatisch erzeugte ST4-PDF-Dateien. Option verwenden, wenn Ersatzteillisten produziert wurden.."
+                               Style="{StaticResource TextBlockStyle}"/>
+                    <Button Content="Verzeichnis leeren"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding CleanupST4PdfCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 2 -->
+            <Border Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="DIR_success"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Löscht alle erfolgreich verarbeiteten Dateien im 'DIR_success'-Verzeichnis."
+                               Style="{StaticResource TextBlockStyle}"/>
+                    <Button Content="Verzeichnis leeren"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding CleanupDIRSuccessCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 3 -->
+            <Border Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="DIR_failed"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Bereinigt das Verzeichnis mit fehlgeschlagenen Dateien. Stelle sicher vorher, dass keine Analyse mehr notwendig ist."
+                               Style="{StaticResource TextBlockStyle}"/>
+                    <Button Content="Verzeichnis leeren"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding CleanupDIRFailedCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>

@@ -33,14 +33,14 @@ public class UserService
         }
 
         var encryptedData = File.ReadAllBytes(FilePath);
-        var json = Decrypt(encryptedData, EncryptionKey);
+        var json = Decrypt(encryptedData, GetEncryptionKey());
         _userList = JsonSerializer.Deserialize<List<AppUser>>(json) ?? new List<AppUser>();
     }
 
     public void SaveUsers()
     {
         var json = JsonSerializer.Serialize(_userList, new JsonSerializerOptions { WriteIndented = true });
-        var encrypted = Encrypt(json, EncryptionKey);
+        var encrypted = Encrypt(json, GetEncryptionKey());
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
         File.WriteAllBytes(FilePath, encrypted);
     }
@@ -59,6 +59,20 @@ public class UserService
 
     public IEnumerable<AppUser> GetUnconfirmedUsers()
         => _userList.Where(u => !u.IsConfirmed);
+
+    private static string GetEncryptionKey()
+    {
+        var keyPath = Path.Combine("Config", "user.key.txt");
+        if (!File.Exists(keyPath))
+            throw new FileNotFoundException("Verschlüsselungs-Schlüssel wurde nicht gefunden (Config/user.key.txt).");
+
+        var key = File.ReadAllText(keyPath).Trim();
+
+        if (key.Length != 32)
+            throw new InvalidOperationException("Der Verschlüsselungsschlüssel muss exakt 32 Zeichen lang sein (AES-256).");
+
+        return key;
+    }
 
     #region AES Crypto
 

@@ -48,27 +48,13 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Typ:" VerticalAlignment="Center"/>
                             <ComboBox Width="200" Height="34"
-          ItemsSource="{Binding Typen}"
-          SelectedItem="{Binding AusgewaehlterTyp, Mode=TwoWay}"
-          IsEditable="True"
-          IsReadOnly="True"
-          Margin="0 0 20 0">
+                                      ItemsSource="{Binding Typen}"
+                                      SelectedItem="{Binding AusgewaehlterTyp, Mode=TwoWay}"
+                                      IsEditable="True"
+                                      IsReadOnly="True"
+                                      Margin="0 0 20 0">
                                 <ComboBox.Style>
-                                    <Style TargetType="ComboBox">
-                                        <!-- Visuelles Styling -->
-                                        <Setter Property="Background" Value="White"/>
-                                        <Setter Property="Foreground" Value="#1E2E40"/>
-                                        <Setter Property="BorderBrush" Value="#AFC7DE"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Padding" Value="6,2"/>
-                                        <Setter Property="FontSize" Value="14"/>
-                                        <Setter Property="MinWidth" Value="150"/>
-                                        <Setter Property="Height" Value="34"/>
-                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-
-                                        <!-- Dynamischer Text (Platzhalter-Ersatz) -->
-                                        <Setter Property="Text" Value="" />
+                                    <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding AusgewaehlterTyp}" Value="{x:Null}">
                                                 <Setter Property="Text" Value="Typ auswählen..." />
@@ -78,28 +64,17 @@
                                 </ComboBox.Style>
                             </ComboBox>
 
+
                             <TextBlock Text="Modell:" VerticalAlignment="Center"/>
                             <ComboBox Width="200" Height="34"
-          ItemsSource="{Binding MerkmalModelle}"
-          SelectedItem="{Binding AusgewaehltesMerkmalModell, Mode=TwoWay}"
-          DisplayMemberPath="ModellBez"
-          IsEditable="True"
-          IsReadOnly="True"
-          Margin="0 0 20 0">
+                                      ItemsSource="{Binding MerkmalModelle}"
+                                      SelectedItem="{Binding AusgewaehltesMerkmalModell, Mode=TwoWay}"
+                                      DisplayMemberPath="ModellBez"
+                                      IsEditable="True"
+                                      IsReadOnly="True"
+                                      Margin="0 0 20 0">
                                 <ComboBox.Style>
-                                    <Style TargetType="ComboBox">
-                                        <Setter Property="Background" Value="White"/>
-                                        <Setter Property="Foreground" Value="#1E2E40"/>
-                                        <Setter Property="BorderBrush" Value="#AFC7DE"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Padding" Value="6,2"/>
-                                        <Setter Property="FontSize" Value="14"/>
-                                        <Setter Property="MinWidth" Value="150"/>
-                                        <Setter Property="Height" Value="34"/>
-                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-
-                                        <Setter Property="Text" Value="" />
+                                    <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding AusgewaehltesMerkmalModell}" Value="{x:Null}">
                                                 <Setter Property="Text" Value="Modell auswählen..." />
@@ -112,6 +87,7 @@
                                     </Style>
                                 </ComboBox.Style>
                             </ComboBox>
+
 
 
                         </StackPanel>

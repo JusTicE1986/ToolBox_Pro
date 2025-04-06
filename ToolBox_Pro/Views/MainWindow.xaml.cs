@@ -23,7 +23,6 @@ namespace ToolBox_Pro.Views
             var storyboard = (Storyboard)FindResource("FlyoutOpenAnimation");
             storyboard.Begin();
         }
-
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
             var storyboard = (Storyboard)FindResource("FlyoutCloseAnimation");
@@ -34,13 +33,11 @@ namespace ToolBox_Pro.Views
             ViewModel.IsFlyoutExpanded = true;
             AnimateFlyoutBorder(320); // Breite bei MouseOver
         }
-
         private void FlyoutBorder_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ViewModel.IsFlyoutExpanded = false;
             AnimateFlyoutBorder(60); // Collapsed-Zustand
         }
-
         private void AnimateFlyoutBorder(double targetWidth)
         {
             var animation = new DoubleAnimation

@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.Controls.SidebarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:local="clr-namespace:ToolBox_Pro.Controls"
+             Height="Auto" Width="Auto">
+
+    <UserControl.DataContext>
+        <vm:MainWindowViewModel />
+    </UserControl.DataContext>
+
+    <Border Background="#8B0000"
+            Width="{Binding FlyoutWidth}"
+            Padding="10">
+
+        <StackPanel>
+            <!-- Header -->
+            <TextBlock Text="Module"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="WhiteSmoke"
+                       Margin="0 0 0 15"
+                       Visibility="{Binding IsFlyoutExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <!-- Navigation -->
+            <ListBox ItemsSource="{Binding NavigationItems}"
+                     SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
+                     Background="Transparent"
+                     BorderThickness="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 5"
+                                    VerticalAlignment="Center">
+                            <material:PackIcon Kind="{Binding Icon}"
+                                               Width="24" Height="24"
+                                               Foreground="WhiteSmoke"/>
+                            <TextBlock Text="{Binding Title}"
+                                       FontSize="14"
+                                       Foreground="White"
+                                       Margin="10 0 0 0"
+                                       VerticalAlignment="Center"
+                                       Visibility="{Binding DataContext.IsFlyoutExpanded,
+                                            RelativeSource={RelativeSource AncestorType=Window},
+                                            Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Border>
+</UserControl>

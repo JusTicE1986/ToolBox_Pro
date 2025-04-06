@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
              xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:controls="clr-namespace:ToolBox_Pro.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -17,26 +18,75 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Titel oder Beschreibung -->
+                <Border Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Language XML Datenverarbeitung" 
+                  Style="{StaticResource ViewUeberschriftStyle}"/>
+                        <TextBlock Text="{Binding StatusMessage}" 
+               Style="{StaticResource StatusMessageStyle}"/>
+                    </StackPanel>
+                </Border>
 
-        <!-- Titel oder Beschreibung -->
-        <TextBlock Text="Language XML Datenverarbeitung" 
-                   FontSize="16" 
-                   FontWeight="Bold" 
-                   Margin="0,0,0,10" />
+                <!-- Button zum Starten der Verarbeitung -->
+                <Border Style="{StaticResource ToolboxContainerStyle}"
+                        Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Datei auswählen"
+           Style="{StaticResource SchrittUeberschriftStyle}"/>
+                        <TextBlock Text="Auswählen der .xlsm-Excel für die Language.xml - Version 2.1"
+                                   Style="{StaticResource TextBlockStyle}"/>
+                        <Button Content="Excel-Datei auswählen"
+                            Command="{Binding DateiauswahlCommand}"
+                            Style="{StaticResource FlatButtonStyle}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding LanguageData.Path}" TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center" FontSize="12" Foreground="#555" />
+                    </StackPanel>
 
-        <!-- Button zum Starten der Verarbeitung -->
-        <Button Content="Verarbeiten" Style="{StaticResource FlatButtonStyle}"
+                </Border>
+                <Border Style="{StaticResource ToolboxContainerStyle}"
+                        Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Language.xml verarbeiten"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                        <TextBlock Text="Erstellt für jede vorhandene Sprache die entsprechende Language.xml-Datei. Eine Import-Datei für ST4 wird generiert."
+                               Style="{StaticResource TextBlockStyle}"/>
+                        <Button Content="Verarbeiten" Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding ProcessDataCommand}" 
+                                MaxWidth="200"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
 
-                Grid.Row="1"
-                HorizontalAlignment="Left"
-                Padding="10,5"
-                Command="{Binding ProcessDataCommand}" />
+                <!-- Fortschrittsanzeige -->
+                <Border Style="{StaticResource ToolboxContainerStyle}"
+                        Margin="10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding VerarbeiteteDateien}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontSize="12" Foreground="#444"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
 
-        <!-- Fortschrittsanzeige -->
-        <StackPanel Grid.Row="2" Margin="0,20,0,0">
-            <TextBlock Text="Fortschritt:" 
-                       FontWeight="Bold" 
-                       Margin="0,0,0,5" />
-        </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+        <Border Background="#AAFFFFFF"
+            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+            CornerRadius="10"
+            Padding="40"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <controls:LoadingSpinner Width="60" Height="60"/>
+        </Border>
     </Grid>
 </UserControl>

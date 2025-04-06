@@ -6,29 +6,62 @@
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel >
-            <Button Content="Merkmale speichern" Style="{StaticResource FlatButtonStyle}"
 
-                    Width="150"
-                    Height="40"
-                    Command="{Binding CsvSpeichernCommand}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
-            <Button Content="Bezeichnungen speichern" Style="{StaticResource FlatButtonStyle}"
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Style="{StaticResource ToolboxContainerStyle}"
+                    Margin="10">
+                <!-- Überschrift -->
+                <TextBlock Style="{StaticResource ViewUeberschriftStyle}" 
+                           Text="Preislisten exportieren"/>
+            </Border>
 
-            Width="150"
-            Height="40"
-            Command="{Binding CsvMerkmaleSpeichernCommand}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"/>
-            <Button Content="Preisliste speichern" Style="{StaticResource FlatButtonStyle}"
+            <!-- Buttons -->
+            <Border Style="{StaticResource ToolboxContainerStyle}"
+                    Margin="10">
+                <StackPanel>
+                    <TextBlock Text="Merkmale speichern"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Exportiert eine CSV-Datei mit allen technischen Merkmalen für VC-alt und VC-neu."
+                               Style="{StaticResource TextBlockStyle}"/>
+                    <Button Content="Merkmale speichern"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding CsvSpeichernCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+            <!-- Card 2 -->
+            <Border Style="{StaticResource ToolboxContainerStyle}"
+                    Margin="10">
+                <StackPanel>
+                    <TextBlock Text="Bezeichnungen speichern"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Erstellt eine CSV-Datei mit den internen Merkmalsbezeichnungen und dem Merkmalstext."
+                               Style="{StaticResource TextBlockStyle}"/>
+                    <Button Content="Bezeichnungen speichern"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding CsvMerkmaleSpeichernCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
 
-            Width="150"
-            Height="40"
-            Command="{Binding PreislistenExportierenCommand}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"/>
+            <!-- Card 3 -->
+            <Border Style="{StaticResource ToolboxContainerStyle}"
+                    Margin="10">
+                <StackPanel>
+                    <TextBlock Text="Preisliste speichern"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                    <TextBlock Text="Fasst alle Merkmale und Preise zu einer vollständigen Preisliste zusammen und exportiert diese als CSV."
+                               Style="{StaticResource TextBlockStyle}" Cursor=""/>
+                    <Button Content="Preisliste speichern"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding PreislistenExportierenCommand}"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ToolBox_Pro.Views
+namespace ToolBox_Pro.Controls
 {
     /// <summary>
-    /// Interaktionslogik für WikiUploadView.xaml
+    /// Interaktionslogik für SidebarView.xaml
     /// </summary>
-    public partial class WikiUploadView : UserControl
+    public partial class SidebarView : UserControl
     {
-        public WikiUploadView()
+        public SidebarView()
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
     }
 }

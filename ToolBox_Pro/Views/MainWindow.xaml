@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToolBox_Pro"
         xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
+        xmlns:control="clr-namespace:ToolBox_Pro.Controls"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" 
         Title="ToolBox Pro" Height="1250" Width="1280"
         Background="#202020"
@@ -37,8 +39,6 @@
                      DecelerationRatio="0.7"/>
             </Storyboard>-->
         </ResourceDictionary>
-
-
     </Window.Resources>
 
     <Grid>
@@ -47,7 +47,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
+        
         <!-- Navigationsleiste -->
         <Border x:Name="FlyoutBorder"
         Background="#8B0000"
@@ -56,61 +56,77 @@
         MouseLeave="FlyoutBorder_MouseLeave">
 
             <Grid>
-                <ListBox x:Name="NavigationList"
+                <StackPanel>
+                    <TextBlock Text="ToolBox"
+               FontSize="24"
+               FontWeight="Bold"
+               Foreground="White"
+               HorizontalAlignment="Center"
+               Margin="0 10 0 10"
+                           FontStyle="Italic"
+                           Visibility="{Binding DataContext.IsFlyoutExpanded,
+               RelativeSource={RelativeSource AncestorType=Window},
+               Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <ListBox x:Name="NavigationList"
                  ItemsSource="{Binding NavigationItems}"
                  SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
                  Background="Transparent"
                  BorderThickness="0">
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <!-- Icon-Bereich -->
-                                    <ColumnDefinition Width="*" />
-                                    <!-- Text-Bereich -->
-                                </Grid.ColumnDefinitions>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <material:PackIcon Kind="{Binding Icon}" 
+                                                   Width="30" 
+                                                   Height="30" 
+                                                   Margin="0,20,10,0" 
+                                                   Foreground="WhiteSmoke"/>
 
-                                <TextBlock Text="{Binding Icon}"
-                                   FontSize="20"
-                                   FontFamily="Segoe UI Emoji"
-                                           Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="0"/>
 
-                                <TextBlock Text="{Binding Title}"
-                                   VerticalAlignment="Center"
-                                           Foreground="White"
-                                   Visibility="{Binding DataContext.IsFlyoutExpanded, 
-                        RelativeSource={RelativeSource AncestorType=Window}, 
-                        Converter={StaticResource BooleanToVisibilityConverter}}"
-                                   Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                                    <TextBlock Text="{Binding Title}"
+                                           Margin="0 20 10 0"
+                                           FontSize="20"
+                                           VerticalAlignment="Center"
+                                           Foreground="WhiteSmoke"
+                                           Visibility="{Binding DataContext.IsFlyoutExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Grid.Column="1"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
             </Grid>
         </Border>
+        <!--<Grid Grid.Column="0">
+            <control:SidebarView />
+        </Grid>-->
 
         <!-- Rechter Bereich -->
         <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <!-- Startanzeige -->
             <Grid x:Name="StartView"
               Visibility="{Binding IstStartAktiv, Converter={StaticResource BoolToVisibilityConverter}}"
-              Background="White">
+              Background="White" Grid.Row="0">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image Source="/Images/WN.png"
                        Width="200" Height="200"
                        Margin="0 0 0 20"/>
                     <TextBlock Text="{Binding Begruessungstext}"
-                           FontSize="22"
+                           FontSize="26"
                            FontWeight="Bold"
                            Foreground="#444"
                            HorizontalAlignment="Center"/>
                     <TextBlock Text="Bitte wähle eine Funktion links in der Navigation aus."
-                           FontSize="14"
+                           FontSize="18"
                            Foreground="#666"
                            Margin="0 10 0 0"
                            HorizontalAlignment="Center"/>
@@ -119,7 +135,14 @@
 
             <!-- Content -->
             <ContentControl Content="{Binding CurrentView}" />
+            <!-- ✅ Neuer Footer -->
+            <Border Grid.Row="1" Background="#1E2E40" Padding="10,4">
+                <TextBlock Text="{Binding FooterText}"
+           Foreground="WhiteSmoke"
+           FontSize="12"
+           HorizontalAlignment="Right"/>
+            </Border>
         </Grid>
-
+        
     </Grid>
 </Window>
