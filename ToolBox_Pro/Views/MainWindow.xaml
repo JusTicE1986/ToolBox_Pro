@@ -51,9 +51,10 @@
         <!-- Navigationsleiste -->
         <Border x:Name="FlyoutBorder"
         Background="#8B0000"
-        Width="60"
-        MouseEnter="FlyoutBorder_MouseEnter"
-        MouseLeave="FlyoutBorder_MouseLeave">
+        Width="320"
+                >
+            <!--MouseEnter="FlyoutBorder_MouseEnter"
+        MouseLeave="FlyoutBorder_MouseLeave"-->
 
             <Grid>
                 <StackPanel>
@@ -64,9 +65,7 @@
                HorizontalAlignment="Center"
                Margin="0 10 0 10"
                            FontStyle="Italic"
-                           Visibility="{Binding DataContext.IsFlyoutExpanded,
-             RelativeSource={RelativeSource AncestorType=Window},
-             Converter={StaticResource BooleanToHiddenConverter}}"/>
+                           Visibility="Visible"/>
                     <ListBox x:Name="NavigationList"
                  ItemsSource="{Binding NavigationItems}"
                  SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
@@ -92,7 +91,7 @@
                                            FontSize="20"
                                            VerticalAlignment="Center"
                                            Foreground="WhiteSmoke"
-                                           Visibility="{Binding DataContext.IsFlyoutExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Visibility="Visible"
                                            Grid.Column="1"/>
 
                                 </Grid>

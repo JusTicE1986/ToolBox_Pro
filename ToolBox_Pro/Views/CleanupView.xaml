@@ -4,75 +4,83 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ToolBox_Pro.Views"
+    xmlns:controls="clr-namespace:ToolBox_Pro.Controls"
     xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    mc:Ignorable="d">
     <UserControl.DataContext>
         <viewmodels:CleanupViewModel/>
     </UserControl.DataContext>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-
-            <!-- Überschrift -->
-            <Border Margin="10"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Überschrift -->
+        <Border Grid.Row="0"
+                Margin="10"
                     Style="{StaticResource ToolboxContainerStyle}">
-                <StackPanel>
-                    <TextBlock Text="Verzeichnisse bereinigen"
+            <StackPanel>
+                <TextBlock Text="Verzeichnisse bereinigen"
                        Style="{StaticResource ViewUeberschriftStyle}"/>
-                    <TextBlock Text="Löschen der Ordner nur wenn gerade keine Produktionen in ST4 über Workflow laufen (Manual oder Spare Parts Lists)."
+                <TextBlock Text="Löschen der Ordner nur wenn gerade keine Produktionen in ST4 über Workflow laufen (Manual oder Spare Parts Lists)."
                            Style="{StaticResource TextBlockStyle}"/>
-                </StackPanel>
-            </Border>
+                <controls:LoadingSpinner Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
 
-            <!-- Card 1 -->
-            <Border Margin="10"
+        </Border>
+
+        <!-- Card 1 -->
+        <Border Margin="10"
+                    Grid.Row="1"
                     Style="{StaticResource ToolboxContainerStyle}">
-                <StackPanel>
-                    <TextBlock Text="ST4_pdf_Automated_Production"
+            <StackPanel>
+                <TextBlock Text="ST4_pdf_Automated_Production"
                                Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <TextBlock Text="Leert das Verzeichnis für automatisch erzeugte ST4-PDF-Dateien. Option verwenden, wenn Ersatzteillisten produziert wurden.."
+                <TextBlock Text="Leert das Verzeichnis für automatisch erzeugte ST4-PDF-Dateien. Option verwenden, wenn Ersatzteillisten produziert wurden.."
                                Style="{StaticResource TextBlockStyle}"/>
-                    <Button Content="Verzeichnis leeren"
+                <Button Content="Verzeichnis leeren"
                             Style="{StaticResource FlatButtonStyle}"
                             Command="{Binding CleanupST4PdfCommand}"
                             MaxWidth="200"
                             HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
+            </StackPanel>
+        </Border>
 
-            <!-- Card 2 -->
-            <Border Margin="10"
+        <!-- Card 2 -->
+        <Border Margin="10"
+                    Grid.Row="2"
                     Style="{StaticResource ToolboxContainerStyle}">
-                <StackPanel>
-                    <TextBlock Text="DIR_success"
+            <StackPanel>
+                <TextBlock Text="DIR_success"
                                Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <TextBlock Text="Löscht alle erfolgreich verarbeiteten Dateien im 'DIR_success'-Verzeichnis."
+                <TextBlock Text="Löscht alle erfolgreich verarbeiteten Dateien im 'DIR_success'-Verzeichnis."
                                Style="{StaticResource TextBlockStyle}"/>
-                    <Button Content="Verzeichnis leeren"
+                <Button Content="Verzeichnis leeren"
                             Style="{StaticResource FlatButtonStyle}"
                             Command="{Binding CleanupDIRSuccessCommand}"
                             MaxWidth="200"
                             HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
+            </StackPanel>
+        </Border>
 
-            <!-- Card 3 -->
-            <Border Margin="10"
+        <!-- Card 3 -->
+        <Border Margin="10"
+                    Grid.Row="3"
                     Style="{StaticResource ToolboxContainerStyle}">
-                <StackPanel>
-                    <TextBlock Text="DIR_failed"
+            <StackPanel>
+                <TextBlock Text="DIR_failed"
                                Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <TextBlock Text="Bereinigt das Verzeichnis mit fehlgeschlagenen Dateien. Stelle sicher vorher, dass keine Analyse mehr notwendig ist."
+                <TextBlock Text="Bereinigt das Verzeichnis mit fehlgeschlagenen Dateien. Stelle sicher vorher, dass keine Analyse mehr notwendig ist."
                                Style="{StaticResource TextBlockStyle}"/>
-                    <Button Content="Verzeichnis leeren"
+                <Button Content="Verzeichnis leeren"
                             Style="{StaticResource FlatButtonStyle}"
                             Command="{Binding CleanupDIRFailedCommand}"
                             MaxWidth="200"
                             HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
-
-        </StackPanel>
-    </ScrollViewer>
+            </StackPanel>
+        </Border>
+    </Grid>
 
 </UserControl>

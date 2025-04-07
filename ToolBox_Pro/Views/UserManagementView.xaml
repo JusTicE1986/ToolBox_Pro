@@ -6,36 +6,56 @@
              xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
              xmlns:local="clr-namespace:ToolBox_Pro.Views" 
              xmlns:helpers="clr-namespace:ToolBox_Pro.Helpers"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d">
     <UserControl.DataContext>
         <vm:UserManagementViewModel/>
     </UserControl.DataContext>
-    <StackPanel Margin="20">
-        <DataGrid ItemsSource="{Binding Benutzerliste}"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Margin="10"
+            Style="{StaticResource ToolboxContainerStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource ViewUeberschriftStyle}" 
+           Text="Benutzerverwaltung"/>
+                <TextBlock Style="{StaticResource SchrittUeberschriftStyle}" 
+                Text="Benutzerverwaltung, um die Rechte in der Navigationsleiste zu verwalten und den Begrüßungstext zu individualisieren."/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Margin="10"
+            Style="{StaticResource ToolboxContainerStyle}">
+
+            <DataGrid ItemsSource="{Binding Benutzerliste}"
                   AutoGenerateColumns="False"
                   IsReadOnly="False"
                   Style="{StaticResource ToolboxDataGridStyle}"
                   Height="300"
                   CanUserAddRows="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Username" Binding="{Binding Username}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}"/>
-                <DataGridCheckBoxColumn Header="Bestätigt" Binding="{Binding IsConfirmed}"/>
-                <DataGridComboBoxColumn Header="Rolle"
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}"/>
+                    <DataGridCheckBoxColumn Header="Bestätigt" Binding="{Binding IsConfirmed}"/>
+                    <DataGridComboBoxColumn Header="Rolle"
                                         SelectedItemBinding="{Binding Role}"
                                         ItemsSource="{x:Static helpers:UserRoleValues.All}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Border Style="{DynamicResource ToolboxContainerStyle}">
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Border Grid.Row="2" Style="{DynamicResource ToolboxContainerStyle}" Margin="10">
             <StackPanel>
                 <TextBlock Text="{Binding BenutzerAnzahl, StringFormat='👥 {0} Benutzer insgesamt'}"
            Style="{StaticResource TextBlockStyle}"/>
                 <Button Content="Speichern"
                 Command="{Binding SpeichernCommand}"
                 Margin="0 10 0 0"
-                Style="{StaticResource FlatButtonStyle}"/>
+                Style="{StaticResource FlatButtonStyle}"
+                        MaxHeight="30"
+                        MaxWidth="200"
+                        HorizontalAlignment="Left"/>
             </StackPanel>
         </Border>
-    </StackPanel>
+    </Grid>
 </UserControl>

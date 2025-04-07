@@ -35,7 +35,7 @@ namespace ToolBox_Pro.Views
         }
         private void FlyoutBorder_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            ViewModel.IsFlyoutExpanded = false;
+            ViewModel.IsFlyoutExpanded = true;
             AnimateFlyoutBorder(60); // Collapsed-Zustand
         }
         private void AnimateFlyoutBorder(double targetWidth)

@@ -10,8 +10,10 @@
     <UserControl.DataContext>
         <vm:MerkmalsImportViewModel/>
     </UserControl.DataContext>
-    <Grid Margin="20">
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <!-- Schritt 1–3 -->
             <RowDefinition MinHeight="625" Height="*"/>
@@ -19,154 +21,143 @@
             <RowDefinition Height="Auto"/>
             <!-- Statuszeile -->
         </Grid.RowDefinitions>
-        <StackPanel Margin="20"
-                Orientation="Vertical"
-                HorizontalAlignment="Left"
-                    Grid.Row="0">
-            <!--Schritt 1 -->
-            <Border BorderBrush="#D8E2F0"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Background="#FAFBFC"
-                    Padding="16"
-                    Margin="0 12 0 0">
-                <StackPanel>
-                    <TextBlock Text="🔹 Schritt 1: Daten laden" 
+        <Border Grid.Row="0" Style="{StaticResource ToolboxContainerStyle}"
+        Margin="10">
+            <StackPanel>
+                <TextBlock Text="Merkmale und Projektfilter"
+           Style="{StaticResource ViewUeberschriftStyle}"/>
+                <TextBlock Text="{Binding Statusmeldung}" Style="{StaticResource StatusMessageStyle}"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <StackPanel>
+                <TextBlock Text="🔹 Schritt 1: Daten laden" 
                        Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Merkmalsliste laden" 
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Merkmalsliste laden" 
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ExcelLadenCommand}" 
                         Padding="10" 
                         Margin="10"/>
-                        <Button Content="Merkmale-XML laden" 
+                    <Button Content="Merkmale-XML laden" 
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding LadeXmlMerkmaleCommand}" 
                         Padding="10" 
                         Margin="10"/>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Typ:" VerticalAlignment="Center"/>
-                            <ComboBox Width="200" Height="34"
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Typ:" VerticalAlignment="Center"/>
+                        <ComboBox Width="200" Height="34"
                                       ItemsSource="{Binding Typen}"
                                       SelectedItem="{Binding AusgewaehlterTyp, Mode=TwoWay}"
                                       IsEditable="True"
                                       IsReadOnly="True"
                                       Margin="0 0 20 0">
-                                <ComboBox.Style>
-                                    <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AusgewaehlterTyp}" Value="{x:Null}">
-                                                <Setter Property="Text" Value="Typ auswählen..." />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ComboBox.Style>
-                            </ComboBox>
+                            <ComboBox.Style>
+                                <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AusgewaehlterTyp}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="Typ auswählen..." />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
 
 
-                            <TextBlock Text="Modell:" VerticalAlignment="Center"/>
-                            <ComboBox Width="200" Height="34"
+                        <TextBlock Text="Modell:" VerticalAlignment="Center"/>
+                        <ComboBox Width="200" Height="34"
                                       ItemsSource="{Binding MerkmalModelle}"
                                       SelectedItem="{Binding AusgewaehltesMerkmalModell, Mode=TwoWay}"
                                       DisplayMemberPath="ModellBez"
                                       IsEditable="True"
                                       IsReadOnly="True"
                                       Margin="0 0 20 0">
-                                <ComboBox.Style>
-                                    <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AusgewaehltesMerkmalModell}" Value="{x:Null}">
-                                                <Setter Property="Text" Value="Modell auswählen..." />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding MerkmalModelle.Count}" Value="0">
-                                                <Setter Property="IsEnabled" Value="False"/>
-                                                <Setter Property="Text" Value="Keine Modelle verfügbar" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ComboBox.Style>
-                            </ComboBox>
+                            <ComboBox.Style>
+                                <Style BasedOn="{StaticResource HintedComboBoxStyle}" TargetType="ComboBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AusgewaehltesMerkmalModell}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="Modell auswählen..." />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding MerkmalModelle.Count}" Value="0">
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                            <Setter Property="Text" Value="Keine Modelle verfügbar" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
 
 
 
-                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </Border>
-            <Border BorderBrush="#D8E2F0"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Background="#FAFBFC"
-                    Padding="16"
-                    Margin="0 12 0 0">
-                <!--Schritt 2 -->
-                <StackPanel>
-                    <TextBlock Text="🔹 Schritt 2: Vergleich starten"
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <!--Schritt 2 -->
+            <StackPanel>
+                <TextBlock Text="🔹 Schritt 2: Vergleich starten"
                        Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <Button Content="Listen vergleichen" 
+                <Button Content="Listen vergleichen" 
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding AbgleichIdsMitXmlCommand}"
                     MaxWidth="410"
                     Padding="10" 
                     Margin="10"
                     HorizontalAlignment="Left">
-                        <Button.IsEnabled>
-                            <MultiBinding Converter="{StaticResource AndConverter}">
-                                <Binding Path="IstListeGeladen"/>
-                                <Binding Path="IstXmlGeladen"/>
-                            </MultiBinding>
-                        </Button.IsEnabled>
-                    </Button>
-                </StackPanel>
-            </Border>
-            <!--Schritt 3 -->
-            <Border BorderBrush="#D8E2F0"
-        BorderThickness="1"
-        CornerRadius="6"
-        Background="#FAFBFC"
-        Padding="16"
-        Margin="0 12 0 0">
-                <StackPanel>
-                    <TextBlock Text="🔹 Schritt 3: Exportieren"
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AndConverter}">
+                            <Binding Path="IstListeGeladen"/>
+                            <Binding Path="IstXmlGeladen"/>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="3" Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <StackPanel>
+                <TextBlock Text="🔹 Schritt 3: Exportieren"
                        Style="{StaticResource SchrittUeberschriftStyle}"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Projektfilter speichern" 
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Projektfilter speichern" 
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ExportiereXmlCommand}" 
                         Padding="10" 
                         Margin="10"
                         IsEnabled="{Binding IstVerglichen}"/>
-                        <Button Content="Projektfilter aktualisieren" 
+                    <Button Content="Projektfilter aktualisieren" 
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding FilterXmlAktualisierenCommand}" 
                         Padding="10" 
                         Margin="10"
                         IsEnabled="{Binding IstVerglichen}"/>
 
-                    </StackPanel>
                 </StackPanel>
+            </StackPanel>
 
-            </Border>
-        </StackPanel>
-        <DataGrid x:Name="MerkmalsDataGrid"
+        </Border>
+        <Border Grid.Row="4"
+                Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <DataGrid x:Name="MerkmalsDataGrid"
                       Grid.Row="1" 
                       ItemsSource="{Binding Eintraege}" 
                   Style="{StaticResource ToolboxDataGridStyle}"
                       Visibility="{Binding IstListeGeladen, Converter={StaticResource BoolToVisibilityConverter}}"
                       MinHeight="650">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
-                <DataGridTextColumn Header="Model" Binding="{Binding Model}"/>
-                <DataGridTextColumn Header="ST4 Id" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Merkmal" Binding="{Binding MerkmalNameUndWert}"/>
-                <DataGridTextColumn Header="Bezeichnung" Binding="{Binding BezeichMerkmalwert}"/>
-            </DataGrid.Columns>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                    <DataGridTextColumn Header="Model" Binding="{Binding Model}"/>
+                    <DataGridTextColumn Header="ST4 Id" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Merkmal" Binding="{Binding MerkmalNameUndWert}"/>
+                    <DataGridTextColumn Header="Bezeichnung" Binding="{Binding BezeichMerkmalwert}"/>
+                </DataGrid.Columns>
 
-        </DataGrid>
-        <!-- ✅ Statuszeile -->
-        <Border Grid.Row="2" Background="#EEE" Padding="10" BorderBrush="#CCC" BorderThickness="1">
-            <TextBlock Text="{Binding Statusmeldung}" FontSize="13" />
+            </DataGrid>
         </Border>
         <controls:LoadingSpinner Visibility="{Binding IstBeschaeftigt, Converter={StaticResource BoolToVisibilityConverter}}"/>
 

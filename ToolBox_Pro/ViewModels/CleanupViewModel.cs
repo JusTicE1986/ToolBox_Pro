@@ -1,84 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ToolBox_Pro.Commands;
+using ToolBox_Pro.Services;
 
 namespace ToolBox_Pro.ViewModels
 {
-    public class CleanupViewModel : INotifyPropertyChanged
+    public partial class CleanupViewModel : ObservableObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly CleanupService _cleanupService;
 
-        public CleanupViewModel() 
+        public CleanupViewModel()
         {
-            CleanupST4PdfCommand = new RelayCommand(() => ExecuteBatchCommand(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\ST4_pdf_Automated_Production"));
-            CleanupDIRSuccessCommand = new RelayCommand(() => ExecuteBatchCommand(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\DIR_success"));
-            CleanupDIRFailedCommand = new RelayCommand(() => ExecuteBatchCommand(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\DIR_failed"));
+            _cleanupService = new CleanupService();
         }
 
-        public ICommand CleanupST4PdfCommand { get; }
-        public ICommand CleanupDIRSuccessCommand { get; }
-        public ICommand CleanupDIRFailedCommand { get; }
+        [ObservableProperty]
+        private bool isBusy;
 
-        private void ExecuteBatchCommand(string folderPath)
+        [RelayCommand]
+        private async Task CleanupST4PdfAsync()
         {
-            try
-            {
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "cmd.exe",
-                        Arguments = $"/c del /q \"{folderPath}\\*.*\" & for /D %a in (\"{folderPath}\\*.*\") do rd /q /s \"%a\"",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
-
-                process.Start();
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                if (!string.IsNullOrEmpty(error))
-                {
-                    Debug.WriteLine($"Fehler: {error}");
-                }
-                else
-                {
-                    Debug.WriteLine($"Erfolg: {output}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exeption: {ex.Message}");
-            }
-        }
-    }
-    public class RelayCommand : ICommand
-    {
-        private readonly Action _execute;
-        private readonly Func<bool> _canExecute;
-
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
+            await CleanupAsync(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\ST4_pdf_Automated_Production");
         }
 
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute();
-        public void Execute(object parameter) => _execute();
-        public event EventHandler CanExecuteChanged
+        [RelayCommand]
+        private async Task CleanupDIRSuccessAsync()
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            await CleanupAsync(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\DIR_success");
+        }
+
+        [RelayCommand]
+        private async Task CleanupDIRFailedAsync()
+        {
+            await CleanupAsync(@"\\lnzdfs1.wnad.net\SAP-Shares\KMR\ST4\DIR_failed");
+        }
+
+        private async Task CleanupAsync(string path)
+        {
+            if (IsBusy) return;
+
+            IsBusy = true;
+
+            await Task.Run(() => _cleanupService.CleanupFolder(path));
+
+            IsBusy = false;
         }
     }
 }

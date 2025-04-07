@@ -304,7 +304,7 @@ namespace ToolBox_Pro.ViewModels
                 string outputDirectory = PdfDirectory;
                 _pdfService.ExportDataToExcel(data, outputDirectory);
 
-                StatusMessage = $"✅ Export abgeschlossen: {Path.Combine(outputDirectory, $"Betriebsanleitungen {DateTime.Now:dd-MM-yyyy}.xlsx")}";
+                StatusMessage = $"✅ Export abgeschlossen: {Path.Combine(outputDirectory, $"Betriebsanleitungen{DateTime.Now:yyyy-MM-dd}.xlsx")}";
             }
             catch (Exception ex)
             {

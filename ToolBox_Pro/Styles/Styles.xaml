@@ -56,7 +56,7 @@
     <Style x:Key="ViewUeberschriftStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Margin" Value="0 20 0 10"/>
+        <Setter Property="Margin" Value="0 10 0 10"/>
         
         <Setter Property="Foreground" Value="{DynamicResource BrushTextMedium}"/>
     </Style>
@@ -203,64 +203,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Text" Value="" />
     </Style>
-
-    <!-- ╔══════════════════════════════════════════╗ -->
-    <!-- ║                DataGrid                 ║ -->
-    <!-- ╚══════════════════════════════════════════╝ -->
-
-    <Style TargetType="DataGrid" x:Key="TimeTrackerGrid">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="RowBackground" Value="White"/>
-        <Setter Property="AlternatingRowBackground" Value="#f9f9f9"/>
-        <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="BorderBrush" Value="#ddd"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="RowHeight" Value="38"/>
-    </Style>
-
-    <Style TargetType="DataGridColumnHeader">
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Background" Value="#eeeeee"/>
-        <Setter Property="BorderBrush" Value="#ddd"/>
-        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        <Setter Property="Padding" Value="8 6"/>
-        <Setter Property="FontSize" Value="15"/>
-    </Style>
-
-    <Style TargetType="DataGridRow">
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="ToolTip" Value="Klicken zum Anzeigen / Bearbeiten"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#dceeff"/>
-            </Trigger>
-            <DataTrigger Binding="{Binding IstFeiertag}" Value="True">
-                <Setter Property="Background" Value="#ffe4e1"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IstWochenende}" Value="True">
-                <Setter Property="Background" Value="#e8ffe8"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!-- ╔══════════════════════════════════════════╗ -->
-    <!-- ║               Spezialstyles              ║ -->
-    <!-- ╚══════════════════════════════════════════╝ -->
-
-    <!-- Anzeigeformatierung für Pausenzeit -->
-    <Style x:Key="TimeSpanStyle" TargetType="TextBlock">
-        <Setter Property="Text" Value="{Binding Pause, StringFormat='hh\\:mm'}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-    </Style>
-
-
 
 </ResourceDictionary>
 

@@ -13,11 +13,22 @@
     <ApplicationIcon>ToolBoxIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Helpers\FeiertagsHelper.cs" />
+    <Compile Remove="Helpers\KulturHelper.cs" />
+    <Compile Remove="Models\ArbeitszeitTag.cs" />
+    <Compile Remove="Models\MonatsInfo.cs" />
+    <Compile Remove="ViewModels\TimeTrackerViewModel.cs" />
+    <Compile Remove="Views\TimeTrackerView.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Assets\favicon.ico" />
     <None Remove="Styles\Fonts\Inter-Bold.ttf" />
     <None Remove="Styles\Fonts\Inter-Regular.ttf" />
     <None Remove="Styles\Fonts\Inter-SemiBold.ttf" />
     <None Remove="Styles\Fonts\InterDisplay-Light.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Views\TimeTrackerView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
