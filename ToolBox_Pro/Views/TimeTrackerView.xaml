@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.TimeTrackerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToolBox_Pro.Views"
+             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:conv="clr-namespace:ToolBox_Pro.Converters"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <vm:TimeTrackerViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="10"
+                Style="{StaticResource ToolboxContainerStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource ViewUeberschriftStyle}"
+                           Text="Zeiterfassung"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="0" Margin="10"
+                Style="{StaticResource ToolboxContainerStyle}">
+            <StackPanel>
+                <TextBlock Text="Arbeitszeit erfassen"
+                       Style="{StaticResource  SchrittUeberschriftStyle}"/>
+
+                <!-- Datum, Start, Ende -->
+                <UniformGrid Columns="1" Rows="3" Margin="0 10 0 10" Width="500">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <TextBlock Text="Datum:" Width="60" VerticalAlignment="Center"/>
+                        <DatePicker SelectedDate="{Binding Datum}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <TextBlock Text="Start:" Width="60" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Start}" Width="100"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <TextBlock Text="Ende:" Width="60" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Ende}" Width="100"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <!-- Buttons -->
+                <StackPanel>
+                    <Button Content="Reset"
+                            Command="{Binding ZuruecksetzenCommand}"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Margin="0 10 0 0"
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                    <Button Content="Speichern"
+                            Command="{Binding SpeichernCommand}"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Margin="0 10 0 0"
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="1"
+                Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <StackPanel Margin="5">
+                <TextBlock Text="Monatsübersicht"
+               Style="{StaticResource SchrittUeberschriftStyle}"
+               Margin="0 0 0 10"/>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Monat -->
+                    <TextBlock Text="📅 Monat:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding AktuelleMonatsInfo.MonatJahr}"
+                   Grid.Row="0" Grid.Column="1"
+                   FontWeight="SemiBold"/>
+
+                    <!-- Sollstunden -->
+                    <TextBlock Text="⏳ Sollstunden:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding AktuelleMonatsInfo.MonatlicheSollzeit, Converter={StaticResource ReadableTextConverter}}"
+                   Grid.Row="1" Grid.Column="1" TextAlignment="Right" Margin="0 10 0 0"/>
+
+                    <!-- Iststunden -->
+                    <TextBlock Text="✅ Iststunden:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding AktuelleMonatsInfo.MonatlichGearbeitet, Converter={StaticResource ReadableTextConverter}}"
+                   Grid.Row="2" Grid.Column="1" TextAlignment="Right" Margin="0 10 0 0"/>
+
+                    <!-- Differenz -->
+                    <TextBlock Text="📉 Differenz:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding AktuelleMonatsInfo.MonatlicheAbweichung, Converter={StaticResource ReadableTextConverter}}"
+                   Grid.Row="3" Grid.Column="1"
+                               Margin="0 10 0 0"
+                   TextAlignment="Right"
+                   FontWeight="Bold"
+                   Foreground="Black"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="3" Grid.ColumnSpan="2"
+                Style="{StaticResource ToolboxContainerStyle}"
+                Margin="10">
+            <StackPanel>
+                <!-- Überschrift -->
+                <TextBlock Text="Wochenübersicht"
+                       Style="{StaticResource SchrittUeberschriftStyle}"/>
+
+                <!-- Kalenderwoche Navigation -->
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0 10 0 10">
+                    <Button Content="◀"
+                        Command="{Binding WocheZurueckCommand}"
+                        Width="30"/>
+                    <TextBlock FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="10,0"
+                           VerticalAlignment="Center"
+                           Text="{Binding KalenderwochenAnzeige}"/>
+                    <Button Content="▶"
+                        Command="{Binding WocheVorCommand}"
+                        Width="30"/>
+                </StackPanel>
+                <DataGrid ItemsSource="{Binding WochenDaten}"
+                      SelectedItem="{Binding AusgewaehlterTag, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      Margin="0 10 0 10"
+                      CanUserAddRows="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                          Style="{StaticResource TimeTrackerGrid}">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="ToolTip" Value="Klicken zum Anzeigen / Bearbeiten"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#dceeff"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding IstFeiertag}" Value="True">
+                                    <Setter Property="Background" Value="#ffe4e1"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IstWochenende}" Value="True">
+                                    <Setter Property="Background" Value="#e8ffe8"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Datum"
+                                        Binding="{Binding Datum, StringFormat='dd.MM.yyyy'}"
+                                        />
+                        <DataGridTextColumn Header="Tag"
+                                        Binding="{Binding Wochentag}"
+                                        />
+                        <DataGridTextColumn Header="Pause"
+                                        Binding="{Binding BerechnetePause, StringFormat=hh\\:mm}"
+                                        ElementStyle="{StaticResource TimeSpanStyle}"
+                                        />
+                        <DataGridTemplateColumn Header="Erfasst" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="16"
+                                           TextAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Text="{Binding IstErfasst, Converter={StaticResource BoolToIconConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Gearbeitet"
+                                        Binding="{Binding BerechneteGearbeiteteZeit, StringFormat=hh\\:mm}"
+                                        />
+                        <DataGridTextColumn Header="Besonderheit"
+                                        Binding="{Binding Besonderheit}"
+                                        />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Gesamtsumme -->
+                <TextBlock Text="{Binding WochenSumme,Converter={StaticResource ReadableTextConverter}}"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 0 10"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -13,13 +13,14 @@
                 <ResourceDictionary Source="Styles/Colors.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
-
-            <!-- BooleanToVisibilityConverter -->
             <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <conv:AndMultiValueConverter x:Key="AndConverter"/>
             <conv:RoleListContainsConverter x:Key="RoleToListConverter"/>
             <conv:BooleanToHiddenConverter x:Key="BooleanToHiddenConverter"/>
+            <conv:BoolToIconConverter x:Key="BoolToIconConverter" />
+            <!--<conv:SmartTimeConverter x:Key="SmartTimeConverter" />-->
+            <conv:TimeSpanToReadableTextConverter x:Key="ReadableTextConverter" />
 
         </ResourceDictionary>
     </Application.Resources>
