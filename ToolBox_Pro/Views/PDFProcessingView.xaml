@@ -16,12 +16,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel>
 
-            <Border Style="{StaticResource ToolboxContainerStyle}"
+            <Border Grid.Row="0" Style="{StaticResource ToolboxContainerStyle}"
                     Margin="10">
                 <StackPanel>
                     <TextBlock Text="📄 Seiten und Gewicht berechnen"
@@ -30,7 +32,7 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource ToolboxContainerStyle}"
+            <Border Grid.Row="1" Style="{StaticResource ToolboxContainerStyle}"
                     Margin="10">
                 <StackPanel>
                     <TextBlock Text="Dateien auswählen."
@@ -50,7 +52,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource ToolboxContainerStyle}"
+            <Border Grid.Row="2" Style="{StaticResource ToolboxContainerStyle}"
                     Margin="10">
                 <StackPanel>
                     <TextBlock Text="PDFs verarbeiten"
@@ -63,12 +65,10 @@
                         MaxWidth="200"
                         HorizontalAlignment="Left" Cursor="Hand"/>
                     <controls:LoadingSpinner Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}" 
-                                             Width="20" 
-                                             Height="20" 
                                              Margin="0 0 10 0" />
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource ToolboxContainerStyle}"
+            <Border Grid.Row="4" Style="{StaticResource ToolboxContainerStyle}"
         Margin="10">
                 <StackPanel>
                     <TextBlock Text="Excel exportieren"
@@ -76,6 +76,7 @@
                     <TextBlock Text="Datei für CPQ und die Druckerei mit erforderlichen Daten erstellen."
                Style="{StaticResource TextBlockStyle}"/>
                     <Button Content="Exportieren"
+                            Command="{Binding ExportiereExcelCommand}"
             Style="{StaticResource FlatButtonStyle}"
             MaxWidth="200"
             HorizontalAlignment="Left"/>
@@ -83,24 +84,30 @@
             </Border>
 
             <!-- TextBox mit Placeholder-Funktion -->
-            <DataGrid Grid.Row="2"
+            <Border Grid.Row="3" 
+                    Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+                <DataGrid 
                   ItemsSource="{Binding ProcessedFiles}"
                   Style="{StaticResource ToolboxDataGridStyle}"
                   AutoGenerateColumns="False"
                       Visibility="{Binding IsTableVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                      MaxHeight="400"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Margin="0,20,0,0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Materialnummer" Binding="{Binding Materialnummer}" Width="*" />
-                    <DataGridTextColumn Header="Format" Binding="{Binding Format}" Width="*" />
-                    <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="*" />
-                    <DataGridTextColumn Header="Ausgabe" Binding="{Binding AusgabeDatum}" Width="*" />
-                    <DataGridTextColumn Header="Fahrzeugtyp" Binding="{Binding Typ}" Width="*" />
-                    <DataGridTextColumn Header="Fahrzeugmodell" Binding="{Binding Model}" Width="*" />
-                    <DataGridTextColumn Header="Seitenzahl" Binding="{Binding Seitenzahl}" Width="*" />
-                    <DataGridTextColumn Header="Sprache" Binding="{Binding Language}" Width="*" />
-                    <DataGridTextColumn Header="Gewicht (kg)" Binding="{Binding Gewicht}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Materialnummer" Binding="{Binding Materialnummer}" Width="*" />
+                        <DataGridTextColumn Header="Format" Binding="{Binding Format}" Width="*" />
+                        <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="*" />
+                        <DataGridTextColumn Header="Ausgabe" Binding="{Binding AusgabeDatum}" Width="*" />
+                        <DataGridTextColumn Header="Fahrzeugtyp" Binding="{Binding Typ}" Width="*" />
+                        <DataGridTextColumn Header="Fahrzeugmodell" Binding="{Binding Model}" Width="*" />
+                        <DataGridTextColumn Header="Seitenzahl" Binding="{Binding Seitenzahl}" Width="*" />
+                        <DataGridTextColumn Header="Sprache" Binding="{Binding Language}" Width="*" />
+                        <DataGridTextColumn Header="Gewicht (kg)" Binding="{Binding Gewicht, StringFormat={}{0:0.000}}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </StackPanel>
     </Grid>
 </UserControl>

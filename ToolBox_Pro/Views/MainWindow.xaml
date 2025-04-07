@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:ToolBox_Pro"
         xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
         xmlns:control="clr-namespace:ToolBox_Pro.Controls"
+        xmlns:conv="clr-namespace:ToolBox_Pro.Converters"
         xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" 
         Title="ToolBox Pro" Height="1250" Width="1280"
         Background="#202020"
-        WindowStartupLocation="CenterScreen"
-        >
+        WindowState="Maximized">
 
     <!-- DataContext Binding für MainWindow -->
     <Window.DataContext>
@@ -65,8 +65,8 @@
                Margin="0 10 0 10"
                            FontStyle="Italic"
                            Visibility="{Binding DataContext.IsFlyoutExpanded,
-               RelativeSource={RelativeSource AncestorType=Window},
-               Converter={StaticResource BooleanToVisibilityConverter}}"/>
+             RelativeSource={RelativeSource AncestorType=Window},
+             Converter={StaticResource BooleanToHiddenConverter}}"/>
                     <ListBox x:Name="NavigationList"
                  ItemsSource="{Binding NavigationItems}"
                  SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"

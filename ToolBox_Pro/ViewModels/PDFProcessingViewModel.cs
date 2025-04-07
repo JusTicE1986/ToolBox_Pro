@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -267,6 +268,8 @@ namespace ToolBox_Pro.ViewModels
             finally
             {
                 IsProcessing = false;
+                OnPropertyChanged(nameof(IsTableVisible));
+
             }
         }
 
@@ -289,7 +292,7 @@ namespace ToolBox_Pro.ViewModels
                         { "Materialnummer", file.Materialnummer },
                         { "Format", file.Format },
                         { "Seitenzahl", file.Seitenzahl.ToString() },
-                        { "Gewicht in kg", file.Gewicht.ToString() },
+                        { "Gewicht in kg", file.Gewicht.ToString("0.000", new CultureInfo("de-DE")) },
                         { "Ausgabedatum", file.AusgabeDatum },
                         { "Fahrzeugtyp", file.Typ },
                         { "Fahrzeugmodell", file.Model },
@@ -297,6 +300,11 @@ namespace ToolBox_Pro.ViewModels
                         { "Version", file.Version }
                     });
                 }
+
+                string outputDirectory = PdfDirectory;
+                _pdfService.ExportDataToExcel(data, outputDirectory);
+
+                StatusMessage = $"✅ Export abgeschlossen: {Path.Combine(outputDirectory, $"Betriebsanleitungen {DateTime.Now:dd-MM-yyyy}.xlsx")}";
             }
             catch (Exception ex)
             {

@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
              xmlns:converters="clr-namespace:ToolBox_Pro.Converters"
-             xmlns:local="clr-namespace:ToolBox_Pro.Controls"
-             Height="Auto" Width="Auto">
+             xmlns:local="clr-namespace:ToolBox_Pro.Controls">
     <UserControl.DataContext>
         <viewmodels:OfferCalculationViewModel/>
     </UserControl.DataContext>
@@ -18,70 +17,112 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Border Grid.Row="0" Style="{StaticResource ToolboxContainerStyle}"
+        Margin="10">
+            <StackPanel>
+                <TextBlock Text="Angebote von KERN berechnen"
+           Style="{StaticResource ViewUeberschriftStyle}"/>
+                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageStyle}"/>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-        
-        <Border Grid.Column="0" Style="{StaticResource ToolboxContainerStyle}">
-            <StackPanel>
-                <TextBlock Style="{StaticResource SchrittUeberschriftStyle}"
-                           Text="Speicherort der Angebote"/>
-                <TextBlock Style="{StaticResource  TextBlockStyle}"
-                           Text="Bitte auswählen:"/>
-                <StackPanel>
-                    <Button Style="{StaticResource FlatButtonStyle}"
-                            Content="Ordner wählen"
-                            Command="{Binding PickFolderCommand}"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
-        <Border Grid.Column="1" Margin="10 10 0 0" Style="{StaticResource ToolboxContainerStyle}">
 
-            <StackPanel Orientation="Vertical">
+            <Border Margin="10" Grid.Column="0" Style="{StaticResource ToolboxContainerStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SchrittUeberschriftStyle}"
+                           Text="Speicherort der Angebote"/>
+                    <TextBlock Style="{StaticResource  TextBlockStyle}"
+                           Text="Bitte auswählen:"/>
+                    <StackPanel>
+                        <Button Style="{StaticResource FlatButtonStyle}"
+                            Content="Ordner wählen"
+                            Command="{Binding PickFolderCommand}"
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Margin="10" Style="{StaticResource ToolboxContainerStyle}">
+
+                <StackPanel Orientation="Vertical">
                     <TextBlock Style="{StaticResource SchrittUeberschriftStyle}"
            Text="Angebote auswerten"/>
-                    <Button Content="Mails speichern" Command="{Binding SaveFilesCommand}"
-                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
-                    <Button Content="Angebote auswerten" Command="{Binding AnalyzeOffersCommand}"
-                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
-                        <Button Content="Gesamtangebot" Command="{Binding GenerateOfferCommand}"
-                        Style="{StaticResource FlatButtonStyle}" Margin="0 10 0 0" MaxHeight="30"/>
-                    </StackPanel>
-        </Border>
+                    <Button Content="Mails speichern" 
+                            Command="{Binding SaveFilesCommand}"
+                            Style="{StaticResource FlatButtonStyle}" 
+                            Margin="0 10 0 0" 
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                    <Button Content="Angebote auswerten" 
+                            Command="{Binding AnalyzeOffersCommand}"
+                            Style="{StaticResource FlatButtonStyle}" 
+                            Margin="0 10 0 0" 
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                    <Button Content="Gesamtangebot" 
+                            Command="{Binding GenerateOfferCommand}"
+                            Style="{StaticResource FlatButtonStyle}" 
+                            Margin="0 10 0 0" 
+                            MaxHeight="30"
+                            MaxWidth="200"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
         </Grid>
         <!-- Spinner während Analyse -->
-         <local:LoadingSpinner Grid.Row="3" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <local:LoadingSpinner Grid.Row="1" 
+                              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
 
-            <!-- Angebotsliste -->
+        <!-- Angebotsliste -->
         <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Offers}"
                   AutoGenerateColumns="False"
                   Visibility="{Binding Offers.Count, Converter={StaticResource ZeroToCollapsedConverter}}"
                   Style="{StaticResource ToolboxDataGridStyle}"
-                  Margin="0 10 0 10">
+                  Margin="0 10 0 10"
+                  MaxHeight="400"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Angebotsdatei" Binding="{Binding FileName}" Width="*"/>
-                <DataGridTextColumn Header="Summe" Binding="{Binding Price, StringFormat={}{0:N2} €}" Width="*"/>
+                <DataGridTextColumn Header="Angebotsdatei" 
+                                    Binding="{Binding FileName}" 
+                                    Width="*"/>
+                <DataGridTextColumn Header="Summe" 
+                                    Binding="{Binding Price, StringFormat={}{0:N2} €}" 
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <!-- Gesamtsumme -->
-        <TextBlock Grid.Row="3"
-                   FontSize="16" FontWeight="Bold"
-                   HorizontalAlignment="Right"
-                   Visibility="{Binding Offers.Count, Converter={StaticResource ZeroToCollapsedConverter}}">
-            <TextBlock.Inlines>
-                <Run Text="Gesamtsumme: "/>
-                <Run Text="{Binding TotalPrice, StringFormat={}{0:N2} €}" />
-            </TextBlock.Inlines>
-        </TextBlock>
-        
+        <Border Grid.Row="3" 
+                Margin="10" 
+                Style="{StaticResource ToolboxContainerStyle}">
+            <StackPanel>
+                <TextBlock Text="Gesamtsumme:"
+                           Style="{StaticResource SchrittUeberschriftStyle}"/>
+                <TextBlock 
+                       FontSize="16" 
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"
+                       Visibility="{Binding Offers.Count, Converter={StaticResource ZeroToCollapsedConverter}}">
+                <TextBlock.Inlines>
+                    <Run Text="Gesamtsumme: "/>
+                    <Run Text="{Binding TotalPrice, StringFormat={}{0:N2} €}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            </StackPanel>
+        </Border>
+
     </Grid>
 </UserControl>

@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
              xmlns:viewmodels="clr-namespace:ToolBox_Pro.ViewModels"
              xmlns:controls="clr-namespace:ToolBox_Pro.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d">
     <UserControl.DataContext>
         <viewmodels:LanguageXMLViewModel/>
     </UserControl.DataContext>
@@ -66,7 +65,8 @@
                 <!-- Fortschrittsanzeige -->
                 <Border Style="{StaticResource ToolboxContainerStyle}"
                         Margin="10">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  MaxHeight="300">
                         <ItemsControl ItemsSource="{Binding VerarbeiteteDateien}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -86,7 +86,7 @@
             Padding="40"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
-            <controls:LoadingSpinner Width="60" Height="60"/>
+            <controls:LoadingSpinner/>
         </Border>
     </Grid>
 </UserControl>

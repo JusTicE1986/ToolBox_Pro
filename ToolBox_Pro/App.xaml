@@ -19,6 +19,7 @@
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <conv:AndMultiValueConverter x:Key="AndConverter"/>
             <conv:RoleListContainsConverter x:Key="RoleToListConverter"/>
+            <conv:BooleanToHiddenConverter x:Key="BooleanToHiddenConverter"/>
 
         </ResourceDictionary>
     </Application.Resources>

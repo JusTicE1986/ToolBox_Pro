@@ -28,6 +28,8 @@ namespace ToolBox_Pro.ViewModels
         private decimal totalPrice;
         [ObservableProperty]
         private bool isBusy;
+        [ObservableProperty]
+        private string statusMessage = "Bereit";
 
         public OfferCalculationViewModel()
         {
@@ -61,6 +63,7 @@ namespace ToolBox_Pro.ViewModels
             }
 
             IsBusy = true;
+            StatusMessage = "Angebote werden analysiert...";
             await Task.Run(() => {
                 var offerList = _pdfService.ExtractPDFData(OfferDestination);
 
@@ -74,6 +77,7 @@ namespace ToolBox_Pro.ViewModels
                     CalculateTotalPrice();
                 });
             });
+            StatusMessage = "Analyse abgeschlossen.";
 
             IsBusy = false;
         }
@@ -86,15 +90,46 @@ namespace ToolBox_Pro.ViewModels
                 return;
             }
 
-            var pdfMergeService = new PdfMergeService(OfferDestination);
-            var pdfDocument = pdfMergeService.CreatePdfWithSummary(Offers.ToList(), TotalPrice.ToString("N2") + " €");
+            try
+            {
+                var pdfMergeService = new PdfMergeService(OfferDestination);
 
-            var pdfPath = Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now:yyyy-MM-dd}.pdf");
-            pdfDocument.Save(pdfPath);
+                // 1. Übersicht als erste Seite erzeugen
+                var mergedPdf = pdfMergeService.CreatePdfWithSummary(Offers.ToList(), TotalPrice.ToString("N2") + " €");
 
-            System.Windows.MessageBox.Show($"Gesamtangebot wurde erstellt und gespeichert unter {pdfPath}", "Datei gespeichert", MessageBoxButton.OK, MessageBoxImage.Information);
+                // 2. Alle Angebots-PDFs aus dem Zielverzeichnis anhängen
+                pdfMergeService.MergePdfs(mergedPdf);
 
+                // 3. Gesamtdokument speichern
+                var pdfPath = Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now:yyyy-MM-dd}.pdf");
+                mergedPdf.Save(pdfPath);
+
+                StatusMessage = $"Gesamtangebot wurde erstellt und gespeichert unter\n{pdfPath}";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Fehler beim Erstellen des Angebots:\n{ex.Message}";
+            }
         }
+
+        //[RelayCommand]
+        //private void GenerateOffer()
+        //{
+        //    if (string.IsNullOrEmpty(OfferDestination))
+        //    {
+        //        System.Windows.MessageBox.Show("Bitte ein Verzeichnis auswählen", "Fehler", MessageBoxButton.OK, MessageBoxImage.Stop);
+        //        return;
+        //    }
+
+        //    var pdfMergeService = new PdfMergeService(OfferDestination);
+        //    var pdfDocument = pdfMergeService.CreatePdfWithSummary(Offers.ToList(), TotalPrice.ToString("N2") + " €");
+
+        //    var pdfPath = Path.Combine(OfferDestination, $"Gesamtangebot vom {DateTime.Now:yyyy-MM-dd}.pdf");
+        //    pdfDocument.Save(pdfPath);
+
+        //    System.Windows.MessageBox.Show($"Gesamtangebot wurde erstellt und gespeichert unter {pdfPath}", "Datei gespeichert", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        //}
 
         private void CalculateTotalPrice()
         {
@@ -113,6 +148,7 @@ namespace ToolBox_Pro.ViewModels
             if(dialog.ShowDialog() == DialogResult.OK)
             {
                 OfferDestination = dialog.SelectedPath;
+                StatusMessage = OfferDestination;
             }
             else
             {

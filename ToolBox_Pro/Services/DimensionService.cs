@@ -105,7 +105,7 @@ namespace ToolBox_Pro.Services
                 totalWeight = (2 * weightCover) / 1000; // Gewicht in kg
             }
 
-            return totalWeight;
+            return Math.Floor(totalWeight * 1000) / 1000;
         }
     }
 }
