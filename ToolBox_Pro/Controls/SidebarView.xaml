@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:ToolBox_Pro.Controls"
              Height="Auto" Width="Auto">
 
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <vm:MainWindowViewModel />
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
 
     <Border Background="#8B0000"
             Width="{Binding FlyoutWidth}"

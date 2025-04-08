@@ -14,9 +14,9 @@
         WindowState="Maximized">
 
     <!-- DataContext Binding für MainWindow -->
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewmodels:MainWindowViewModel />
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

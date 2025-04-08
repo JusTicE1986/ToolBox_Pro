@@ -11,12 +11,12 @@ namespace ToolBox_Pro.Views
     public partial class MainWindow : Window
     {
         public MainWindowViewModel ViewModel { get; }
-        public MainWindow()
+
+        public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
-            ViewModel = new MainWindowViewModel();
+            ViewModel = viewModel;
             DataContext = ViewModel;
-            //MessageBox.Show($"Username ist: {Environment.UserName}");
         }
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
