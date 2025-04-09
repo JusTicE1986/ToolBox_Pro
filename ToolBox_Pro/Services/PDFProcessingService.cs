@@ -300,7 +300,7 @@ namespace ToolBox_Pro.Services
         private static string ExtractLanguageFromText(string text)
         {
             var match = Regex.Match(text, @"\[\w{2}(?:-\w{2})?\]");
-            return match.Success ? match.Value.Trim('[', ']') : "Nicht gefunden";
+            return match.Success ? match.Value : "Nicht gefunden";
         }
 
 

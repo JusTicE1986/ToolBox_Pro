@@ -26,12 +26,15 @@ namespace ToolBox_Pro
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             var splash = new Views.SplashScreen();
             splash.Show();
+
+            await Task.Delay(100);
+
             Task.Run(() =>
             {
                 try
@@ -39,7 +42,6 @@ namespace ToolBox_Pro
                     
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        MessageBox.Show("Bin jetzt fertig!");
                         var mainViewModel = new MainWindowViewModel();
                         var mainWindow = new MainWindow(mainViewModel);
                         mainWindow.Show();
@@ -50,7 +52,6 @@ namespace ToolBox_Pro
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        MessageBox.Show("Fehler beim Start:\n" + ex.Message);
                         splash.Close();
                         Application.Current.Shutdown(); // optional
                     });

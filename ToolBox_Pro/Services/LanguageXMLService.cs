@@ -263,8 +263,8 @@ namespace ToolBox_Pro.Services
 
         private string ExtractValueBetweenQuotes(string input)
         {
-            var match = Regex.Match(input, @"(?<=value\\s*=\\s*\"")[^\""]+");
-            return match.Success ? match.Groups[0].Value : string.Empty;
+            var match = Regex.Match(input, @"value\s*=\s*""([^""]+)""");
+            return match.Success ? match.Groups[1].Value : string.Empty;
         }
 
         private string ExtractKeyBetweenQuotes(string input)
