@@ -21,6 +21,7 @@
             <conv:BoolToIconConverter x:Key="BoolToIconConverter" />
             <!--<conv:SmartTimeConverter x:Key="SmartTimeConverter" />-->
             <conv:TimeSpanToReadableTextConverter x:Key="ReadableTextConverter" />
+            <conv:LanguageDictionaryConverter x:Key="LanguageDictionaryConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

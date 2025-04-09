@@ -1,0 +1,161 @@
+{
+  "languages": [
+    {
+      "code": "ar",
+      "column": "arabic"
+    },
+    {
+      "code": "bg",
+      "column": "bulgarian"
+    },
+    {
+      "code": "cs",
+      "column": "czech"
+    },
+    {
+      "code": "da",
+      "column": "danish"
+    },
+    {
+      "code": "de",
+      "column": "german"
+    },
+    {
+      "code": "el",
+      "column": "greek"
+    },
+    {
+      "code": "en",
+      "column": "english"
+    },
+    {
+      "code": "en-US",
+      "column": "english-US"
+    },
+    {
+      "code": "en-fr",
+      "column": "americas"
+    },
+    {
+      "code": "es",
+      "column": "spanish"
+    },
+    {
+      "code": "es-MX",
+      "column": "mexican"
+    },
+    {
+      "code": "et",
+      "column": "estonian"
+    },
+    {
+      "code": "fi",
+      "column": "finnish"
+    },
+    {
+      "code": "fr",
+      "column": "french"
+    },
+    {
+      "code": "fr-KN",
+      "column": "canadian"
+    },
+    {
+      "code": "hr",
+      "column": "croatian"
+    },
+    {
+      "code": "hu",
+      "column": "hungarian"
+    },
+    {
+      "code": "is",
+      "column": "icelandic"
+    },
+    {
+      "code": "it",
+      "column": "italian"
+    },
+    {
+      "code": "ja",
+      "column": "japanese"
+    },
+    {
+      "code": "ko",
+      "column": "korean"
+    },
+    {
+      "code": "lt",
+      "column": "lithuanian"
+    },
+    {
+      "code": "lv",
+      "column": "latvian"
+    },
+    {
+      "code": "nl",
+      "column": "dutch"
+    },
+    {
+      "code": "no",
+      "column": "norwegian"
+    },
+    {
+      "code": "pl",
+      "column": "polnish"
+    },
+    {
+      "code": "pt",
+      "column": "portuguese"
+    },
+    {
+      "code": "pt-BR",
+      "column": "brazilian"
+    },
+    {
+      "code": "ro",
+      "column": "romanian"
+    },
+    {
+      "code": "ru",
+      "column": "russian"
+    },
+    {
+      "code": "sk",
+      "column": "slovakian"
+    },
+    {
+      "code": "sl",
+      "column": "slovenian"
+    },
+    {
+      "code": "sr",
+      "column": "serbian"
+    },
+    {
+      "code": "sv",
+      "column": "swedish"
+    },
+    {
+      "code": "tr",
+      "column": "turkish"
+    },
+    {
+      "code": "uk",
+      "column": "ukrainian"
+    },
+    {
+      "code": "zh-CHS",
+      "column": "chinese"
+    }
+  ],
+  "brands": [ "Weidemann", "Wacker Neuson", "Kramer Landwirtschaft", "Kramer Bauwirtschaft" ],
+  "manufacturers": [ "PGK", "SxM", "PAL", "PGP", "PGR", "PCP", "PNA" ],
+  "productTypes": [ "Radlader", "Bagger", "Teleskoplader", "Teleskopradlader", "Hoftrac" ],
+  "layouts": [ "A4", "A5" ],
+  "documentTypes": [ "Betriebsanleitung", "Kurzanleitung", "Serviceheft" ],
+  "pimGroups": [ "CE", "CE - PGP", "LE" ],
+  "documentContents": [ "OM_Machine", "OM_Engine" ],
+  "labors": [ "120 - PGK", "110 - PGP", "100 - PGR", "130 - PAL", "200 - PNA", "300 - PCP" ],
+  "capitalMarkets": [ "CompactEquipment", "LightEquipment" ]
+}

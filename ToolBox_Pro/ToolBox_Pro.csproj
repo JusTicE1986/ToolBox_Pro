@@ -92,6 +92,24 @@
     <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Config\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\typPattern.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\users.securejson">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Excels\09.04.2025 PGK Materialnumber import OMs.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Excels\2023-08-21 PGK Materialnumber import OMs.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Excels\EXPORT_20250409054845.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="OutlookMailService.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

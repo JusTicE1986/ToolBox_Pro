@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="ToolBox_Pro.Views.MappingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToolBox_Pro.Views"
+             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:MappingViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel>
+            
+            <StackPanel Margin="20" Width="600">
+                <TextBlock Text="Type"/>
+                <TextBox Text="{Binding SelectedMapping.Type}"/>
+
+                <TextBlock Text="Bezeichnung des Fahrzeugs"/>
+                <TextBox Text="{Binding SelectedMapping.Designation}"/>
+
+                <TextBlock Text="Marke"/>
+                <ComboBox ItemsSource="{Binding Brands}"
+                          SelectedItem="{Binding SelectedMapping.Brand}"/>
+
+                <TextBlock Text="Hersteller"/>
+                <ComboBox ItemsSource="{Binding Manufacturers}"
+                          SelectedItem="{Binding SelectedMapping.Manufacturer}"/>
+
+                <TextBlock Text="Product Type"/>
+                <ComboBox ItemsSource="{Binding ProductTypes}"
+                          SelectedItem="{Binding SelectedMapping.ProductType}"/>
+                
+                <TextBlock Text="Document Type"/>
+                <ComboBox ItemsSource="{Binding DocumentTypes}"
+                          SelectedItem="{Binding SelectedMapping.DocumentType}"/>
+
+                <TextBlock Text="Layout"/>
+                <ComboBox ItemsSource="{Binding Layouts}"
+          SelectedItem="{Binding SelectedMapping.Layout}"/>
+
+                <TextBlock Text="PIM Group"/>
+                <ComboBox ItemsSource="{Binding PIMGroups}"
+          SelectedItem="{Binding SelectedMapping.PIMGroup}"/>
+
+                <TextBlock Text="Version"/>
+                <TextBox Text="{Binding SelectedMapping.Version}"/>
+
+                <TextBlock Text="Ausgabedatum"/>
+                <TextBox Text="{Binding SelectedMapping.EditionDate}"/>
+
+                <TextBlock Text="Document Content"/>
+                <ComboBox ItemsSource="{Binding DocumentContents}"
+SelectedItem="{Binding SelectedMapping.DocumentContent}"/>
+
+                <TextBlock Text="Labore"/>
+                <ComboBox ItemsSource="{Binding Labors}"
+SelectedItem="{Binding SelectedMapping.Labor}"/>
+
+                <TextBlock Text="Kapitalmarkt"/>
+                <ComboBox ItemsSource="{Binding CapitalMarket}"
+SelectedItem="{Binding SelectedMapping.CapitalMarket}"/>
+
+                <TextBlock Text="Projektfilter"/>
+                <TextBox Text="{Binding SelectedMapping.StandardFilter}"/>
+
+                <TextBlock Text="Verkauffähige Maschine"/>
+                <TextBox Text="{Binding SelectedMapping.MaterialnumberSellingMachine}"/>
+            </StackPanel>
+
+            <Button Content="Materialnummern importieren"
+        Command="{Binding ImportMaterialnummernCommand}"
+        Margin="0 10 0 0 "
+        Width="200"/>
+            <Button Content="Hinzufügen"
+                    Command="{Binding AddCurrentMappingCommand}"
+                    Margin="0 10 0 0"
+                    Width="200"/>
+            <DataGrid ItemsSource="{Binding Mappings}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          Margin="10"
+          IsReadOnly="True"
+          GridLinesVisibility="All"
+                      VerticalScrollBarVisibility="Auto">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Typ" Binding="{Binding Type}" />
+                    <DataGridTextColumn Header="Designation" Binding="{Binding Designation}" />
+                    <DataGridTextColumn Header="Brand" Binding="{Binding Brand}" />
+                    <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer}" />
+                    <DataGridTextColumn Header="Product Type" Binding="{Binding ProductType}" />
+                    <DataGridTextColumn Header="Document Type" Binding="{Binding DocumentType}" />
+                    <DataGridTextColumn Header="Layout" Binding="{Binding Layout}" />
+                    <DataGridTextColumn Header="PIM Group" Binding="{Binding PIMGroup}" />
+                    <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
+                    <DataGridTextColumn Header="Edition Date" Binding="{Binding EditionDate}" />
+                    <DataGridTextColumn Header="Content" Binding="{Binding DocumentContent}" />
+                    <DataGridTextColumn Header="Labor" Binding="{Binding Labor}" />
+                    <DataGridTextColumn Header="Capital Market" Binding="{Binding CapitalMarket}" />
+                    <DataGridTextColumn Header="Standard Filter" Binding="{Binding StandardFilter}" />
+                    <DataGridTextColumn Header="Materialnummer" Binding="{Binding MaterialnumberSellingMachine}" />
+                    <DataGridTextColumn Header="Sprachen" Binding="{Binding LanguagesFormatted}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Content="Exportieren"
+        Command="{Binding ExportMappingsCommand}"
+        Margin="0 10 0 0"
+        Width="200"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

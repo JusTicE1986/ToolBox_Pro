@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ToolBox_Pro.Models
+{
+    public class DocumentMapping
+    {
+        public string Type { get; set; }
+        public string Designation { get; set; }
+
+        public string Brand { get; set; } // Enum? Begrenzte Anzahl von Marken => Auswahl
+        public string Manufacturer { get; set; } // Enum? Begrenzte Anzahl von Manufacturer => Auswahl
+        public string ProductType { get; set; } // Enum? Begrenzte Anzahl von Produktgruppen => Auswahl
+        public string DocumentType { get; set; } // Enum? Begrenzte Anzahl von Dokumenttypen => Auswahl
+        public string Layout { get; set; } // Enum? Begrenzte Anzahl von Layouts => Auswahl
+        public string PIMGroup { get; set; } // Enum? Begrenzte Anzahl von PIM-Gruppen => Auswahl
+
+        public string Version { get; set; }
+        public string EditionDate { get; set; }
+
+        public string DocumentContent { get; set; } // Enum? Begrenzte Anzahl von Inhalten => Auswahl
+        public string Labor { get; set; } // Enum? Begrenzte Anzahl von Laboren => Auswahl
+        public string CapitalMarket { get; set; } //Enum? Begrenzte Anzahl von Kapitalmärkten => Auswahl
+
+        public string StandardFilter { get; set; }
+
+        public string NodeTitle => $"{Type} - {Designation} {DocumentType}"; // Setzt sich zusammen aus $"{Type} - {Designation} {DocumentType}
+
+        public string MaterialnumberSellingMachine { get; set; }
+
+        public Dictionary<string, string> LanguageMapping { get; set; } = new();
+
+        public string LanguagesFormatted =>
+        LanguageMapping != null && LanguageMapping.Any()
+            ? string.Join(" | ", LanguageMapping.Select(x => $"{x.Key}: {x.Value}"))
+            : "–";
+
+
+    }
+}
