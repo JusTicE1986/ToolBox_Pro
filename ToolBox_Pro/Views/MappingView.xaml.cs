@@ -33,6 +33,14 @@ namespace ToolBox_Pro.Views
             //DataContext = new MappingViewModel();
         }
 
+        private void MappingGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(DataContext is MappingViewModel vm)
+            {
+                vm.ForceUpdateSelectedMappingCommand.Execute(null);
+            }
+        }
+
         //private void MappingViewModel_Loaded(object sender, RoutedEventArgs e)
         //{
         //    if(DataContext is MappingViewModel vm)

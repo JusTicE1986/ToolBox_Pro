@@ -203,6 +203,19 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Text" Value="" />
     </Style>
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#1E2E40"/>
+        <Setter Property="BorderBrush" Value="#AFC7DE"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="6,2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinWidth" Value="150"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Text" Value="" />
+    </Style>
 
 </ResourceDictionary>
 

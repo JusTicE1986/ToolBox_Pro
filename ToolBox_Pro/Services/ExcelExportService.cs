@@ -1,22 +1,27 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToolBox_Pro.Models;
 
 namespace ToolBox_Pro.Services
 {
     public class ExcelExportService
     {
+        private readonly ConfigService _configService;
+
+        public ExcelExportService(ConfigService configService)
+        {
+            _configService = configService ?? throw new ArgumentNullException(nameof(configService));
+        }
+
         public void Export(List<DocumentMapping> mappings, string filePath)
         {
-            using var workbook = new XLWorkbook();
-            var worksheet = workbook.Worksheets.Add("Export");
+            if (mappings == null || mappings.Count == 0)
+                throw new ArgumentException("Keine Mappings zum Exportieren vorhanden.");
 
-            // 📌 Exakter Header
-            var headers = new[]
+            var fixedHeaders = new[]
             {
                 "Type Designation (meta.BB.TypeVariant)",
                 "Selling Designation (meta.BB.ProductName)",
@@ -32,55 +37,29 @@ namespace ToolBox_Pro.Services
                 "Labor (meta.BB.Labor)",
                 "Materialnumber of selling machine (meta.BB.ObjectLink_MAT)",
                 "Capital Market (meta.BB.CapitalMarket)",
-                "Standard filter (meta.BB.Filter)",
-                "arabic",
-"bulgarian",
-"czech",
-"danish",
-"german",
-"greek",
-"english",
-"english-US",
-"americas",
-"spanish",
-"mexican",
-"estonian",
-"finnish",
-"french",
-"canadian",
-"croatian",
-"hungarian",
-"icelandic",
-"italian",
-"japanese",
-"korean",
-"lithuanian",
-"latvian",
-"dutch",
-"norwegian",
-"polnish",
-"portuguese",
-"brazilian",
-"romanian",
-"russian",
-"slovakian",
-"slovenian",
-"serbian",
-"swedish",
-"turkish",
-"ukrainian",
-"chinese",
-
-                "Node Title"
+                "Standard filter (meta.BB.Filter)"
             };
 
-            for (int i = 0; i < headers.Length; i++)
+            var languageColumns = _configService.Config.Languages
+                .Select(l => l.Column)
+                .ToList();
+
+            var allHeaders = fixedHeaders
+                .Concat(languageColumns)
+                .Concat(new[] { "Node Title" })
+                .ToList();
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.AddWorksheet("Document Mappings");
+
+            // Header schreiben
+            for (int i = 0; i < allHeaders.Count; i++)
             {
-                worksheet.Cell(1, i + 1).Value = headers[i];
+                worksheet.Cell(1, i + 1).Value = allHeaders[i];
                 worksheet.Cell(1, i + 1).Style.Font.Bold = true;
             }
 
-            // 📝 Inhalte schreiben
+            // Inhalte schreiben
             for (int row = 0; row < mappings.Count; row++)
             {
                 var m = mappings[row];
@@ -102,50 +81,22 @@ namespace ToolBox_Pro.Services
                 worksheet.Cell(r, 14).Value = m.CapitalMarket;
                 worksheet.Cell(r, 15).Value = m.StandardFilter;
 
-                // 📦 Sprach-Mapping basierend auf Spaltentiteln
-                worksheet.Cell(r, 16).Value = m.LanguageMapping?.GetValueOrDefault("arabic");
-                worksheet.Cell(r, 17).Value = m.LanguageMapping?.GetValueOrDefault("bulgarian");
-                worksheet.Cell(r, 18).Value = m.LanguageMapping?.GetValueOrDefault("czech");
-                worksheet.Cell(r, 19).Value = m.LanguageMapping?.GetValueOrDefault("danish");
-                worksheet.Cell(r, 20).Value = m.LanguageMapping?.GetValueOrDefault("german");
-                worksheet.Cell(r, 21).Value = m.LanguageMapping?.GetValueOrDefault("greek");
-                worksheet.Cell(r, 22).Value = m.LanguageMapping?.GetValueOrDefault("english");
-                worksheet.Cell(r, 23).Value = m.LanguageMapping?.GetValueOrDefault("english-US");
-                worksheet.Cell(r, 24).Value = m.LanguageMapping?.GetValueOrDefault("americas");
-                worksheet.Cell(r, 25).Value = m.LanguageMapping?.GetValueOrDefault("spanish");
-                worksheet.Cell(r, 26).Value = m.LanguageMapping?.GetValueOrDefault("mexican");
-                worksheet.Cell(r, 27).Value = m.LanguageMapping?.GetValueOrDefault("estonian");
-                worksheet.Cell(r, 28).Value = m.LanguageMapping?.GetValueOrDefault("finnish");
-                worksheet.Cell(r, 29).Value = m.LanguageMapping?.GetValueOrDefault("french");
-                worksheet.Cell(r, 30).Value = m.LanguageMapping?.GetValueOrDefault("canadian");
-                worksheet.Cell(r, 31).Value = m.LanguageMapping?.GetValueOrDefault("croatian");
-                worksheet.Cell(r, 32).Value = m.LanguageMapping?.GetValueOrDefault("hungarian");
-                worksheet.Cell(r, 33).Value = m.LanguageMapping?.GetValueOrDefault("icelandic");
-                worksheet.Cell(r, 34).Value = m.LanguageMapping?.GetValueOrDefault("italian");
-                worksheet.Cell(r, 35).Value = m.LanguageMapping?.GetValueOrDefault("japanese");
-                worksheet.Cell(r, 36).Value = m.LanguageMapping?.GetValueOrDefault("korean");
-                worksheet.Cell(r, 37).Value = m.LanguageMapping?.GetValueOrDefault("lithuanian");
-                worksheet.Cell(r, 38).Value = m.LanguageMapping?.GetValueOrDefault("latvian");
-                worksheet.Cell(r, 39).Value = m.LanguageMapping?.GetValueOrDefault("dutch");
-                worksheet.Cell(r, 40).Value = m.LanguageMapping?.GetValueOrDefault("norwegian");
-                worksheet.Cell(r, 41).Value = m.LanguageMapping?.GetValueOrDefault("polnish");
-                worksheet.Cell(r, 42).Value = m.LanguageMapping?.GetValueOrDefault("portuguese");
-                worksheet.Cell(r, 43).Value = m.LanguageMapping?.GetValueOrDefault("brazilian");
-                worksheet.Cell(r, 44).Value = m.LanguageMapping?.GetValueOrDefault("romanian");
-                worksheet.Cell(r, 45).Value = m.LanguageMapping?.GetValueOrDefault("russian");
-                worksheet.Cell(r, 46).Value = m.LanguageMapping?.GetValueOrDefault("slovakian");
-                worksheet.Cell(r, 47).Value = m.LanguageMapping?.GetValueOrDefault("slovenian");
-                worksheet.Cell(r, 48).Value = m.LanguageMapping?.GetValueOrDefault("serbian");
-                worksheet.Cell(r, 49).Value = m.LanguageMapping?.GetValueOrDefault("swedish");
-                worksheet.Cell(r, 50).Value = m.LanguageMapping?.GetValueOrDefault("turkish");
-                worksheet.Cell(r, 51).Value = m.LanguageMapping?.GetValueOrDefault("ukrainian");
-                worksheet.Cell(r, 52).Value = m.LanguageMapping?.GetValueOrDefault("chinese");
+                // Dynamische Sprachspalten
+                for (int i = 0; i < languageColumns.Count; i++)
+                {
+                    var colName = languageColumns[i];
+                    string matnr = string.Empty;
+                    m.LanguageMapping?.TryGetValue(colName, out matnr);
+                    worksheet.Cell(r, 16 + i).Value = matnr;
+                }
 
-                worksheet.Cell(r, 53).Value = $"{m.Type} - {m.Designation} {m.DocumentType}";
+                // Node Title
+                var nodeTitle = $"{m.Type} - {m.Designation} {m.DocumentType}";
+                worksheet.Cell(r, 16 + languageColumns.Count).Value = nodeTitle;
             }
 
+            // Speichern
             workbook.SaveAs(filePath);
         }
     }
 }
-

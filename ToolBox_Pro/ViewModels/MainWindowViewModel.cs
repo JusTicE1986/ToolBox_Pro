@@ -85,7 +85,7 @@ namespace ToolBox_Pro.ViewModels
                 new NavigationItem("Ordner bereinigen", "DeleteSweep", new CleanupView(), UserRole.Admin),
                 new NavigationItem("Language_XML", "Translate", new Views.LanguageXML(), UserRole.Admin),
                 new NavigationItem("User Settings", "AccountMultiple", new UserManagementView(), UserRole.Admin),
-                new NavigationItem("Blaue Bücher Liste", "CalendarClock", new MappingView())
+                new NavigationItem("Blaue Bücher Liste", "FormTextbox", new MappingView())
             };
 
         public MainWindowViewModel()

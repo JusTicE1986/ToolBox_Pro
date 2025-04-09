@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
              xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="1200" d:DesignWidth="800">
     <UserControl.DataContext>
         <vm:MappingViewModel/>
     </UserControl.DataContext>
@@ -16,104 +16,238 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <StackPanel>
-            
-            <StackPanel Margin="20" Width="600">
-                <TextBlock Text="Type"/>
-                <TextBox Text="{Binding SelectedMapping.Type}"/>
+        <ScrollViewer>
+            <StackPanel>
+                <Border Margin="10"
+                Style="{StaticResource ToolboxContainerStyle}">
+                    <TextBlock Text="Datenknotenimport für Blaue Bücher"
+                           Style="{StaticResource ViewUeberschriftStyle}" Cursor=""/>
+                </Border>
 
-                <TextBlock Text="Bezeichnung des Fahrzeugs"/>
-                <TextBox Text="{Binding SelectedMapping.Designation}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Margin="10"
+                        Style="{StaticResource ToolboxContainerStyle}" 
+                        Grid.Column="0">
 
-                <TextBlock Text="Marke"/>
-                <ComboBox ItemsSource="{Binding Brands}"
-                          SelectedItem="{Binding SelectedMapping.Brand}"/>
+                        <StackPanel Margin="20" 
+                                Width="600" 
+                                HorizontalAlignment="Left">
+                            <TextBlock Text="Blaue Bücher Einstellungen"
+                                   Style="{StaticResource SchrittUeberschriftStyle}"/>
+                            <TextBlock Text="Alle notwendigen Einstellungen eingeben, Excel-Export laden und hinzufügen. Liste an gewünschten Ort exportieren."
+                                   Style="{StaticResource TextBlockStyle}"
+                                   TextWrapping="Wrap"/>
+                            <Grid Margin="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                <TextBlock Text="Hersteller"/>
-                <ComboBox ItemsSource="{Binding Manufacturers}"
-                          SelectedItem="{Binding SelectedMapping.Manufacturer}"/>
+                                <!-- Type -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Type" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                   />
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.Type}" Grid.Row="0" Grid.Column="1"
+                                 />
 
-                <TextBlock Text="Product Type"/>
-                <ComboBox ItemsSource="{Binding ProductTypes}"
-                          SelectedItem="{Binding SelectedMapping.ProductType}"/>
-                
-                <TextBlock Text="Document Type"/>
-                <ComboBox ItemsSource="{Binding DocumentTypes}"
-                          SelectedItem="{Binding SelectedMapping.DocumentType}"/>
+                                <!-- Designation -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Bezeichnung des Fahrzeugs" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.Designation}" Grid.Row="1" Grid.Column="1"/>
 
-                <TextBlock Text="Layout"/>
-                <ComboBox ItemsSource="{Binding Layouts}"
-          SelectedItem="{Binding SelectedMapping.Layout}"/>
+                                <!-- Brand -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Marke" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}" ItemsSource="{Binding Brands}" SelectedItem="{Binding SelectedMapping.Brand}" Grid.Row="2" Grid.Column="1"/>
 
-                <TextBlock Text="PIM Group"/>
-                <ComboBox ItemsSource="{Binding PIMGroups}"
-          SelectedItem="{Binding SelectedMapping.PIMGroup}"/>
+                                <!-- Manufacturer -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                            Text="Hersteller" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding Manufacturers}" SelectedItem="{Binding SelectedMapping.Manufacturer}" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBlock Text="Version"/>
-                <TextBox Text="{Binding SelectedMapping.Version}"/>
+                                <!-- ProductType -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Product Type" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding ProductTypes}" SelectedItem="{Binding SelectedMapping.ProductType}" Grid.Row="4" Grid.Column="1"/>
 
-                <TextBlock Text="Ausgabedatum"/>
-                <TextBox Text="{Binding SelectedMapping.EditionDate}"/>
+                                <!-- DocumentType -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Document Type" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding DocumentTypes}" SelectedItem="{Binding SelectedMapping.DocumentType}" Grid.Row="5" Grid.Column="1"/>
 
-                <TextBlock Text="Document Content"/>
-                <ComboBox ItemsSource="{Binding DocumentContents}"
-SelectedItem="{Binding SelectedMapping.DocumentContent}"/>
+                                <!-- Layout -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Layout" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding Layouts}" SelectedItem="{Binding SelectedMapping.Layout}" Grid.Row="6" Grid.Column="1"/>
 
-                <TextBlock Text="Labore"/>
-                <ComboBox ItemsSource="{Binding Labors}"
-SelectedItem="{Binding SelectedMapping.Labor}"/>
+                                <!-- PIMGroup -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="PIM Group" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding PIMGroups}" SelectedItem="{Binding SelectedMapping.PIMGroup}" Grid.Row="7" Grid.Column="1"/>
 
-                <TextBlock Text="Kapitalmarkt"/>
-                <ComboBox ItemsSource="{Binding CapitalMarket}"
-SelectedItem="{Binding SelectedMapping.CapitalMarket}"/>
+                                <!-- Version -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Version" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.Version}" Grid.Row="8" Grid.Column="1"/>
 
-                <TextBlock Text="Projektfilter"/>
-                <TextBox Text="{Binding SelectedMapping.StandardFilter}"/>
+                                <!-- EditionDate -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Ausgabedatum" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.EditionDate}" Grid.Row="9" Grid.Column="1"/>
 
-                <TextBlock Text="Verkauffähige Maschine"/>
-                <TextBox Text="{Binding SelectedMapping.MaterialnumberSellingMachine}"/>
+                                <!-- DocumentContent -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Document Content" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding DocumentContents}" SelectedItem="{Binding SelectedMapping.DocumentContent}" Grid.Row="10" Grid.Column="1"/>
+
+                                <!-- Labor -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Labor" Grid.Row="11" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding Labors}" SelectedItem="{Binding SelectedMapping.Labor}" Grid.Row="11" Grid.Column="1"/>
+
+                                <!-- Capital Market -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Kapitalmarkt" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Style="{StaticResource HintedComboBoxStyle}"
+                                  ItemsSource="{Binding CapitalMarket}" SelectedItem="{Binding SelectedMapping.CapitalMarket}" Grid.Row="12" Grid.Column="1"/>
+
+                                <!-- Standard Filter -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="Projektfilter" Grid.Row="13" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.StandardFilter}" Grid.Row="13" Grid.Column="1"/>
+
+                                <!-- MaterialnumberSellingMachine -->
+                                <TextBlock Style="{StaticResource TextBlockStyle}"
+                                   Text="VK-Materialnummer" Grid.Row="14" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding SelectedMapping.MaterialnumberSellingMachine}" Grid.Row="14" Grid.Column="1"/>
+
+                            </Grid>
+                            <Button Content="Materialnummern importieren"
+                                Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding ImportMaterialnummernCommand}"
+                                Margin="0 10 0 0 "
+                                Width="210" HorizontalAlignment="Left"/>
+                            <Button Content="Hinzufügen"
+                                Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding AddCurrentMappingCommand}"
+                                Margin="0 10 0 0"
+                                Width="210"
+                                HorizontalAlignment="Left"/>
+                            <Button Content="Aktualisieren"
+                                    Style="{StaticResource FlatButtonStyle}"
+                                    Command="{Binding UpdateSelectedMappingCommand}"
+                                    Margin="0 10 0 0"
+                                    Width="210"
+                                    HorizontalAlignment="Left" Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="10" Grid.Column="1"
+                        Style="{StaticResource ToolboxContainerStyle}">
+                        <StackPanel >
+                            <TextBlock Text="Importierte Sprachen"
+                                   Style="{StaticResource SchrittUeberschriftStyle}"/>
+                            <TextBlock Text="Anzeige der importierten Sprachen zur Prüfung"
+                                   Style="{StaticResource TextBlockStyle}"/>
+                            <TextBox  Text="{Binding LanguageMappingMultilinePreview, Mode=OneWay}"
+              Margin="0 10 0 0"
+              FontFamily="Consolas"
+              FontSize="12"
+              IsReadOnly="True"
+              AcceptsReturn="True"
+              TextWrapping="Wrap"
+              VerticalScrollBarVisibility="Auto"
+              Height="550"/>
+                                <TextBlock Text="Statusmeldungen"
+                                           Style="{StaticResource SchrittUeberschriftStyle}"/>
+                                <TextBlock Text="{Binding StatusMessage}"
+                                           Style="{StaticResource StatusMessageStyle}"
+                                           TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Border Margin="10"
+                    Style="{StaticResource ToolboxContainerStyle}">
+
+                    <StackPanel>
+                        <TextBlock Text="Hinzugefügte Typen"
+                               Style="{StaticResource SchrittUeberschriftStyle}"/>
+                        <TextBlock Text="Auflistung der geladenen und importierten Typen."
+                               Style="{StaticResource TextBlockStyle}"/>
+
+                        <DataGrid x:Name="MappingGrid"
+                              Style="{StaticResource ToolboxDataGridStyle}"
+                              ItemsSource="{Binding Mappings}"
+                              SelectedItem="{Binding SelectedMapping, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              Margin="10"
+                              IsReadOnly="True"
+                              GridLinesVisibility="All"
+                              VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Typ" Binding="{Binding Type}" />
+                                <DataGridTextColumn Header="Bezeichnung" Binding="{Binding Designation}" />
+                                <DataGridTextColumn Header="Marke" Binding="{Binding Brand}" />
+                                <DataGridTextColumn Header="Werk" Binding="{Binding Manufacturer}" />
+                                <DataGridTextColumn Header="Produkttyp" Binding="{Binding ProductType}" />
+                                <DataGridTextColumn Header="Dokumentenart" Binding="{Binding DocumentType}" />
+                                <DataGridTextColumn Header="Layout" Binding="{Binding Layout}" />
+                                <DataGridTextColumn Header="PIM Gruppe" Binding="{Binding PIMGroup}" />
+                                <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
+                                <DataGridTextColumn Header="Ausgabedatum" Binding="{Binding EditionDate}" />
+                                <DataGridTextColumn Header="Inhalt" Binding="{Binding DocumentContent}" />
+                                <DataGridTextColumn Header="Labor" Binding="{Binding Labor}" />
+                                <DataGridTextColumn Header="Kapitalmarkt" Binding="{Binding CapitalMarket}" />
+                                <DataGridTextColumn Header="Standardfilter" Binding="{Binding StandardFilter}" />
+                                <DataGridTextColumn Header="VK-Materialnummer" Binding="{Binding MaterialnumberSellingMachine}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Button Content="Exportieren"
+                            Style="{StaticResource FlatButtonStyle}"
+                            Command="{Binding ExportMappingsCommand}"
+                            Margin="0 10 0 0"
+                            Width="210"
+                            HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
-
-            <Button Content="Materialnummern importieren"
-        Command="{Binding ImportMaterialnummernCommand}"
-        Margin="0 10 0 0 "
-        Width="200"/>
-            <Button Content="Hinzufügen"
-                    Command="{Binding AddCurrentMappingCommand}"
-                    Margin="0 10 0 0"
-                    Width="200"/>
-            <DataGrid ItemsSource="{Binding Mappings}"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          Margin="10"
-          IsReadOnly="True"
-          GridLinesVisibility="All"
-                      VerticalScrollBarVisibility="Auto">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Typ" Binding="{Binding Type}" />
-                    <DataGridTextColumn Header="Designation" Binding="{Binding Designation}" />
-                    <DataGridTextColumn Header="Brand" Binding="{Binding Brand}" />
-                    <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer}" />
-                    <DataGridTextColumn Header="Product Type" Binding="{Binding ProductType}" />
-                    <DataGridTextColumn Header="Document Type" Binding="{Binding DocumentType}" />
-                    <DataGridTextColumn Header="Layout" Binding="{Binding Layout}" />
-                    <DataGridTextColumn Header="PIM Group" Binding="{Binding PIMGroup}" />
-                    <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
-                    <DataGridTextColumn Header="Edition Date" Binding="{Binding EditionDate}" />
-                    <DataGridTextColumn Header="Content" Binding="{Binding DocumentContent}" />
-                    <DataGridTextColumn Header="Labor" Binding="{Binding Labor}" />
-                    <DataGridTextColumn Header="Capital Market" Binding="{Binding CapitalMarket}" />
-                    <DataGridTextColumn Header="Standard Filter" Binding="{Binding StandardFilter}" />
-                    <DataGridTextColumn Header="Materialnummer" Binding="{Binding MaterialnumberSellingMachine}" />
-                    <DataGridTextColumn Header="Sprachen" Binding="{Binding LanguagesFormatted}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <Button Content="Exportieren"
-        Command="{Binding ExportMappingsCommand}"
-        Margin="0 10 0 0"
-        Width="200"/>
-
-        </StackPanel>
+        </ScrollViewer>
+        
     </Grid>
 </UserControl>
