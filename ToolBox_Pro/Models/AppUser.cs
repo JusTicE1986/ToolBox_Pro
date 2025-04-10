@@ -14,5 +14,7 @@ namespace ToolBox_Pro.Models
         public UserRole Role { get; set; } = UserRole.NormalUser;
         public DateTime Created { get; set; } = DateTime.Now;
         public bool IsConfirmed { get; set; } = false;
+
+        public int StartCount { get; set; }
     }
 }

@@ -16,13 +16,11 @@ public class UserService
 
     private List<AppUser> _userList = new();
 
-
     public IReadOnlyList<AppUser> Users => _userList;
     public void AddUser(AppUser user)
     {
         _userList.Add(user);
     }
-
 
     public void LoadUsers()
     {
@@ -36,7 +34,6 @@ public class UserService
         var json = Decrypt(encryptedData, EncryptionKey);
         _userList = JsonSerializer.Deserialize<List<AppUser>>(json) ?? new List<AppUser>();
     }
-
     public void SaveUsers()
     {
         var json = JsonSerializer.Serialize(_userList, new JsonSerializerOptions { WriteIndented = true });
@@ -48,12 +45,26 @@ public class UserService
     public AppUser GetOrCreateUser(string username)
     {
         var user = _userList.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+
         if (user == null)
         {
-            user = new AppUser { Username = username };
+            user = new AppUser
+            {
+                Username = username,
+                DisplayName = "",
+                Role = UserRole.NormalUser,
+                IsConfirmed = false,
+                Werk = "",
+                StartCount = 1
+            };
             _userList.Add(user);
-            SaveUsers();
         }
+        else
+        {
+            user.StartCount++;
+        }
+        SaveUsers();
         return user;
     }
 
