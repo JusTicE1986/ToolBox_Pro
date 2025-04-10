@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using ToolBox_Pro.Models;
 
 namespace ToolBox_Pro.Services
@@ -19,8 +20,10 @@ namespace ToolBox_Pro.Services
         public void Export(List<DocumentMapping> mappings, string filePath)
         {
             if (mappings == null || mappings.Count == 0)
-                throw new ArgumentException("Keine Mappings zum Exportieren vorhanden.");
-
+            {
+                MessageBox.Show("Kein Export möglich, da keine Daten hinzugefügt wurden", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             var fixedHeaders = new[]
             {
                 "Type Designation (meta.BB.TypeVariant)",

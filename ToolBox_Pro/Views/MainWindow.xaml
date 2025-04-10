@@ -67,7 +67,7 @@
                            FontStyle="Italic"
                            Visibility="Visible"/>
                     <ListBox x:Name="NavigationList"
-                 ItemsSource="{Binding NavigationItems}"
+                 ItemsSource="{Binding FilteredNavigationItems}"
                  SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
                  Background="Transparent"
                  BorderThickness="0">

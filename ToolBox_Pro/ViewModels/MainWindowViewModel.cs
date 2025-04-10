@@ -36,6 +36,17 @@ namespace ToolBox_Pro.ViewModels
                 }
             }
         }
+        private UserRole _currentUserRole;
+        public UserRole CurrentUserRole
+        {
+            get => _currentUserRole;
+            set
+            {
+                SetProperty(ref _currentUserRole, value);
+                OnPropertyChanged(nameof(FilteredNavigationItems));
+            }
+        }
+
 
         private readonly UserService _userService = new UserService();
 
@@ -47,46 +58,42 @@ namespace ToolBox_Pro.ViewModels
         [ObservableProperty]
         private string footerText = "ToolBox Pro © 2025 – Version 1.0.0 by Andreas Neumann";
 
-        //private AppUser _currentUser;
-        //public AppUser CurrentUser
-        //{
-        //    get => _currentUser;
-        //    set
-        //    {
-        //        _currentUser = value;
-        //        OnPropertyChanged();
-        //        OnPropertyChanged(nameof(CurrentUserDisplayNameOrUsername));
-        //        OnPropertyChanged(nameof(AdminVisibility));
-        //        OnPropertyChanged(nameof(PriceListVisibility));
-        //        OnPropertyChanged(nameof(NormalUserVisibility));
-        //    }
-        //}
-
-        //public string CurrentUserDisplayNameOrUsername =>
-        //    string.IsNullOrWhiteSpace(CurrentUser?.DisplayName)
-        //        ? CurrentUser?.Username
-        //        : CurrentUser?.DisplayName;
-
-        //public bool HasRole(UserRole role) => CurrentUser?.Role.Contains(role) == true;
-
         public bool IstStartAktiv => CurrentView == null;
+
+        public ObservableCollection<NavigationItem> AllNavigationItems { get; } = new()
+{
+    new NavigationItem("Projektfilter erstellen", "FilterVariant", new MerkmalsImportView()),
+    new NavigationItem("Blaue Bücher Liste", "FormTextbox", new MappingView()),
+    new NavigationItem("KERN Angebote", "Folder", new OfferCalculation()),
+    new NavigationItem("Seitenzahlen & Gewicht", "Scale", new PDFProcessingView()),
+    new NavigationItem("Preisliste exportieren", "FileExport", new PreislsiteExportView(), UserRole.PriceLists),
+    new NavigationItem("Ordner bereinigen", "DeleteSweep", new CleanupView(), UserRole.Admin),
+    new NavigationItem("Language_XML", "Translate", new Views.LanguageXML(), UserRole.Admin),
+    new NavigationItem("User Settings", "AccountMultiple", new UserManagementView(), UserRole.Admin)
+};
+
+        public IEnumerable<NavigationItem> FilteredNavigationItems =>
+            AllNavigationItems.Where(item =>
+                item.RequiredRole == null || item.RequiredRole == CurrentUserRole || CurrentUserRole == UserRole.Admin);
+
 
         partial void OnCurrentViewChanged(object value)
         {
             OnPropertyChanged(nameof(IstStartAktiv));
         }
 
-        public ObservableCollection<NavigationItem> NavigationItems { get; } = new ObservableCollection<NavigationItem>
-            {
-                new NavigationItem("Projektfilter erstellen", "FilterVariant", new MerkmalsImportView()),
-                new NavigationItem("KERN Angebote", "Folder", new OfferCalculation()),
-                new NavigationItem("Seitenzahlen & Gewicht", "Scale", new PDFProcessingView()),
-                new NavigationItem("Preisliste exportieren", "FileExport", new PreislsiteExportView(), UserRole.PriceLists),
-                new NavigationItem("Ordner bereinigen", "DeleteSweep", new CleanupView(), UserRole.Admin),
-                new NavigationItem("Language_XML", "Translate", new Views.LanguageXML(), UserRole.Admin),
-                new NavigationItem("User Settings", "AccountMultiple", new UserManagementView(), UserRole.Admin),
-                new NavigationItem("Blaue Bücher Liste", "FormTextbox", new MappingView())
-            };
+        //public ObservableCollection<NavigationItem> NavigationItems { get; } = new ObservableCollection<NavigationItem>
+        //    {
+        //        new NavigationItem("Projektfilter erstellen", "FilterVariant", new MerkmalsImportView()),
+        //        new NavigationItem("Blaue Bücher Liste", "FormTextbox", new MappingView()),
+        //        new NavigationItem("KERN Angebote", "Folder", new OfferCalculation()),
+        //        new NavigationItem("Seitenzahlen & Gewicht", "Scale", new PDFProcessingView()),
+        //        new NavigationItem("Preisliste exportieren", "FileExport", new PreislsiteExportView(), UserRole.PriceLists),
+        //        new NavigationItem("Ordner bereinigen", "DeleteSweep", new CleanupView(), UserRole.Admin),
+        //        new NavigationItem("Language_XML", "Translate", new Views.LanguageXML(), UserRole.Admin),
+        //        new NavigationItem("User Settings", "AccountMultiple", new UserManagementView(), UserRole.Admin)
+
+        //    };
 
         public MainWindowViewModel()
         {
@@ -103,19 +110,19 @@ namespace ToolBox_Pro.ViewModels
         }
 
 
-        private UserRole _currentUserRole;
-        public UserRole CurrentUserRole
-        {
-            get => _currentUserRole;
-            set
-            {
-                _currentUserRole = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(AdminVisibility));
-                OnPropertyChanged(nameof(PriceListVisibility));
-                OnPropertyChanged(nameof(NormalUserVisibility));
-            }
-        }
+
+        //public UserRole CurrentUserRole
+        //{
+        //    get => _currentUserRole;
+        //    set
+        //    {
+        //        _currentUserRole = value;
+        //        OnPropertyChanged();
+        //        OnPropertyChanged(nameof(AdminVisibility));
+        //        OnPropertyChanged(nameof(PriceListVisibility));
+        //        OnPropertyChanged(nameof(NormalUserVisibility));
+        //    }
+        //}
         public Visibility AdminVisibility =>
             CurrentUserRole == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
         public Visibility PriceListVisibility =>

@@ -167,15 +167,9 @@
                                 Margin="0 10 0 0"
                                 Width="210"
                                 HorizontalAlignment="Left"/>
-                            <Button Content="Aktualisieren"
-                                    Style="{StaticResource FlatButtonStyle}"
-                                    Command="{Binding UpdateSelectedMappingCommand}"
-                                    Margin="0 10 0 0"
-                                    Width="210"
-                                    HorizontalAlignment="Left" Cursor="Hand"/>
-                            <Button Content="Zurücksetzen"
+                            <Button Content="Löschen"
+        Command="{Binding DeleteAndResetCommand}"
         Style="{StaticResource FlatButtonStyle}"
-        Command="{Binding ResetMappingCommand}"
         Margin="0 10 0 0"
         Width="210"
         HorizontalAlignment="Left"/>

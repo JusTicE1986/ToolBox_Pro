@@ -50,13 +50,30 @@ namespace ToolBox_Pro.ViewModels
         [RelayCommand]
         private void ImportMaterialnummern()
         {
+            // Schritt 1: Eingabevalidierung
+            var errors = ValidateSelectedMapping();
+            if (errors.Any())
+            {
+                StatusMessage = "⚠️ Eingabe ungültig:\n" + string.Join(Environment.NewLine, errors);
+                return;
+            }
             var ofd = new OpenFileDialog
             {
                 Title = "Materialnummern-Datei auswählen.",
                 Filter = "Excel-Dateien|*.xlsx;*.xls"
             };
 
-            if (ofd.ShowDialog() == DialogResult.OK)
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+
+            // Schritt 3: Prüfen ob Datei verwendbar ist
+            if (!IsFileReadable(ofd.FileName))
+            {
+                StatusMessage = $"❌ Datei '{System.IO.Path.GetFileName(ofd.FileName)}' ist gesperrt oder wird von einem anderen Programm verwendet.";
+                return;
+            }
+
+            try
             {
                 var mapping = _importService.ImportiereSpracheMaterialnummern(ofd.FileName);
 
@@ -67,8 +84,13 @@ namespace ToolBox_Pro.ViewModels
                     SelectedMapping.LanguageMapping[kvp.Key] = kvp.Value;
 
                 OnPropertyChanged(nameof(LanguageMappingMultilinePreview));
-                AddCurrentMappingCommand.NotifyCanExecuteChanged();
+                StatusMessage = $"✅ {mapping.Count} Einträge erfolgreich importiert.";
 
+                AddCurrentMappingCommand.NotifyCanExecuteChanged();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"❌ Fehler beim Import: {ex.Message}";
             }
         }
 
@@ -119,27 +141,27 @@ namespace ToolBox_Pro.ViewModels
                 Mappings.Remove(SelectedMapping);
         }
         [RelayCommand]
-        private void UpdateSelectedMapping()
+        private void DeleteAndReset()
         {
             if (SelectedMapping == null)
                 return;
 
-            var errors = ValidateSelectedMapping();
-
-            StatusMessage = errors.Any()
-                ? string.Join(Environment.NewLine, errors)
-                : "✏️ Eintrag wurde aktualisiert.";
-
-            if (errors.Any())
-                return;
-
-            int index = Mappings.IndexOf(Mappings.FirstOrDefault(m => m.Id == SelectedMapping.Id));
-            if (index >= 0)
+            // Eintrag entfernen
+            var existing = Mappings.FirstOrDefault(m => m.Id == SelectedMapping.Id);
+            if (existing != null)
             {
-                Mappings[index] = SelectedMapping.Clone(true);
-                OnPropertyChanged(nameof(Mappings));
+                Mappings.Remove(existing);
+                StatusMessage = "🗑️ Eintrag gelöscht. Neues Formular bereit.";
             }
+            else
+            {
+                StatusMessage = "⚠️ Kein passender Eintrag gefunden.";
+            }
+
+            // Formular leeren
+            ClearSelectedMapping();
         }
+
 
         [RelayCommand]
         private void ResetMapping()
@@ -238,6 +260,19 @@ namespace ToolBox_Pro.ViewModels
                    !ValidateSelectedMapping().Any() &&
                    SelectedMapping.LanguageMapping is { Count: > 0 };
         }
+        private bool IsFileReadable(string filePath)
+        {
+            try
+            {
+                using var stream = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 
     }
