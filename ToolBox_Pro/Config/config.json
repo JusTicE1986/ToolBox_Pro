@@ -149,13 +149,13 @@
       "column": "chinese"
     }
   ],
-  "brands": [ "Weidemann", "Wacker Neuson", "Kramer Landwirtschaft", "Kramer Bauwirtschaft" ],
-  "manufacturers": [ "PGK", "SxM", "PAL", "PGP", "PGR", "PCP", "PNA" ],
-  "productTypes": [ "Radlader", "Bagger", "Teleskoplader", "Teleskopradlader", "Hoftrac" ],
+  "brands": [ "Kramer Landwirtschaft", "Kramer Bauwirtschaft", "Wacker Neuson", "Weidemann" ],
+  "manufacturers": [ "PAL", "PCP", "PNA", "PGK", "PGP", "PGR", "SxM" ],
+  "productTypes": [ "Bagger", "Dumper", "Hoftrac", "Radlader", "Teleskoplader", "Teleskopradlader" ],
   "layouts": [ "A4", "A5" ],
-  "documentTypes": [ "Betriebsanleitung", "Kurzanleitung", "Serviceheft" ],
-  "pimGroups": [ "CE", "CE - PGP", "LE" ],
+  "documentTypes": [ "Betriebsanleitung", "Service- and Repair Manual", "System- and Troubleshooting Guide" ],
+  "pimGroups": [ "LE", "CE", "CE - PGP" ],
   "documentContents": [ "OM_Machine", "OM_Engine" ],
-  "labors": [ "120 - PGK", "110 - PGP", "100 - PGR", "130 - PAL", "200 - PNA", "300 - PCP" ],
+  "labors": [ "100 - PGR", "110 - PGP", "120 - PGK", "130 - PAL", "200 - PNA", "300 - PCP" ],
   "capitalMarkets": [ "CompactEquipment", "LightEquipment" ]
 }

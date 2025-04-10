@@ -8,6 +8,8 @@ namespace ToolBox_Pro.Models
 {
     public class DocumentMapping
     {
+        public Guid Id { get; set; } = Guid.NewGuid(); // ← Intern zur Identifikation
+
         public string Type { get; set; }
         public string Designation { get; set; }
 
@@ -37,6 +39,32 @@ namespace ToolBox_Pro.Models
         LanguageMapping != null && LanguageMapping.Any()
             ? string.Join(" | ", LanguageMapping.Select(x => $"{x.Key}: {x.Value}"))
             : "–";
+
+        public DocumentMapping Clone(bool preserveId = false)
+        {
+            return new DocumentMapping
+            {
+                Id = preserveId ? this.Id : Guid.NewGuid(),
+                Type = this.Type,
+                Designation = this.Designation,
+                Brand = this.Brand,
+                Manufacturer = this.Manufacturer,
+                ProductType = this.ProductType,
+                DocumentType = this.DocumentType,
+                Layout = this.Layout,
+                PIMGroup = this.PIMGroup,
+                Version = this.Version,
+                EditionDate = this.EditionDate,
+                DocumentContent = this.DocumentContent,
+                Labor = this.Labor,
+                CapitalMarket = this.CapitalMarket,
+                StandardFilter = this.StandardFilter,
+                MaterialnumberSellingMachine = this.MaterialnumberSellingMachine,
+                LanguageMapping = this.LanguageMapping != null
+                    ? new Dictionary<string, string>(this.LanguageMapping) // WICHTIG: neue Instanz!
+                    : new Dictionary<string, string>()
+            };
+        }
 
 
     }
