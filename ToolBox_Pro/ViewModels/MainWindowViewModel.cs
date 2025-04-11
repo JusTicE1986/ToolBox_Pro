@@ -62,6 +62,7 @@ namespace ToolBox_Pro.ViewModels
 
         public ObservableCollection<NavigationItem> AllNavigationItems { get; } = new()
 {
+    new NavigationItem("Projekte und Typen", "FileTreeOutline", new ProjektTypenView()),
     new NavigationItem("Projektfilter erstellen", "FilterVariant", new MerkmalsImportView()),
     new NavigationItem("Blaue Bücher Liste", "FormTextbox", new MappingView()),
     new NavigationItem("KERN Angebote", "Folder", new OfferCalculation()),
