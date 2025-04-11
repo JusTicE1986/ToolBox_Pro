@@ -29,6 +29,7 @@
             Style="{StaticResource ToolboxContainerStyle}">
 
             <DataGrid ItemsSource="{Binding Benutzerliste}"
+                      x:Name="UserGrid"
                   AutoGenerateColumns="False"
                   IsReadOnly="False"
                   Style="{StaticResource ToolboxDataGridStyle}"
@@ -36,11 +37,43 @@
                   CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Username" Binding="{Binding Username}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}"/>
+                    <DataGridTextColumn Header="Anzeigename" Binding="{Binding DisplayName}"/>
+                    <DataGridTextColumn Header="Vollständiger" Binding="{Binding FullName}"/>
                     <DataGridCheckBoxColumn Header="Bestätigt" Binding="{Binding IsConfirmed}"/>
                     <DataGridComboBoxColumn Header="Rolle"
                                         SelectedItemBinding="{Binding Role}"
-                                        ItemsSource="{x:Static helpers:UserRoleValues.All}"/>
+                                        ItemsSource="{x:Static helpers:UserRoleValues.All}"
+                                            >
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="ItemTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="Werk"
+                                            SelectedItemBinding="{Binding Werk}"
+                                            ItemsSource="{x:Static helpers:WerkValueHelper.All}"
+                                            >
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="Startcounter" Binding="{Binding StartCount}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

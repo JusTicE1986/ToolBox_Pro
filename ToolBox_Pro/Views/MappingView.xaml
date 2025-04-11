@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ToolBox_Pro.Views"
-             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels"
+             xmlns:vm="clr-namespace:ToolBox_Pro.ViewModels" xmlns:controls="clr-namespace:ToolBox_Pro.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="1200" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -29,6 +29,7 @@
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
+
                     <Border Margin="10"
                         Style="{StaticResource ToolboxContainerStyle}" 
                         Grid.Column="0">
@@ -156,6 +157,7 @@
                                  Text="{Binding SelectedMapping.MaterialnumberSellingMachine}" Grid.Row="14" Grid.Column="1"/>
 
                             </Grid>
+
                             <Button Content="Materialnummern importieren"
                                 Style="{StaticResource FlatButtonStyle}"
                                 Command="{Binding ImportMaterialnummernCommand}"
@@ -246,7 +248,9 @@
                             HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>
+                
             </StackPanel>
+            
         </ScrollViewer>
 
     </Grid>

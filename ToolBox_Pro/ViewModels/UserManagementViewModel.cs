@@ -16,7 +16,11 @@ namespace ToolBox_Pro.ViewModels
     {
         private readonly UserService _userService;
 
+        [ObservableProperty]
+        private AppUser selectedUser;
+
         public ObservableCollection<AppUser> Benutzerliste { get; set; }
+        public ObservableCollection<string> WerkeListe { get; }
         public int BenutzerAnzahl => Benutzerliste?.Count ?? 0;
 
         public UserManagementViewModel()

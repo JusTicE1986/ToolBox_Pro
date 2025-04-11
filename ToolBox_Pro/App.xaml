@@ -22,6 +22,7 @@
             <!--<conv:SmartTimeConverter x:Key="SmartTimeConverter" />-->
             <conv:TimeSpanToReadableTextConverter x:Key="ReadableTextConverter" />
             <conv:LanguageDictionaryConverter x:Key="LanguageDictionaryConverter" />
+            <conv:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
 
         </ResourceDictionary>
     </Application.Resources>

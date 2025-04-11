@@ -188,8 +188,17 @@
             </Setter.Value>
         </Setter>
     </Style>
-        
-        <!--Hinted Combobox-->
+
+    <Style x:Key="UserManagementDataGridStyle"
+       TargetType="DataGrid"
+       BasedOn="{StaticResource ToolboxDataGridStyle}">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="RowHeight" Value="34"/>
+        <Setter Property="AlternatingRowBackground" Value="#FAFAFA"/>
+    </Style>
+
+
+    <!--Hinted Combobox-->
     <Style x:Key="HintedComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="#1E2E40"/>

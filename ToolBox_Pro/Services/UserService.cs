@@ -53,9 +53,10 @@ public class UserService
             {
                 Username = username,
                 DisplayName = "",
+                FullName = "",
                 Role = UserRole.NormalUser,
                 IsConfirmed = false,
-                Werk = "",
+                Werk = Werke.Def,
                 StartCount = 1
             };
             _userList.Add(user);

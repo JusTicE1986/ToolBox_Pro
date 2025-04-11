@@ -35,6 +35,8 @@ namespace ToolBox_Pro.ViewModels
 
         [ObservableProperty]
         private string statusMessage = "ℹ️ Noch keine Eingabe geprüft.";
+        [ObservableProperty]
+        private bool isBusy; 
 
         public MappingViewModel()
         {
@@ -75,6 +77,7 @@ namespace ToolBox_Pro.ViewModels
 
             try
             {
+                IsBusy = true;
                 var mapping = _importService.ImportiereSpracheMaterialnummern(ofd.FileName);
 
                 SelectedMapping.LanguageMapping ??= new();
@@ -91,6 +94,10 @@ namespace ToolBox_Pro.ViewModels
             catch (Exception ex)
             {
                 StatusMessage = $"❌ Fehler beim Import: {ex.Message}";
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

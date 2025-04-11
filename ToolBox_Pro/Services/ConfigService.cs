@@ -45,6 +45,5 @@ namespace ToolBox_Pro.Services
                 Config = new ConfigData();
             }
         }
-
     }
 }

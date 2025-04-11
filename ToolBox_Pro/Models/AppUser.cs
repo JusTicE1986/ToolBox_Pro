@@ -11,10 +11,12 @@ namespace ToolBox_Pro.Models
     {
         public string Username { get; set; } // von Environment.UserName
         public string DisplayName { get; set; } // Optional vom Admin ergänzt
+        public string FullName { get; set; } // Optional vom Admin ergänzt
         public UserRole Role { get; set; } = UserRole.NormalUser;
         public DateTime Created { get; set; } = DateTime.Now;
         public bool IsConfirmed { get; set; } = false;
 
         public int StartCount { get; set; }
+        public Werke Werk { get; set; }
     }
 }
