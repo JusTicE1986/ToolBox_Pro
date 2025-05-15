@@ -16,14 +16,15 @@ namespace ToolBox_Pro.ViewModels
     {
         private readonly UserService _userService;
 
-        public ObservableCollection<AppUser> Benutzerliste { get; set; }
-        public int BenutzerAnzahl => Benutzerliste?.Count ?? 0;
+        public IEnumerable<AppUser> Benutzerliste => _userService.Users;
+        //public ObservableCollection<AppUser> Benutzerliste { get; set; }
+        public int BenutzerAnzahl => _userService.Users.Count;
 
-        public UserManagementViewModel()
+        public UserManagementViewModel(UserService userService)
         {
-            _userService = new UserService();
-            _userService.LoadUsers();
-            Benutzerliste = new ObservableCollection<AppUser>(_userService.Users);
+            _userService = userService;
+            //_userService.LoadUsers();
+            //Benutzerliste = new ObservableCollection<AppUser>(_userService.Users);
         }
 
         [RelayCommand]

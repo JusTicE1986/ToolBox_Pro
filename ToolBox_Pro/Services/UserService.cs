@@ -24,6 +24,34 @@ public class UserService
     }
 
 
+    //public void SetAllUsersOffline()
+    //{
+    //    foreach (var user in _userList)
+    //    {
+    //        user.IsOnline = false;
+    //    }
+    //}
+
+    //public void SetCurrentUserOnline(string username)
+    //{
+    //    var user = GetOrCreateUser(username);
+    //    user.IsOnline = true;
+    //}
+
+    //public void MarkCurrentUserOffline(string username)
+    //{
+    //    var user = GetOrCreateUser(username);
+    //        user.IsOnline = false;
+    //}
+
+    public IEnumerable<AppUser> GetTopNonAdminUsers(int count = 10)
+    {
+        return _userList
+            .Where(u => u.Role != UserRole.Admin)
+            .OrderByDescending(u => u.FeatureCounter)
+            .Take(count);
+    }
+
     public void LoadUsers()
     {
         if (!File.Exists(FilePath))

@@ -12,21 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ToolBox_Pro.Models;
+using ToolBox_Pro.Interfaces;
 using ToolBox_Pro.Services;
 using ToolBox_Pro.ViewModels;
 
-namespace ToolBox_Pro.Views
+namespace ToolBox_Pro.Views;
+/// <summary>
+/// Interaktionslogik für FileScannerView.xaml
+/// </summary>
+public partial class FileScannerView : UserControl
 {
-    /// <summary>
-    /// Interaktionslogik für UserManagementView.xaml
-    /// </summary>
-    public partial class UserManagementView : UserControl
+    public FileScannerView()
     {
-        public UserManagementView(UserService userService)
-        {
-            InitializeComponent();
-            DataContext = new UserManagementViewModel(userService);
-        }
+        InitializeComponent();
+        DataContext = new FileScannerViewModel(new FileScannerService());
     }
 }

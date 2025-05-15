@@ -20,6 +20,7 @@ namespace ToolBox_Pro
     /// </summary>
     public partial class App : Application
     {
+        public static UserService UserService { get; private set; }
         public App()
         {
             CultureInfo culture = new CultureInfo("de-DE");
@@ -29,7 +30,9 @@ namespace ToolBox_Pro
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
+            UserService = new UserService();
+            UserService.LoadUsers();
+            //UserService.MarkCurrentUserOffline(Environment.UserName);
             var splash = new Views.SplashScreen();
             splash.Show();
 

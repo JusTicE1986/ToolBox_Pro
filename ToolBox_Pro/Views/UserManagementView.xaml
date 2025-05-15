@@ -7,9 +7,7 @@
              xmlns:local="clr-namespace:ToolBox_Pro.Views" 
              xmlns:helpers="clr-namespace:ToolBox_Pro.Helpers"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:UserManagementViewModel/>
-    </UserControl.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -41,6 +39,11 @@
                     <DataGridComboBoxColumn Header="Rolle"
                                         SelectedItemBinding="{Binding Role}"
                                         ItemsSource="{x:Static helpers:UserRoleValues.All}"/>
+                    <DataGridTextColumn Header="Aktionen" Binding="{Binding FeatureCounter}" />
+                    <DataGridTextColumn Header="Rang" Binding="{Binding Rank}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Status"
+                    Binding="{Binding LastSeenDisplay}"
+                    IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
