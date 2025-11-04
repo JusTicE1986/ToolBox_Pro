@@ -119,6 +119,7 @@ namespace ToolBox_Pro.ViewModels
         new NavigationItem("KERN Angebote", "Folder", new OfferCalculation()),
         new NavigationItem("Seitenzahlen & Gewicht", "Scale", new PDFProcessingView()),
         new NavigationItem("Dateianalyse", "MagnifyScan", new FileScannerView()),
+        new NavigationItem("ST4-Report Analyse", "Xml", new XmlTagFilterView()),
         new NavigationItem("Preisliste exportieren", "FileExport", new PreislsiteExportView(), UserRole.PriceLists),
         new NavigationItem("Ordner bereinigen", "DeleteSweep", new CleanupView(), UserRole.Admin),
         new NavigationItem("Language_XML", "Translate", new Views.LanguageXML(), UserRole.Admin),
